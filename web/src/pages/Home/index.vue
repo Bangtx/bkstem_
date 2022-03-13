@@ -7,12 +7,14 @@
 
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api'
-import { HeaderBar, Banner } from 'components'
+import { HeaderBar, Banner, SideBar, Main } from 'components'
 
 const Home = defineComponent({
   components: {
     HeaderBar,
-    Banner
+    Banner,
+    SideBar,
+    Main
   },
   setup() {
     const value = ref('hhi')

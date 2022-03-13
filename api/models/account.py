@@ -4,6 +4,7 @@ from peewee import (
     IntegerField
 )
 
+
 class Account(BaseModel):
     name = CharField()
     password = CharField()
