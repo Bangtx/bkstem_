@@ -1,0 +1,587 @@
+{
+  "common": {
+    "menu": "メニュー",
+    "logout": "ログアウト",
+    "list_order": "注文一覧",
+    "sales_report": "?Sales report",
+    "chart": "?Chart",
+    "settings": "設定",
+    "yes": "はい",
+    "no": "いいえ",
+    "ok": "OK",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "new": "新規",
+    "duplicate": "複製",
+    "merge": "合成",
+    "copy": "コピー",
+    "reset": "リセット",
+    "update": "更新",
+    "next": "次へ",
+    "prev": "前へ",
+    "release": "?Release",
+    "confirm_delete": "削除してもよろしいですか？",
+    "confirm_reset": "入力内容が破棄されますが、よろしいですか？",
+    "click_save_button": "画面右上の[保存]ボタンで保存してください。",
+    "save": "保存",
+    "close": "閉じる",
+    "maximum_number_photos": "最大4枚の画像を登録できます。",
+    "upload_image_fail": "画像をアップロードできませんでした。",
+    "year_and_month": "{year}年{month}月",
+    "sales_date_of_year": "{year}年の売日",
+    "box": "箱",
+    "add_new_master": "新しいマスタとして登録",
+    "add_query_as_new_master": "'{query}'を新しいマスタとして登録",
+    "assign_box": "?引当済: {box}箱",
+    "date_month_format": "MM月DD日(ddd)",
+    "time_full_format": "YYYY年MM月DD日(ddd)",
+    "time_month_date": "MM月DD日(ddd)",
+    "not_assign_box": "?未引当: {box}箱",
+    "total_boxes": "?合計口数: {0}箱",
+    "total_amount": "?合計数量: {amount}",
+    "un_assign_amount": "?未配荷数量: {amount}",
+    "created_at": "?登録日: {0}",
+    "auction_date": "売日",
+    "packed_date": "登録日",
+    "harvest_date": "収穫日",
+    "auction_date_start": "?売日(開始)",
+    "auction_date_end": "?売日(終了)",
+    "search_empty_list": "登録がありません。",
+    "search": "検索",
+    "add": "追加",
+    "date_range": "登録日(開始 ~ 終了)",
+    "from_date": "登録日(開始)",
+    "to_date": "登録日(終了)",
+    "expand_all": "全てを詳細まで表示",
+    "collapse_all": "詳細表示を全て閉じる",
+    "select_all": "全てを選択",
+    "_comment_start": "これは common? order じゃない？",
+    "is_special": "特注",
+    "mark_assigned": "済",
+    "mark_special": "特",
+    "mark_not_assign": "未",
+    "show_by": "表示モード",
+    "sales_type": "販売タイプ",
+    "save_current_states": "Save current states",
+    "no_sale_date": "販売無し日",
+    "previous_five_day": "<< 前の５販売無し日",
+    "hide_past_day": "過去の日非表示",
+    "current_inputting_data": "現在の入力データ",
+    "get_data_failed": "Get data failed",
+    "select_2_date": "２つを選択しました。",
+    "msg": {
+      "create_success": "Create successfully",
+      "update_success": "Update successfully",
+      "delete_success": "Delete successfully",
+      "system_failure": "System failure.",
+      "save_input_state_successful": "Save input state successfully"
+    }
+  },
+  "header_bar": {
+    "order": "?注文"
+  },
+  "product": "商品",
+  "quick_input": "コード入力",
+  "customer": "出荷先",
+  "auction_date": "売日",
+  "history": "入力履歴",
+  "home": {
+    "title": "ホーム",
+    "add_order": "注文入力",
+    "list_order": "注文一覧",
+    "statistics": "統計",
+    "sales_report": "納品書",
+    "step": {
+      "expected_harvest": "予定",
+      "FM": "FM",
+      "order": "注文",
+      "harvest_result": "収穫",
+      "packing": "PCK",
+      "assign": "配荷"
+    },
+    "calendar": {
+      "title": "カレンダー",
+      "mode": {
+        "title": "モード:",
+        "month": "1ヶ月",
+        "days": "7日",
+        "confirm_mode_default": ["", "を初期表示モードにしますか?"],
+        "confirm_value_type_default": "!数量表示設定:",
+        "next_days": "次の7日 >>",
+        "prev_days": "<< 前の7日",
+        "prev_day": "< 前の日",
+        "next_day": "次の日 >"
+      },
+      "search": {
+        "title": "品目／品種／出荷先名で絞り込めます",
+        "item": "品目",
+        "variety": "品種",
+        "customer": "出荷先"
+      }
+    }
+  },
+  "setting": {
+    "confirm_save_default": "この設定を初期表示モードにします。",
+    "unit_default": {
+      "title": "単位",
+      "stems": "本数",
+      "box": "ケース数",
+      "info": "'c'はケースです。"
+    },
+    "value_default": {
+      "title": "データ",
+      "total": "合計",
+      "remaining": "残り",
+      "total_and_remaining": "合計と残り",
+      "info": "オレンジ数字は残りです。"
+    },
+    "value_type": {
+      "title": "!数量表示設定:",
+      "expected_harvest": "予定",
+      "FM": "FM",
+      "order": "注文",
+      "harvest_result": "収穫",
+      "packing": "PCK",
+      "assign": "配荷"
+    },
+    "days_before": "今日の前の初期表示日",
+    "display_as": "表示で",
+    "error": {
+      "get_default_setting_fail": "エラーです。初期設定情報を読み込めませんでした。",
+      "update_default_setting_fail": "エラーです。初期設定情報を更新できませんでした。"
+    }
+  },
+  "assign_seri": {
+    "title": "パッキング→セリ",
+    "customer": "出荷先",
+    "multi_customers": "全て",
+    "boxes_number": "箱数",
+    "assign_to_multiple_customers": "全て",
+    "search_by_customer": "出荷先を検索",
+    "selected_customers": "選ばれた出荷先",
+    "no_customers_selected": "出荷先がありません。",
+    "create_successful": "Create successful",
+    "assign_successful": "出荷しました。",
+    "create_failed": "System failure.",
+    "number_of_boxes_must_be_greater_than_0": "箱数は0より大きくなければなりません。",
+    "boxes": "箱数",
+    "no_customer": "出荷ができません。出荷先を選んでください。",
+    "msg": {
+      "assignments_empty": "出荷された件がありません。",
+      "success": "件は出荷されました。"
+    }
+  },
+  "assign_order": {
+    "title": "パッキング→注文",
+    "assign_from_packing": "パッキングから配荷する",
+    "show_all": "全て表示",
+    "filter_by_order": "Filter by order",
+    "assigned": "{boxes}c({stems}本)",
+    "assign_successful": "{assigned}件は配荷しました。",
+    "auto_assign_successful": "{assigned}件は自動配荷しました。",
+    "mask_as_assigned": "この注文は配荷済みに設定しますか?",
+    "do_you_want_to_show": "未配荷分を表示しますか？",
+    "orders_are_not_automatically_assigned": "{orders_can_not_assign}件は自動配荷出来ません。",
+    "create_failed": "Create failed",
+    "update_failed": "Update failed",
+    "order_already_assigned": "{orders}件は自動配荷しました。",
+    "no_orders_are_automatically_assigned": "No orders are automatically assigned",
+    "number_of_boxes_must_be_greater_than_0": "箱数は0より大きくなければなりません。",
+    "packing_is_not_enough_to_assign": "Packing is not enough to assign",
+    "filter": {
+      "title": "注文一覧",
+      "show_all": "全て",
+      "unassigned": "未配荷のみ",
+      "special": "特注のみ"
+    },
+    "actions": {
+      "auto_assign": "注文分自動配荷",
+      "select_packing": "パッキング一覧で配荷",
+      "input_assignment": "手動入力で配荷"
+    }
+  },
+  "order": {
+    "name": "注文",
+    "title": "注文",
+    "menu_title": "注文一覧",
+    "input": "注文入力",
+    "list_empty": "注文は登録されていません。",
+    "by_customer_tab": "出荷先別({0})",
+    "by_product_tab": "商品別({0})",
+    "search_by_customer": "出荷先コード・出荷先名で絞り込めます。",
+    "search_by_product": "商品名で絞り込めます。",
+    "search_by_history": "検索",
+    "edit": "!Edit order",
+    "create": "!Create order",
+    "delete": "!Delete order",
+    "register_detail": "!Register details",
+    "empty_detail": "!注文が登録されていません。[＋]ボタンをおして、注文を追加できます。",
+    "detail": {
+      "title": "注文データ",
+      "by_product": "?Detail by product"
+    },
+    "msg": {
+      "get_order_data_failed": "?Cannot get order information",
+      "merge_successful": "?Merge order successfully",
+      "merge_failed": "?Merge order failed"
+    },
+    "list": "!Orders"
+  },
+  "assign": {
+    "title": "配荷",
+    "create_title": "配荷",
+    "product": "!配荷済み商品",
+    "assign_by_customer": "配荷済(出荷先別)",
+    "assign_by_product": "配荷済(商品別)",
+    "order_by_product": "注文(商品別)",
+    "order_by_customer": "注文(出荷先別)",
+    "filter": "絞り込み",
+    "list_empty": "配荷データが登録されていません。",
+    "batch": "一括配荷",
+    "not_assign_yet": "未配荷注文のみ",
+    "assigned": "配荷済み注文のみ",
+    "placeholder": "注文データから取得",
+    "mark_order": "この注文を［配荷済み］にしますか？",
+    "add_breakdown": "追加",
+    "auto_assign": {
+      "title": "注文分自動配荷",
+      "select_order_type": "自動配荷を実行する注文タイプを選択してください。",
+      "select_packing_date": "自動配荷で配荷するパッキング日を指定してください。",
+      "mess": "システムが自動でパッキングデータと注文データを突合させて配荷を登録します。",
+      "execute": "実行",
+      "success": "自動配荷処理が終了しました。 {number}/{order_number} 件の注文が配荷されました!",
+      "failed": "自動配荷処理にエラーがありました。"
+    },
+    "list_assign_order_detail": {
+      "lock_auto_assign": "?Lock auto assign",
+      "unlock_auto_assign": "?Unlock auto assign",
+      "assignments": "?Assignments",
+      "assign": "?Assign"
+    },
+    "assignment_dialog": {
+      "title": "?Assigning",
+      "packing_result": "パッキングデータ",
+      "harvest_result": "?Harvest result",
+      "quantity": "?入数",
+      "boxes": "?箱数",
+      "stems": "?本数",
+      "price": "?単価",
+      "list_packing_result_empty": "?There is no packing result"
+    },
+    "properties": {
+      "order": "注文",
+      "box": "箱",
+      "stems": "出荷",
+      "quality": "?等級",
+      "earn": "?売上",
+      "box_type": "?箱種別",
+      "box_number": "?箱数",
+      "price": "?単価",
+      "remark": "?Remark",
+      "breakdown": "商品明細追加",
+      "box_number_packing_result": "?未",
+      "box_number_assigned": "?配"
+    }
+  },
+  "packing_result": {
+    "name": "パッキング",
+    "title": "パッキング",
+    "empty": "パッキングの登録がありません。",
+    "select": "!パッキングを選択してください",
+    "list": {
+      "title": "!パッキング",
+      "assign_boxes": "?引当済",
+      "assign_stems": "?Assign Stems"
+    },
+    "date": {
+      "title": "パッキング",
+      "show_by": "表示モード",
+      "register": "!パッキングを入力",
+      "show_by_options": {
+        "packing_result": "登録済みパッキング",
+        "product": "商品マスター",
+        "customer": "注文(出荷先別)",
+        "order": "注文(商品別)",
+        "history": "入力履歴"
+      }
+    },
+    "detail": {
+      "title": "パッキングデータ",
+      "delivery": "配荷",
+      "packed_date": "パッキング日",
+      "add_delivery": "追加",
+      "new_delivery": "New",
+      "breakdown": "商品明細追加",
+      "add_breakdown": "追加",
+      "new_breakdown": "新規",
+      "assign_now": "登録して注文に割当てる",
+      "assign_now_dialog" : {
+        "text": "この注文を割当て完了にしますか？",
+        "finish": "割当て完了",
+        "continue": "追加で割当てる"
+      }
+    },
+    "msg": {
+      "load_data_fail": "?Failed to load packing data",
+      "confirm_over_boxes": "Total boxes is over, do you want to save?"
+    }
+  },
+  "calendar": {
+    "dialog": {
+      "assigned": "?Assigned",
+      "need_assigning": "?Need Assigning"
+    }
+  },
+  "master": {
+    "title": "マスタ管理",
+    "code": "コード",
+    "yomigana": "よみがな",
+    "name_eng": "英語表記",
+    "short_name": "短縮表示名",
+    "quantity": "入数",
+    "boxes": "箱数",
+    "total_stems": "合計数",
+    "remark": "備考",
+    "price": "単価",
+    "desired_price": "希望単価",
+    "total_amount": "合計金額",
+    "amount": "合計金額",
+    "buyer_info": "買参番号",
+    "stems": "合計数量",
+    "address_1": "住所1",
+    "address_2": "住所2",
+    "zip_code": "郵便番号",
+    "placeholder": {
+      "item": "品目 を選択",
+      "variety": "品種 を選択",
+      "size": "サイズ(階級) を選択",
+      "color": "色 を選択",
+      "quality": "等級 を選択",
+      "unit": "単位 を選択",
+      "box_type": "梱包タイプ を選択",
+      "order_type": "出荷区分 を選択",
+      "quantity": "入数 を入力",
+      "price": "単価 を入力",
+      "boxes": "口数 を入力",
+      "total_stems": "合計数量 を入力",
+      "desired_price": "希望単価 を入力",
+      "customer": "出荷先 を選択",
+      "auction_date": "売日 を選択",
+      "packed_date": "パッキング日 を選択",
+      "buyer_info": "買参番号 を入力",
+      "quick_input": "コードで入力",
+      "total_amount": "合計金額"
+    },
+    "bundle_size": "バンドルサイズ",
+    "msg": {
+      "save_name_empty": "[名前]を入力してください。",
+      "save_tel_empty": "[電話番号]を入力してください。",
+      "get_data_failed": "!データが取得できませんでした。",
+      "save_order_successful": "並び順を登録しました。",
+      "save_order_failed": "並び順を登録できませんでした。(So what)",
+      "create_successful": "!マスタに追加しました。",
+      "create_failed": "!マスタ登録できませんでした。(So what)",
+      "update_successful": "マスタを更新しました。",
+      "update_failed": "マスタを更新できませんでした。(So what)",
+      "merge_successful": "!マスタを合成しました。",
+      "merge_failed": "!マスタを合成できませんでした。",
+      "delete_successful": "!マスタを削除しました。",
+      "delete_failed": "!マスタを削除できませんでした。",
+      "name_already_exists": "同じ名称のマスタデータがすでに存在します。",
+      "date_already_exists": "同じ日のマスタデータがすでに存在します。",
+      "bundle_size_must_be_an_integer": "![バンドルサイズ]は、数値(小数不可)で入力してください。",
+      "please_enter_bundle_size": "![バンドルサイズ]を入力してください。",
+      "please_enter_yomi": "[よみがな]を入力してください。"
+    },
+    "sort": {
+      "by_name": "名前で並び替える",
+      "drag_drop": "!ドラッグして並び替え",
+      "drag_drop_title": "!ドラッグして並び替え",
+      "choose_item_to_drag_drop": "!品目 をドラッグして選択",
+      "sort_variety_of_all_item": "!全ての品目内の品種を並び替え",
+      "sort_variety_of_one_item": "!1つの品目内の品種を並び替え",
+      "choose_item_to_sort": "!並び替える品目を選択"
+    },
+    "size": {
+      "name": "サイズ(階級)",
+      "title": "サイズ(階級)",
+      "search": "名称、英語名称、よみがなで絞り込み",
+      "add": "新しいサイズを登録",
+      "edit": "サイズを編集",
+      "list_size_empty": "登録がありません",
+      "list_size_search_empty": "該当する登録がありません",
+      "size_list_is_sorted": "?Size list is sorted",
+      "size_list_is_reset": "?Size list is reset",
+      "sort_sizes_in_1_group": "サイズの並び順を変更"
+    },
+    "size_group": {
+      "name": "サイズ区分",
+      "title": "サイズ区分",
+      "add": "新しいサイズ区分を追加",
+      "edit": "サイズ区分を編集",
+      "sort_size_groups": "サイズ区分の並び順を変更"
+    },
+    "unit": {
+      "name": "単位名",
+      "title": "単位",
+      "search": "名称で絞り込めます",
+      "add_common": "?共通単位を追加",
+      "add": "単位を追加",
+      "edit": "単位を編集",
+      "add_item": "?Create new item unit",
+      "add_variety": "?Create new variety unit",
+      "edit_common": "?Edit common unit",
+      "edit_item": "?Edit item unit",
+      "edit_variety": "?Edit variety unit",
+      "list_unit_empty": "登録がありません。",
+      "list_unit_search_empty": "該当する登録がありません。",
+      "unit_list_is_sorted": "?Unit list is sorted",
+      "unit_list_is_reset": "?Unit list is reset",
+      "sort": "単位の並び順を変更する"
+    },
+    "item": {
+      "name": "品目名",
+      "title": "品目",
+      "search": "名称、英語名称、よみがなで絞り込み",
+      "add": "品目を追加",
+      "edit": "品目を編集",
+      "list_item_empty": "登録がありません。",
+      "list_item_search_empty": "該当する登録がありません。",
+      "item_list_is_sorted": "?Item list is sorted",
+      "item_list_is_reset": "!Item list is reset",
+      "unit": "単位",
+      "unit_name": "単位名",
+      "default_unit": "初期値",
+      "select_unit_and_default_unit": "単位設定",
+      "default_unit_text": "単位初期値: ",
+      "sort_items": "品目の並び順を変更する"
+    },
+    "variety": {
+      "name": "品種名",
+      "title": "品種",
+      "search": "名称、英語名称、よみがなで絞り込み",
+      "list_variety_empty": "登録がありません。",
+      "list_variety_search_empty": "該当する登録がありません。",
+      "item_has_no_varieties": "この品目には品種が登録されていません。",
+      "add": "品種を追加",
+      "edit": "品種を編集",
+      "variety_list_is_sorted": "!Variety list is sorted",
+      "variety_list_is_reset": "?Variety list is reset",
+      "sort_varieties_in_1_item": "品種の並び順を変更する"
+    },
+    "customer": {
+      "name": "出荷先名",
+      "title": "出荷先",
+      "search": "出荷先の登録情報で絞り込み",
+      "add": "出荷先を追加",
+      "edit": "出荷先を編集",
+      "list_customer_empty": "登録がありません。",
+      "list_customer_search_empty": "該当する登録がありません。",
+      "customer_list_is_sorted": "?Customer list is sorted",
+      "customer_list_is_reset": "!Customer list is reset",
+      "tel": "電話番号",
+      "fax": "FAX番号",
+      "email": "Email",
+      "code": "コード",
+      "sort": "並び順を変更する",
+      "default_invoice_method": "デフォルトの請求方法",
+      "default_invoice_method_items": {
+        "pdf_mail": "メールでPDFファイルを送る",
+        "pdf_fax": "FAXでPDFファイルを送る",
+        "csv_mail": "CSVデータ送信",
+        "null": "設定なし"
+      },
+      "allow_pre_sale": "前伝票を許可する",
+      "allow_pre_sale_items": {
+        "yes": "はい",
+        "no": "いいえ"
+      },
+      "level_customer": "レベル",
+      "level_customer_items": {
+        "market": "市場",
+        "buyer": "買参人",
+        "shop": "ショップ"
+      }
+    },
+    "quality": {
+      "name": "等級名",
+      "title": "等級",
+      "search": "名称、英語名称、短縮名称、よみがなで絞り込み",
+      "add": "等級を追加",
+      "edit": "等級を編集",
+      "list_quality_empty": "登録がありません。",
+      "list_quality_search_empty": "該当する登録がありません。",
+      "quality_list_is_sorted": "?Quality list is sorted",
+      "quality_list_is_reset": "?Quality list is reset",
+      "sort_qualities_in_1_group": "!等級の並び順を変更する"
+    },
+    "quality_group": {
+      "name": "等級区分名",
+      "title": "等級区分",
+      "add": "等級区分を追加",
+      "edit": "等級区分を編集",
+      "sort_quality_groups": "!等級区分の並び順を変更する"
+    },
+    "color": {
+      "name": "色",
+      "title": "色"
+    },
+    "order_type": {
+      "name": "出荷区分",
+      "title": "出荷区分",
+      "edit": "出荷区分を編集"
+    },
+    "box_type": {
+      "name": "梱包タイプ名",
+      "title": "梱包タイプ",
+      "search": "名称、英語名称、よみがなで絞り込み",
+      "add": "梱包タイプを追加",
+      "edit": "梱包タイプを編集",
+      "box_type_list_is_sorted": "?Box type list is sorted",
+      "box_type_list_is_reset": "Box type list is reset",
+      "box_type_save_successful": "?Box type list save successful",
+      "there_is_no_box_type": "登録がありません。",
+      "sort": "!並び順を変更する"
+    },
+    "quick_input": {
+      "quick_input_code": "Quick input code",
+      "title": "短縮コード",
+      "search": "コード、品目名、品種名、サイズで絞り込み",
+      "add": "短縮コードを追加",
+      "edit": "短縮コードを編集",
+      "quick_input_list_is_sorted": "?Quick input list is sorted",
+      "code_empty": "?code is empty",
+      "item_empty": "?item is empty",
+      "list_quick_input_empty": "登録がありません。",
+      "tooltip_title": "短縮コードで、品目や品種を一括にゅりょくできます。"
+    },
+    "auction_date": {
+      "title": "売日設定",
+      "day_of_week": {
+        "monday": "月",
+        "tuesday": "火",
+        "wednesday": "水",
+        "thursday": "木",
+        "friday": "金",
+        "saturday": "土",
+        "sunday": "日"
+      },
+      "add": "販売無し日を追加",
+      "edit": "販売無し日を編集"
+    }
+  },
+  "harvest": {
+    "title": "収穫",
+    "create_screen_title": "収穫入力",
+    "date_format": "MM月DD日",
+    "time_format": "HH時mm分",
+    "add_order": "注文を追加",
+    "add": "収穫を入力",
+    "result": {
+      "title": "収穫データ",
+      "list_empty": "登録がありません。",
+      "add_from_expected_stock": "!収穫予定から入力"
+    },
+    "select": "?Select from harvest result"
+  }
+}

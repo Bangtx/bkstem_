@@ -1,0 +1,469 @@
+{
+  "common": {
+    "menu": "Menu",
+    "logout": "Log out",
+    "list_order": "Order list",
+    "sales_report": "Sales report",
+    "chart": "Chart",
+    "settings": "Setting",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "Ok",
+    "cancel": "キャンセル",
+    "delete": "Delete",
+    "merge": "Merge",
+    "copy": "Copy",
+    "reset": "Reset",
+    "next": "Next",
+    "prev": "Prev",
+    "release": "Release",
+    "confirm_delete": "Are you sure to delete?",
+    "confirm_reset": "Do you want to reset current changes?",
+    "click_save_button": "Click [Save] button on the top right to save",
+    "save": "Save",
+    "save_create_new_one": "Save & create new one",
+    "close": "Close",
+    "maximum_number_photos": "Maximum number of photos is 4 pictures",
+    "upload_image_fail": "Upload image fail",
+    "year_and_month": "{year}年{month}月",
+    "sales_date_of_year": "{year}年の売日",
+    "box": "箱",
+    "assign_box": "引当済: {box}箱",
+    "date_month_format": "MM月DD日(ddd)",
+    "time_full_format": "YYYY年MM月DD日(ddd)",
+    "not_assign_box": "引当未: {box}箱",
+    "total_boxes": "Total boxes: {0}箱",
+    "total_amount": "Total amount: {amount}",
+    "un_assign_amount": "Un-assign amount: {amount}",
+    "created_at": "Created at: {0}",
+    "auction_date": "販売日",
+    "harvest_date": "Harvest date",
+    "auction_date_start": "Auction date start",
+    "auction_date_end": "Auction date end",
+    "search_empty_list": "There is no data",
+    "start_date": "Start date",
+    "end_date": "End date",
+    "search": "Search",
+    "add": "Add",
+    "from_date": "From date",
+    "to_date": "To date",
+    "expand_all": "Expand all",
+    "collapse_all": "Collapse all",
+    "select_all": "Select all",
+    "is_special": "Is special",
+    "mark_assigned": "済",
+    "mark_special": "特",
+    "mark_not_assign": "未",
+    "show_by": "Show by"
+  },
+  "header_bar": {
+    "order": "Order"
+  },
+  "product": "Products",
+  "quick_input": "Quick Input",
+  "customer": "Customer",
+  "home": {
+    "title": "Home",
+    "add_order": "注文入力",
+    "list_order": "注文一覧",
+    "statistics": "統計",
+    "sales_report": "納品書",
+    "step": {
+      "expected_harvest": "予定",
+      "FM": "FM",
+      "order": "注文",
+      "harvest_result": "収穫",
+      "packing": "Pck",
+      "assign": "配荷"
+    },
+    "calendar": {
+      "title": "Calendar",
+      "mode": {
+        "title": "Mode:",
+        "month": "Month",
+        "10days": "10 days",
+        "confirm_mode_default": ["Set mode", "as default ?"],
+        "confirm_value_type_default": "Default value type:",
+        "next_10days": "次の10日＞",
+        "prev_10days": "＜前の10日"
+      },
+      "search": {
+        "title": "Search",
+        "item": "品目",
+        "variety": "品種",
+        "customer": "顧客"
+      },
+      "error": {
+        "get_default_setting_fail": "Get default setting failed",
+        "update_default_setting_fail": "Update default setting failed"
+      }
+    }
+  },
+  "order": {
+    "name": "注文",
+    "title": "Order",
+    "menu_title": "注文入力",
+    "summary_title": "Order summary",
+    "list_empty": "There is no order",
+    "by_customer_tab": "By customer({0})",
+    "by_product_tab": "By product({0})",
+    "by_date_title": "Orders {date}",
+    "search_by_customer": "Search by customer code or name",
+    "search_by_product": "Search by product name",
+    "edit": "Edit order",
+    "create": "Create order",
+    "delete": "Delete order",
+    "register_detail": "Register details",
+    "empty_detail": "Detail is empty. Click + button to add new detail",
+    "orders_by_date": {
+      "title": "Orders by date"
+    },
+    "detail": {
+      "title": "Order detail",
+      "by_product": "Detail by product"
+    },
+    "msg": {
+      "get_order_data_failed": "Cannot get order information"
+    },
+    "list": "Orders"
+  },
+  "assign": {
+    "title": "Assignments",
+    "create_title": "Assignments",
+    "product": "Assigned product",
+    "date": "Date",
+    "search": "絞り込み",
+    "show_by": "Show by",
+    "list_empty": "There is no assign",
+    "batch": "Batch assign",
+    "not_assign_yet": "未配荷注文のみ",
+    "assigned": "済配荷分のみ",
+    "placeholder": "Automatically gotten from order",
+    "mark_order": "Do you want to mark this order as 'already assigned'?",
+    "auto_assign": {
+      "title": "Auto Assign",
+      "select_order_type": "Choose type to apply auto assign",
+      "select_packing_date": "Select packing date to apply auto assign",
+      "mess": "System will automatically matching packing result and order detail",
+      "execute": "Execute",
+      "success": "Auto assign finished {number}/{order_number} orders are assigned!",
+      "failed": "Auto assign failed"
+    },
+    "list_assign_order_detail": {
+      "lock_auto_assign": "Lock auto assign",
+      "unlock_auto_assign": "Unlock auto assign",
+      "assignments": "Assignments",
+      "assign": "Assign"
+    },
+    "assignment_dialog": {
+      "title": "Assigning",
+      "packing_result": "Packing result",
+      "harvest_result": "Harvest result",
+      "quantity": "入数",
+      "boxes": "箱数",
+      "stems": "本数",
+      "price": "単価",
+      "list_packing_result_empty": "There is no packing result"
+    },
+    "properties": {
+      "order": "注文",
+      "box": "箱",
+      "stems": "出荷",
+      "quality": "等級",
+      "earn": "売上",
+      "box_type": "箱種別",
+      "box_number": "箱数",
+      "price": "単価",
+      "remark": "Remark",
+      "box_number_packing_result": "未",
+      "box_number_assigned": "配"
+    },
+    "mess": {
+      "create_assignment_success": "Create successfully",
+      "create_assignment_fail": "create failed",
+      "update_assignment_success": "Update successfully",
+      "update_assignment_fail": "Update failed",
+      "delete_assignment_success": "Delete successfully",
+      "delete_assignment_fail": "Delete failed",
+      "get_packing_result_fail": "Get packing result failed",
+      "get_assignment_fail": "Get assignment failed",
+      "get_orders_fail": "Get order failed",
+      "set_lock_order_detail_fail": "Set lock order detail failed",
+      "validate_assign_dialog": "Please fill out all fields"
+    }
+  },
+  "create_order": {
+    "title": "Add order",
+    "create_order_detail": {
+      "title": "Order detail"
+    }
+  },
+  "packing_result": {
+    "name": "Packing",
+    "title": "Packing Result",
+    "empty": "There is no packing results",
+    "select": "Select from packing result",
+    "list": {
+      "title": "Packing Result",
+      "assign_boxes": "引当済",
+      "assign_stems": "Assign Stems"
+    },
+    "date": {
+      "title": "Packing Result",
+      "show_by": "Show by",
+      "register": "Register packing result",
+      "show_by_options": {
+        "packing_result": "packing_result",
+        "product": "product",
+        "customer": "customer",
+        "order": "order"
+      },
+      "auction_date_start": "Start date",
+      "auction_date_end": "End date",
+      "packed_date_start": "Start date",
+      "packed_date_end": "End date"
+    },
+    "detail": {
+      "title": "Detail",
+      "delivery": "Delivery",
+      "packed_date": "Packed date",
+      "add_delivery": "Add",
+      "new_delivery": "New",
+      "breakdown": "Breakdown",
+      "add_breakdown": "Add",
+      "new_breakdown": "New",
+      "assign_now": "登録して注文に割り当てる",
+      "assign_now_dialog" : {
+        "text": "この注文を割り当て完了にしますか？",
+        "finish": "割り当て完了",
+        "continue": "追加で割り当てる"
+      }
+    }
+  },
+  "calendar": {
+    "dialog": {
+      "assigned": "Assigned",
+      "need_assigning": "Need Assigning"
+    }
+  },
+  "master": {
+    "title": "Master",
+    "name": "Name",
+    "code": "code",
+    "yomigana": "Yomigana",
+    "name_eng": "Name eng",
+    "short_name": "Short name",
+    "quantity": "入数",
+    "boxes": "箱数",
+    "total_stems": "合計数",
+    "remark": "Remark",
+    "price": "単価",
+    "desired_price": "希望単価",
+    "total_amount": "Total amount",
+    "buyer_info": "買参番号",
+    "stems": "合計数",
+    "address_1": "address 1",
+    "address_2": "address 2",
+    "zip_code": "zip code",
+    "placeholder": {
+      "item": "Select item",
+      "variety": "Select variety",
+      "size": "Select size",
+      "color": "Select color",
+      "quality": "Select quality",
+      "unit": "Select unit",
+      "box_type": "Select box type",
+      "order_type": "Select order type",
+      "quantity": "Fill quantity",
+      "price": "Fill price",
+      "boxes": "Fill box number",
+      "total_stems": "Fill total stems",
+      "desired_price": "Fill desired price",
+      "customer": "Select customer",
+      "auction_date": "Select auction date",
+      "packed_date": "Select packed date",
+      "buyer_info": "Fill buyer info",
+      "quick_input": "Fill quick input code"
+    },
+    "bundle_size": "Bundle size",
+    "msg": {
+      "save_name_empty": "Cannot save, name is empty",
+      "save_tel_empty": "Cannot save, tel is empty",
+      "get_data_failed": "Get data failed",
+      "save_order_successful": "Save order successful",
+      "save_order_failed": "Save order failed",
+      "create_successful": "Create successfully",
+      "create_failed": "Create Failed",
+      "update_successful": "Update successfully",
+      "update_failed": "Update failed",
+      "merge_successful": "Merge successful",
+      "merge_failed": "Merge failed",
+      "delete_successful": "Delete successfully",
+      "delete_failed": "Delete failed",
+      "name_already_exists": "Name already exists",
+      "bundle_size_must_be_an_integer": "bundle size must be an integer",
+      "please_enter_bundle_size": "Please enter bundle size",
+      "please_enter_yomi": "Please enter yomi"
+    },
+    "sort": {
+      "by_name": "Sort ascending by name",
+      "drag_drop": "Drag & drop",
+      "drag_drop_title": "Drag & drop to rearrange",
+      "choose_item_to_drag_drop": "Choose item to drag & drop",
+      "sort_variety_of_all_item": "Sort variety of all item",
+      "sort_variety_of_one_item": "Sort variety of one item",
+      "choose_item_to_sort": "Choose one item to sort"
+    },
+    "size": {
+      "name": "サイズ",
+      "title": "Sizes",
+      "search": "Size name, name_eng, yomigana to searching",
+      "add": "Create new size",
+      "edit": "Edit size",
+      "list_size_empty": "サイズがありません",
+      "list_size_search_empty": "There is no size",
+      "size_list_is_sorted": "Size list is sorted",
+      "size_list_is_reset": "Size list is reset",
+      "sort_sizes_in_1_group": "Sort sizes"
+    },
+    "size_group": {
+      "name": "Size group",
+      "title": "Size Group",
+      "add": "Create new size group",
+      "edit": "Edit size group",
+      "sort_size_groups": "Sort size groups"
+    },
+    "unit": {
+      "name": "単位",
+      "title": "Units",
+      "search": "Unit name to searching",
+      "add_common": "Create new common unit",
+      "add": "Create new unit",
+      "edit": "Edit unit",
+      "add_item": "Create new item unit",
+      "add_variety": "Create new variety unit",
+      "edit_common": "Edit common unit",
+      "edit_item": "Edit item unit",
+      "edit_variety": "Edit variety unit",
+      "list_unit_empty": "There is no unit",
+      "list_unit_search_empty": "There is no unit",
+      "unit_list_is_sorted": "Unit list is sorted",
+      "unit_list_is_reset": "Unit list is reset",
+      "sort": "Sort units"
+    },
+    "item": {
+      "name": "品目",
+      "title": "Items",
+      "search": "Item name, name_eng, yomigana to searching",
+      "add": "Create new item",
+      "edit": "Edit item",
+      "list_item_empty": "There is no item",
+      "list_item_search_empty": "There is no item",
+      "item_list_is_sorted": "Item list is sorted",
+      "item_list_is_reset": "Item list is reset",
+      "unit": "Unit",
+      "unit_name": "Unit name",
+      "default_unit": "Default",
+      "select_unit_and_default_unit": "Select unit and default unit",
+      "default_unit_text": "Default unit:",
+      "sort_items": "Sort items"
+    },
+    "variety": {
+      "name": "品種",
+      "title": "Varieties",
+      "search": "Product name, name_eng, yomigana to searching",
+      "list_variety_empty": "There is no variety",
+      "list_variety_search_empty": "There is no variety",
+      "item_has_no_varieties": "This item has no varieties",
+      "add": "Create new variety",
+      "edit": "Edit Variety",
+      "variety_list_is_sorted": "Variety list is sorted",
+      "variety_list_is_reset": "Variety list is reset",
+      "sort_varieties_in_1_item": "Sort varieties"
+    },
+    "customer": {
+      "name": "Customer",
+      "title": "Customers",
+      "search": "Customer name, short_name, buyer info, yomi, fax, telephone number, email, code",
+      "add": "Create new customer",
+      "edit": "Edit customer",
+      "list_customer_empty": "There is no customer",
+      "list_customer_search_empty": "There is no customer",
+      "customer_list_is_sorted": "Customer list is sorted",
+      "customer_list_is_reset": "Customer list is reset",
+      "tel": "Tel",
+      "fax": "Fax",
+      "email": "Email",
+      "code": "Code",
+      "sort": "Sort customers"
+    },
+    "quality": {
+      "name": "等級",
+      "title": "Quality",
+      "search": "Quality name, name_eng, short_name,yomigana to searching",
+      "add": "Create new quality",
+      "edit": "Edit quality",
+      "list_quality_empty": "サイズがありません",
+      "list_quality_search_empty": "There is no quality",
+      "quality_list_is_sorted": "Quality list is sorted",
+      "quality_list_is_reset": "Quality list is reset",
+      "sort_qualities_in_1_group": "Sort qualities"
+    },
+    "quality_group": {
+      "name": "Quality group",
+      "title": "Quality Group",
+      "add": "Create new quality group",
+      "edit": "Edit quality group",
+      "sort_quality_groups": "Sort quality groups"
+    },
+    "color": {
+      "name": "色",
+      "title": "Colors"
+    },
+    "order_type": {
+      "name": "Order type",
+      "title": "Order types",
+      "edit": "Edit item"
+    },
+    "box_type": {
+      "name": "箱種別",
+      "title": "Box types",
+      "search": "Box type name, name_eng, short_name to searching",
+      "add": "Create new box type",
+      "edit": "Edit box type",
+      "box_type_list_is_sorted": "Box type list is sorted",
+      "box_type_list_is_reset": "Box type list is reset",
+      "box_type_save_successful": "Box type list save successful",
+      "there_is_no_box_type": "There is no box type",
+      "sort": "Sort box types"
+    },
+    "quick_input": {
+      "quick_input_code": "Quick input code",
+      "title": "Quick Input",
+      "search": "Quick input code, item name, variety name, size to searching",
+      "add": "Create new quick input",
+      "edit": "Edit quick input",
+      "quick_input_list_is_sorted": "Quick input list is sorted",
+      "code_empty": "code is empty",
+      "item_empty": "item is empty",
+      "list_quick_input_empty": "There is no quick input",
+      "tooltip_title": "Quick input code to auto fill item, variety..."
+    }
+  },
+  "harvest": {
+    "title": "Harvest",
+    "create_screen_title": "Harvest result",
+    "date_format": "MM月DD日",
+    "time_format": "HH時mm分",
+    "add_order": "Add order",
+    "add": "Add harvest",
+    "result": {
+      "title": "Harvest result",
+      "list_empty": "There is no harvest results",
+      "add_from_expected_stock": "Add from expected stock"
+    },
+    "date_from": "Harvest date from",
+    "date_to": "Harvest date to",
+    "select": "Select from harvest result"
+  }
+}

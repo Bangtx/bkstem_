@@ -1,0 +1,57 @@
+$blue-grey: #8492A6
+$blue-grey-bg: #f0f2f4
+$darken-blue-grey: #47525E
+$darken-blue-grey-text: #424c57
+$calendar-day-focus: #77D353 !important
+$calendar-month-focus: #D3DAE0 !important
+$not-complete-color: #ffe3b6 !important
+$completed-color-text: #6aaf52 !important
+$not-complete-color-text: #f15356 !important
+
+$border-color: rgba(168, 190, 223, .53)
+$grouped-item-color: #5784ca
+$blue-grey-text: #1f385f!important
+$rough-black: #343f4b!important
+$darken-blue-grey-btn: #6f97ce
+$darken-blue-grey-label: #4175be
+$section-bg-color: #ecf1f8!important
+
+$dark-orange: #EB8774
+$dark-yellow: #F5D54E
+$dark-green: #13CE66
+$dark-blue: #66ABF2
+$dark-purple: #DD4FF0
+$dark-navy: #0E5A84
+$light-orange: #FFF5E5
+$light-yellow: #FFFFE0
+$light-green: #DFF5E9
+$light-blue: #E5FCFF
+$light-purple: #FFE1FF
+$light-navy: #BBDFFA
+
+@mixin component-wrapper
+  background-color: white
+  border-radius: 15px
+  border: 2px solid #8492A6
+
+@mixin component-wrapper-2
+  background-color: white
+  border-radius: 5px
+  border: 2px solid #8492A6
+
+@mixin button-wrapper
+  background-color: white
+  border-radius: 5px
+  border: 2px solid #8492A6
+
+@mixin relative-fontsize
+  font-size: 16px
+  -webkit-text-size-adjust: 100%
+  @media all and (device-width: 768px) and (device-height: 1024px) and (orientation:portrait)
+    font-size: 1.3rem
+
+@mixin relative-fontsize-2
+  font-size: 16px
+  -webkit-text-size-adjust: 100%
+  @media all and (device-width: 768px) and (device-height: 1024px) and (orientation:portrait)
+    font-size: 1.2rem
