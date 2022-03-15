@@ -11,6 +11,6 @@ RUN npm install
 
 COPY . /app/web
 
-EXPOSE 4000
+EXPOSE 1100
 
-CMD ["npm", "run", "serve", "--", "--port", "4000"]
+CMD ["npm", "run", "serve", "--", "--port", "1100"]

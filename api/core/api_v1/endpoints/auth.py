@@ -5,6 +5,8 @@ import models.account as models
 import schemas.account as schemas
 from fastapi import APIRouter
 import jwt
+import hashlib
+import json
 
 router = APIRouter()
 
@@ -23,16 +25,40 @@ def test():
     return {'msg': encoded_jwt}
 
 
-@router.post('login', response_model=List[schemas.Account])
+@router.post('login')
 def login(account: schemas.Account):
-    query = list(
-        models.Account.select().where(models.Account.name == account.name, models.Account.password == account.password).dict()
-    )
-    print(query)
-    return query
+    query = models.Account.select(
+        models.Account.id,
+        models.Account.name,
+        models.Account.mail,
+        models.Account.phone,
+        models.Account.password.alias('key_member')
+    ).where(
+        models.Account.name == account.name,
+        models.Account.password == hashlib.md5(account.password.encode()).hexdigest(),
+        models.Account.active
+    ).dicts()
+    if query:
+        return {'status': 200, 'token': jwt.encode(query[0], 'token', algorithm='HS256')}
+    return {'status': 404}
 
 
 @router.post('/auth')
 def check(token: Token):
-    account = jwt.decode(token.token, "token", algorithms=["HS256"])
-    return jwt.decode(token.token, "token", algorithms=["HS256"])
+    data = jwt.decode(token.token, "token", algorithms=["HS256"])
+    query = list(
+        models.Account.select(
+            models.Account.id,
+            models.Account.name,
+            models.Account.mail,
+            models.Account.phone,
+            models.Account.password.alias('key_member')
+        ).where(
+            models.Account.name == data['name'],
+            models.Account.password == data['key_member'],
+            models.Account.active
+        ).dicts()
+    )
+    if query:
+        return {'result': True}
+    return {'result': False}

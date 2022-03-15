@@ -4,6 +4,7 @@ from peewee import (
     IntegerField
 )
 
+
 class Account(BaseModel):
     name = CharField()
     password = CharField()
@@ -11,3 +12,6 @@ class Account(BaseModel):
     phone = CharField()
     role = IntegerField()
     search_str = CharField()
+
+    class Meta:
+        db_table = 'account'
