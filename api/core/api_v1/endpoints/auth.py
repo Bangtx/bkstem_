@@ -25,7 +25,7 @@ def test():
     return {'msg': encoded_jwt}
 
 
-@router.post('login')
+@router.post('/login')
 def login(account: schemas.Account):
     query = models.Account.select(
         models.Account.id,
