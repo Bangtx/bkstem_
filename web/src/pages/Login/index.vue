@@ -9,7 +9,7 @@
             v-card-text
               v-form
                 v-text-field(
-                  prepend-icon="mdi-account" :label="'Sđt/mail'" type="mai" v-model="userData.user"
+                  prepend-icon="mdi-account" :label="'Sđt/mail'" type="mai" v-model="userData.name"
                 )
                 v-text-field#password(
                   prepend-icon="mdi-key"
@@ -25,22 +25,28 @@
 
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api'
-import { api } from 'plugins'
-import { endpoints, toSnakeCase } from 'utils'
+import axios from 'axios'
+import { endpoints, toSnakeCase, urlPath } from 'utils'
 
 const Login = defineComponent({
   setup(props, { root }) {
-    const { $toast } = root
-    const userData = ref({ user: '', password: '' })
+    const { $toast, $router } = root
+    const userData = ref({ name: '', password: '' })
     const onClickLogin = async () => {
-      userData.value.user = userData.value.user.trim()
+      userData.value.name = userData.value.name.trim()
       userData.value.password = userData.value.password.trim()
-      if (userData.value.user.length === 0) $toast.error('Vui lòng nhập mail/sđt')
+      if (userData.value.name.length === 0) $toast.error('Vui lòng nhập mail/sđt')
       if (userData.value.password.length === 0) $toast.error('Vui lòng nhập mật khẩu')
-      if (userData.value.user.length > 0 && userData.value.user.length > 0) {
+      if (userData.value.name.length > 0 && userData.value.password.length > 0) {
         try {
-          const { data } = await api.post(`${endpoints.AUTH}login`, toSnakeCase(userData))
-          console.log(data)
+          const { data } = await axios.post(`${endpoints.AUTH}login`, toSnakeCase(userData.value))
+          if (data.status === 404) {
+            $toast.error('Tài khoản mật khẩu không chính xác')
+          }
+          localStorage.setItem('token', data.token)
+          $router.push({
+            name: urlPath.START.name
+          })
         } catch (e) {
           $toast.error('Đăng nhập thấy bại')
         }

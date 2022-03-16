@@ -1,1 +1,1 @@
-export const AUTH = '/auth/'
+export const AUTH = `${process.env.VUE_APP_API_URL}/auth/`
