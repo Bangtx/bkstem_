@@ -1,32 +1,33 @@
-from builtins import print
 from typing import List
 from schemas.token import Token
 import models.account as models
 import schemas.account as schemas
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 import jwt
 import hashlib
 import json
+from utils.auth import Auth
 
 router = APIRouter()
 
 
 @router.get('/test_auth')
-def test():
-    encoded_jwt = jwt.encode(
-        {
-            'id': 1,
-            'name': 'bang'
-        },
-        'token',
-        algorithm='HS256'
-    )
-    print(type(encoded_jwt))
-    return {'msg': encoded_jwt}
+def test(data=Depends(Auth())):
+    # encoded_jwt = jwt.encode(
+    #     {
+    #         'id': 1,
+    #         'name': 'bang'
+    #     },
+    #     'token',
+    #     algorithm='HS256'
+    # )
+    # encoded_jwt
+    # print(type(encoded_jwt))
+    return {'msg': data}
 
 
 @router.post('/login')
-def login(account: schemas.Account):
+def login(account: schemas.AccountBase):
     query = models.Account.select(
         models.Account.id,
         models.Account.name,
