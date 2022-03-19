@@ -11,7 +11,7 @@ import json
 router = APIRouter()
 
 
-@router.get('/', response_model=List[schemas.Teacher])
+@router.get('/')
 def get_teachers():
     return models.Teacher.get_list()
 

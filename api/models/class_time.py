@@ -9,7 +9,7 @@ from .date_of_week import DateOfWeek
 
 
 class ClassTime(BaseModel):
-    date_of_week_id = ForeignKeyField(DateOfWeek)
+    date_of_week = ForeignKeyField(DateOfWeek, column_name='date_of_week_id')
     start_time = TimeField()
     stop_time = TimeField()
 

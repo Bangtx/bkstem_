@@ -16,3 +16,12 @@ class Classroom(BaseModel):
 
     class Meta:
         db_table = 'classroom'
+
+    @classmethod
+    def get_classrooms(cls):
+        classrooms = cls.get_list()
+        print(classrooms)
+
+    @classmethod
+    def check_teacher_class_times_exits(cls):
+        pass

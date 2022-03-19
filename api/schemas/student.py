@@ -1,9 +1,14 @@
 from .account import AccountBase
 
 
-class Student(AccountBase):
+class StudentBase(AccountBase):
+    pass
+
+
+class StudentCreate(StudentBase):
     account_id: int
 
 
-class StudentCreate(Student):
-    pass
+class Student(StudentBase):
+    account: AccountBase
+    id: int

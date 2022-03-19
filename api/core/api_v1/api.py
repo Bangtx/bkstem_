@@ -14,6 +14,8 @@ api_router = APIRouter()
 api_router.include_router(auth.router, prefix='/auth', tags=['auth'])
 api_router.include_router(teacher.router, prefix='/teacher', tags=['teacher'])
 api_router.include_router(student.router, prefix='/student', tags=['student'])
+api_router.include_router(classroom.router, prefix='/classroom', tags=['classroom'])
+api_router.include_router(class_time.router, prefix='/class_time', tags=['class_time'])
 
 # api_router.include_router(
 #     home.router,
