@@ -16,7 +16,7 @@ class Student(BaseModel):
 
     @classmethod
     def get_list(cls):
-        student = (
+        students = (
             cls.select(
                 cls.id,
                 Account.name,
@@ -29,6 +29,21 @@ class Student(BaseModel):
                 Account, on=cls.account_id == Account.id
             ).where(cls.active, Account.active).dicts()
         )
-        return list(student)
+        return list(students)
+
+    @classmethod
+    def get_students_by_ids(cls, ids):
+        students = (
+            cls.select(
+                cls.id,
+                Account.name
+            ).join(
+                Account, on=Account.id == cls.account
+            ).where(
+                Account.active, cls.active, cls.id << ids
+            ).dicts()
+        )
+        return list(students)
+
 
 

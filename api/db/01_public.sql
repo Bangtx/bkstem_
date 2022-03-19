@@ -54,8 +54,8 @@ CREATE TABLE classroom
   id bigserial NOT NULL,
   name text,
   teacher_id bigint,
-  student_ids bigint,
-  class_time_ids bigint,
+  student_ids bigint[],
+  class_time_ids bigint[],
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   created_by bigint,
   modified_at timestamp with time zone,
@@ -70,7 +70,7 @@ DROP TABLE IF EXISTS class_time CASCADE;
 CREATE TABLE class_time
 (
   id bigserial NOT NULL,
-  date_of_week_id text,
+  date_of_week_id int,
   start_time time,
   stop_time time,
   created_at timestamp with time zone NOT NULL DEFAULT now(),

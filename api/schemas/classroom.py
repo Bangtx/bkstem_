@@ -1,13 +1,17 @@
 from .schema import Schema
+from .teacher import Teacher
 from typing import List
 
 
-class ClassRoom(Schema):
-    name: int
-    teacher_id: int
+class ClassRoomBase(Schema):
+    name: str
     student_ids: List[int]
     class_time_ids: List[int]
 
 
-class ClassRoomCreate(ClassRoom):
-    pass
+class ClassRoom(ClassRoomBase):
+    teacher: int
+
+
+class ClassRoomCreate(ClassRoomBase):
+    teacher: int
