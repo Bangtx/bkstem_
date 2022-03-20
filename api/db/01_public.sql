@@ -130,3 +130,21 @@ CREATE TABLE roll_call
   active boolean DEFAULT TRUE,
   CONSTRAINT pkey_roll_call PRIMARY KEY (id)
 );
+
+DROP TABLE IF EXISTS notification CASCADE;
+CREATE TABLE notification
+(
+  id bigserial NOT NULL,
+  classroom_id bigint,
+  student_id bigint[],
+  teacher_id bigint,
+  notification text,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  created_by bigint,
+  modified_at timestamp with time zone,
+  modified_by bigint,
+  deleted_at timestamp with time zone,
+  deleted_by bigint,
+  active boolean DEFAULT TRUE,
+  CONSTRAINT pkey_notification PRIMARY KEY (id)
+);

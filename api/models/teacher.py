@@ -4,6 +4,7 @@ from peewee import (
     ForeignKeyField
 )
 from .account import Account
+from playhouse.shortcuts import model_to_dict
 
 
 class Teacher(BaseModel):
@@ -31,3 +32,17 @@ class Teacher(BaseModel):
             .dicts()
         )
         return list(query)
+
+    @classmethod
+    def get_teacher_by_id(cls, id):
+        teacher = (
+            Teacher.select(
+                Teacher.id,
+                Account.name
+            ).join(
+                Account, on=Account.id == Teacher.account
+            ).where(
+                Account.active, Teacher.active, Teacher.id == id
+            ).dicts()
+        )
+        return teacher.get()

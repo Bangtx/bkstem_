@@ -5,7 +5,8 @@ from .endpoints import (
     teacher,
     student,
     class_time,
-    classroom
+    classroom,
+    roll_call
 )
 
 
@@ -16,10 +17,4 @@ api_router.include_router(teacher.router, prefix='/teacher', tags=['teacher'])
 api_router.include_router(student.router, prefix='/student', tags=['student'])
 api_router.include_router(classroom.router, prefix='/classroom', tags=['classroom'])
 api_router.include_router(class_time.router, prefix='/class_time', tags=['class_time'])
-
-# api_router.include_router(
-#     home.router,
-#     prefix='/home',
-#     tags=['home'],
-#     dependencies=[Depends(Auth())],
-# )
+api_router.include_router(roll_call.router, prefix='/roll_call', tags=['roll_call'])

@@ -1,12 +1,16 @@
 from .schema import Schema
 
 
-class RollCall(Schema):
-    classroom_id: int
-    student_id: int
-    teacher_id: int
-    absent_type_id: int
+class RollCallBase(Schema):
+    classroom: int
+    student: int
+    teacher: int
+    absent_type: int
 
 
-class RollCallCreate(RollCall):
+class RollCall(RollCallBase):
+    pass
+
+
+class RollCallCreate(RollCallBase):
     pass

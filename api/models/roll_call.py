@@ -1,5 +1,5 @@
 from .base import BaseModel
-from peewee import CharField, ForeignKeyField
+from peewee import CharField, ForeignKeyField, fn
 from .teacher import Teacher
 from .student import Student
 from .classroom import Classroom
@@ -7,10 +7,40 @@ from .absent_type import AbsentType
 
 
 class RollCall(BaseModel):
-    classroom_id = ForeignKeyField(Classroom)
-    student_id = ForeignKeyField(Student)
-    teacher_id = ForeignKeyField(Teacher)
-    absent_type_id = ForeignKeyField(AbsentType)
+    classroom = ForeignKeyField(Classroom, column_name='classroom_id')
+    student = ForeignKeyField(Student, column_name='student_id')
+    teacher = ForeignKeyField(Teacher, column_name='teacher_id')
+    absent_type = ForeignKeyField(AbsentType, column_name='absent_type_id')
 
     class Meta:
         db_table = 'roll_call'
+
+    @classmethod
+    def get_list(cls):
+        roll_calls = list(
+            cls.select(
+                cls.id,
+                fn.json_build_object(
+                    'id', Classroom.id,
+                    'name', Classroom.name
+                ).alias('class_room'),
+                cls.teacher,
+                cls.student,
+                fn.json_build_object(
+                    'id', AbsentType.id,
+                    'type', AbsentType.type
+                ).alias('absent_type')
+            ).join(
+                Classroom, on=Classroom.id == cls.classroom
+            ).join(
+                AbsentType, on=AbsentType.id == cls.absent_type
+            ).where(
+                cls.active, Classroom.active
+            ).dicts()
+        )
+
+        for roll_call in roll_calls:
+            roll_call['student'] = Student.get_students_by_id(roll_call['student'])
+            roll_call['teacher'] = Teacher.get_teacher_by_id(roll_call['teacher'])
+
+        return roll_calls

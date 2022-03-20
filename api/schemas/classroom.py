@@ -10,7 +10,7 @@ class ClassRoomBase(Schema):
 
 
 class ClassRoom(ClassRoomBase):
-    teacher: int
+    teacher: Teacher
 
 
 class ClassRoomCreate(ClassRoomBase):
