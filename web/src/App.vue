@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-app
+  div
     router-view
 </template>
 
@@ -17,8 +17,4 @@ export default App
 
 <style lang="sass">
 @import 'styles/master.sass'
-</style>
-
-<style>
-@import 'styles/css/main.css';
 </style>

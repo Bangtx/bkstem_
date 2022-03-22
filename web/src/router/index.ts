@@ -10,7 +10,18 @@ const routes: Array<RouteConfig> = [
     component: () => import(/* webpackChunkName: "home" */ '../pages/Home/index.vue'),
     beforeEnter: (to, from, next) => {
       const token = localStorage.getItem('token')
-      console.log(from.fullPath)
+      if (token && from.name !== to.name) {
+        next()
+        return
+      }
+      next({ name: 'Login' })
+    }
+  },
+  {
+    ...urlPath.CLASSROOM,
+    component: () => import(/* webpackChunkName: "home" */ '../pages/Classroom/index.vue'),
+    beforeEnter: (to, from, next) => {
+      const token = localStorage.getItem('token')
       if (token && from.name !== to.name) {
         next()
         return

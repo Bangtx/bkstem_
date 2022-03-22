@@ -19,28 +19,35 @@
         // class list
         .grid.gap-6.mb-8(class="md:grid-cols-2 xl:grid-cols-4")
           // Card
-          class-button
-          class-button
-          class-button
-          class-button
-          class-button
-          class-button
+          class-button(@on-click="openClassroom()")
+          //class-button
+          //class-button
+          //class-button
+          //class-button
+          //class-button
 
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent } from '@vue/composition-api'
 import { HeaderBar, ClassButton } from 'components'
+import { urlPath } from 'utils'
 
 const Home = defineComponent({
   components: {
     HeaderBar,
     ClassButton
   },
-  setup() {
-    const value = ref('hhi')
+  setup(props, { root }) {
+    const { $router } = root
+    const openClassroom = () => {
+      $router.push({
+        path: urlPath.CLASSROOM.path
+      })
+      console.log('hih')
+    }
     return {
-      value
+      openClassroom
     }
   }
 })
