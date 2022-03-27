@@ -16,6 +16,11 @@ def get_classrooms():
     return models.Classroom.get_list()
 
 
+@router.get('/{id}')
+def get_classroom_by_id(id: int):
+    return models.Classroom.get_one(id)
+
+
 @router.post('/')
 def create_classroom(classroom: schemas.ClassRoomCreate):
     classroom_data = classroom.dict()

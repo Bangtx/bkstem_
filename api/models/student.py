@@ -38,7 +38,9 @@ class Student(BaseModel):
         students = (
             cls.select(
                 cls.id,
-                Account.name
+                Account.name,
+                Account.gender,
+                Account.date_of_birth
             ).join(
                 Account, on=Account.id == cls.account
             ).where(

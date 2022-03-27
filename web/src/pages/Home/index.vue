@@ -25,7 +25,7 @@
           class-button(
             :class-name="classroom.name"
             :total-student="classroom.students.length"
-            @on-click="openClassroom()"
+            @on-click="openClassroom(classroom.id)"
           )
 
 </template>
@@ -44,9 +44,12 @@ const Home = defineComponent({
   setup(props, { root }) {
     const { $router, $toast } = root
     const classrooms = ref([])
-    const openClassroom = () => {
+    const openClassroom = (classroomId: number) => {
       $router.push({
-        path: urlPath.CLASSROOM.path
+        name: urlPath.CLASSROOM.name,
+        params: {
+          classroomId: String(classroomId)
+        }
       })
     }
 

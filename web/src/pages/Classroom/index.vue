@@ -15,13 +15,13 @@
             .items-center.mt-4.gap-36(class='md:flex')
               h1.py-2
                 | Tên lớp:
-                span Toán cao cấp
+                span {{ classroom.name }}
               h1.py-2
                 | Sĩ số:
-                span 32
+                span {{ students.length }}
             h1.py-2
               | Giáo viên chủ nhiệm:
-              span Nam
+              span {{ teacher.name }}
             h1.py-2.flex.gap-2.items-center
               div Danh sách sinh viên
             // Danh sách sinh viên
@@ -39,7 +39,7 @@
                   tbody.bg-white(v-for="(student, index) in students" :key="student.id")
                     tr.text-gray-700
                       td.px-4.py-3.border.text-center {{ index }}
-                      td.px-4.py-3.border {{ student.account.id }}
+                      td.px-4.py-3.border
                       td.px-4.py-3.border {{ student.name }}
                       td.px-4.py-3.text-sm.border {{ student.dateOfBirth }}
                       td.px-4.py-3.text-sm.border {{ student.gender }}
@@ -54,17 +54,30 @@ import { HeaderBar, MenuComponent } from 'components'
 import { endpoints, toCamelCase } from 'utils'
 import { api } from 'plugins'
 
-interface Account {
+interface Teacher {
   id: number
-  mail: string
-  phone: string
+  name: string
+}
+
+interface ClassTime {
+  dateOfWeek: string
+  startTime: string
+  stopTime: string
 }
 
 interface Student {
+  id: number
   name: string
   dateOfBirth: string
   gender: string
-  account: Account
+}
+
+interface ClassroomType {
+  id: number
+  name: string
+  teacher: Teacher
+  students: Student
+  classTime: ClassTime
 }
 
 const Classroom = defineComponent({
@@ -73,16 +86,23 @@ const Classroom = defineComponent({
     MenuComponent
   },
   setup(props, { root }) {
-    const { $toast } = root
+    const { $toast, $route } = root
+    const classroomID = $route.params.classroomId
     const feature = ref('index')
+    const classroom = ref<ClassroomType | any>({})
     const students = ref<Array<Student>>([])
+    const teacher = ref<Teacher | any>({})
+
     const onSelectFeature = (data: string) => {
       feature.value = data
     }
     const getData = async () => {
       try {
-        const { data } = await api.get(`${endpoints.STUDENT}`)
-        students.value = toCamelCase(data)
+        const { data } = await api.get(`${endpoints.CLASSROOM}${classroomID}`)
+        classroom.value = toCamelCase(data)
+        students.value = classroom.value.students
+        teacher.value = classroom.value.teacher
+        console.log(students.value)
       } catch (e) {
         $toast.error('Get data failed')
       }
@@ -93,7 +113,9 @@ const Classroom = defineComponent({
     })
     return {
       onSelectFeature,
-      students
+      students,
+      classroom,
+      teacher
     }
   }
 })

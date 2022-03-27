@@ -57,6 +57,40 @@ class Classroom(BaseModel):
         return classrooms
 
     @classmethod
+    def get_one(cls, id):
+        teacher = (
+            Teacher.select(
+                Teacher.id,
+                Account.name
+            ).join(
+                Account, on=Account.id == Teacher.account
+            ).where(
+                Account.active, Teacher.active
+            ).alias('teacher')
+        )
+
+        query = (
+            cls.select(
+                cls.id,
+                cls.name,
+                fn.json_build_object(
+                    'id', teacher.c.id,
+                    'name', teacher.c.name
+                ).alias('teacher'),
+                cls.student_ids.alias('students'),
+                cls.class_time_ids.alias('class_times')
+            ).join(
+                teacher, on=teacher.c.id == cls.teacher
+            ).where(
+                cls.active, cls.id == id
+            ).dicts()
+        )
+        classroom = query.get()
+        classroom['students'] = Student.get_students_by_ids(classroom['students'])
+        classroom['class_times'] = ClassTime.get_class_times_by_ids(classroom['class_times'])
+        return classroom
+
+    @classmethod
     def check_teacher_class_times_exits(cls, student_ids, class_time_ids):
         students = list(
             Student.select().where(Student.active, Student.id << student_ids)
