@@ -1,11 +1,14 @@
 from .base import BaseModel
 from peewee import (
-    CharField
+    CharField,
+    DateField
 )
 
 
 class Account(BaseModel):
     name = CharField()
+    date_of_birth = DateField()
+    gender = CharField()
     password = CharField()
     mail = CharField()
     phone = CharField()
@@ -21,7 +24,6 @@ class Account(BaseModel):
                 cls.active, cls.mail == mail or cls.phone == phone
             )
         )
-        print(query)
         if query:
             return True
         return False

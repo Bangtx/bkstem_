@@ -20,6 +20,8 @@ class Student(BaseModel):
             cls.select(
                 cls.id,
                 Account.name,
+                Account.gender,
+                Account.date_of_birth,
                 fn.json_build_object(
                     'id', Account.id,
                     'mail', Account.name,

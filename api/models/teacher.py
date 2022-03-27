@@ -4,7 +4,6 @@ from peewee import (
     ForeignKeyField
 )
 from .account import Account
-from playhouse.shortcuts import model_to_dict
 
 
 class Teacher(BaseModel):
@@ -19,6 +18,8 @@ class Teacher(BaseModel):
             cls.select(
                 cls.id,
                 Account.name,
+                Account.gender,
+                Account.date_of_birth,
                 fn.json_build_object(
                     'id', Account.id,
                     'mail', Account.name,

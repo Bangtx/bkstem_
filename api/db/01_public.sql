@@ -3,6 +3,8 @@ CREATE TABLE account
 (
   id bigserial NOT NULL,
   name text,
+  gender text,
+  date_of_birth date,
   password text,
   mail text,
   phone text,

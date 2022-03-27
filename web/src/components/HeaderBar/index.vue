@@ -1,7 +1,7 @@
 <template lang="pug">
   .w-full.bg-white.shadow.py-3.px-4.flex.justify-between.items-center.z-20.fixed(class="md:px-8")
     div
-      img.h-8(src="http://bksteam.edu.vn/wp-content/uploads/2021/03/logobksteam.png" alt="")
+      img.h-8(src="https://scontent.fhan5-8.fna.fbcdn.net/v/t1.6435-9/183340909_114537410761573_7380865489238873457_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=MxDF6r7TslsAX8vAxAm&_nc_ht=scontent.fhan5-8.fna&oh=00_AT-Na2Jyp1gbI-0Im8JosVL1SO5pzO6c5z44c-zvCWp00Q&oe=626496E8" alt="")
     .flex.rounded-full.bg-gray-100
       input.px-4.py-2.w-32.rounded-full.bg-gray-100(type="text" class="md:w-80 lg:w-96 focus:outline-none" placeholder="Search...")
       button.flex.items-center.justify-center.px-4.text-purple-500
