@@ -17,21 +17,24 @@
             span.text-base Button 2
         h1.text-3xl.py-4.mt-4 Danh sách lớp
         // class list
-        .grid.gap-6.mb-8(class="md:grid-cols-2 xl:grid-cols-4")
-          // Card
-          class-button(@on-click="openClassroom()")
-          //class-button
-          //class-button
-          //class-button
-          //class-button
-          //class-button
+        .grid.gap-6.mb-8(
+          class="md:grid-cols-2 xl:grid-cols-4"
+          v-for="classroom in classrooms"
+          :key="classroom.id"
+        )
+          class-button(
+            :class-name="classroom.name"
+            :total-student="classroom.students.length"
+            @on-click="openClassroom()"
+          )
 
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, onMounted, ref } from '@vue/composition-api'
 import { HeaderBar, ClassButton } from 'components'
-import { urlPath } from 'utils'
+import { urlPath, endpoints, toCamelCase } from 'utils'
+import { api } from 'plugins'
 
 const Home = defineComponent({
   components: {
@@ -39,15 +42,29 @@ const Home = defineComponent({
     ClassButton
   },
   setup(props, { root }) {
-    const { $router } = root
+    const { $router, $toast } = root
+    const classrooms = ref([])
     const openClassroom = () => {
       $router.push({
         path: urlPath.CLASSROOM.path
       })
-      console.log('hih')
     }
+
+    const getData = async () => {
+      try {
+        const { data } = await api.get(`${endpoints.CLASSROOM}`)
+        classrooms.value = toCamelCase(data)
+      } catch (e) {
+        $toast.error('Get data failed')
+      }
+    }
+
+    onMounted(async () => {
+      await getData()
+    })
     return {
-      openClassroom
+      openClassroom,
+      classrooms
     }
   }
 })

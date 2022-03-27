@@ -31,6 +31,8 @@ def login(account: schemas.AccountBase):
     query = models.Account.select(
         models.Account.id,
         models.Account.name,
+        models.Account.gender,
+        models.Account.date_of_birth,
         models.Account.mail,
         models.Account.phone,
         models.Account.password.alias('key_member')

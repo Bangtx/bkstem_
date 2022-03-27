@@ -16,7 +16,7 @@ def get_classrooms():
     return models.Classroom.get_list()
 
 
-@router.post('/', response_model=schemas.ClassRoom)
+@router.post('/')
 def create_classroom(classroom: schemas.ClassRoomCreate):
     classroom_data = classroom.dict()
     is_exists = models.Classroom.check_teacher_class_times_exits(

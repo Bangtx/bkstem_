@@ -36,55 +36,13 @@
                       th.px-4.py-3.border Ngày sinh
                       th.px-4.py-3.border Giới tính
                       th.px-4.py-3.border Ghi chú
-                  tbody.bg-white
+                  tbody.bg-white(v-for="(student, index) in students" :key="student.id")
                     tr.text-gray-700
-                      td.px-4.py-3.border.text-center 1
-                      td.px-4.py-3.border B18DCCB423
-                      td.px-4.py-3.border Lê Hoàng Nam
-                      td.px-4.py-3.text-sm.border 6/4/2000
-                      td.px-4.py-3.text-sm.border Nam
-                      td.px-4.py-3.text-sm.border
-                    tr.text-gray-700
-                      td.px-4.py-3.border.text-center 1
-                      td.px-4.py-3.border B18DCCB423
-                      td.px-4.py-3.border Lê Hoàng Nam
-                      td.px-4.py-3.text-sm.border 6/4/2000
-                      td.px-4.py-3.text-sm.border Nam
-                      td.px-4.py-3.text-sm.border
-                    tr.text-gray-700
-                      td.px-4.py-3.border.text-center 1
-                      td.px-4.py-3.border B18DCCB423
-                      td.px-4.py-3.border Lê Hoàng Nam
-                      td.px-4.py-3.text-sm.border 6/4/2000
-                      td.px-4.py-3.text-sm.border Nam
-                      td.px-4.py-3.text-sm.border
-                    tr.text-gray-700
-                      td.px-4.py-3.border.text-center 1
-                      td.px-4.py-3.border B18DCCB423
-                      td.px-4.py-3.border Lê Hoàng Nam
-                      td.px-4.py-3.text-sm.border 6/4/2000
-                      td.px-4.py-3.text-sm.border Nam
-                      td.px-4.py-3.text-sm.border
-                    tr.text-gray-700
-                      td.px-4.py-3.border.text-center 1
-                      td.px-4.py-3.border B18DCCB423
-                      td.px-4.py-3.border Lê Hoàng Nam
-                      td.px-4.py-3.text-sm.border 6/4/2000
-                      td.px-4.py-3.text-sm.border Nam
-                      td.px-4.py-3.text-sm.border
-                    tr.text-gray-700
-                      td.px-4.py-3.border.text-center 1
-                      td.px-4.py-3.border B18DCCB423
-                      td.px-4.py-3.border Lê Hoàng Nam
-                      td.px-4.py-3.text-sm.border 6/4/2000
-                      td.px-4.py-3.text-sm.border Nam
-                      td.px-4.py-3.text-sm.border
-                    tr.text-gray-700
-                      td.px-4.py-3.border.text-center 1
-                      td.px-4.py-3.border B18DCCB423
-                      td.px-4.py-3.border Lê Hoàng Nam
-                      td.px-4.py-3.text-sm.border 6/4/2000
-                      td.px-4.py-3.text-sm.border Nam
+                      td.px-4.py-3.border.text-center {{ index }}
+                      td.px-4.py-3.border {{ student.account.id }}
+                      td.px-4.py-3.border {{ student.name }}
+                      td.px-4.py-3.text-sm.border {{ student.dateOfBirth }}
+                      td.px-4.py-3.text-sm.border {{ student.gender }}
                       td.px-4.py-3.text-sm.border
 
 
@@ -93,8 +51,21 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from '@vue/composition-api'
 import { HeaderBar, MenuComponent } from 'components'
-import { endpoints } from 'utils'
+import { endpoints, toCamelCase } from 'utils'
 import { api } from 'plugins'
+
+interface Account {
+  id: number
+  mail: string
+  phone: string
+}
+
+interface Student {
+  name: string
+  dateOfBirth: string
+  gender: string
+  account: Account
+}
 
 const Classroom = defineComponent({
   components: {
@@ -104,13 +75,14 @@ const Classroom = defineComponent({
   setup(props, { root }) {
     const { $toast } = root
     const feature = ref('index')
+    const students = ref<Array<Student>>([])
     const onSelectFeature = (data: string) => {
       feature.value = data
     }
     const getData = async () => {
       try {
         const { data } = await api.get(`${endpoints.STUDENT}`)
-        console.log(data)
+        students.value = toCamelCase(data)
       } catch (e) {
         $toast.error('Get data failed')
       }
@@ -120,7 +92,8 @@ const Classroom = defineComponent({
       await getData()
     })
     return {
-      onSelectFeature
+      onSelectFeature,
+      students
     }
   }
 })

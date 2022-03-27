@@ -36,6 +36,7 @@ class Classroom(BaseModel):
 
         classrooms = list(
             cls.select(
+                cls.id,
                 cls.name,
                 fn.json_build_object(
                     'id', teacher.c.id,
