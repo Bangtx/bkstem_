@@ -2,6 +2,9 @@
   div
     .bg-gray-50.min-h-screen
       header-bar
+      div.banner-content
+        img.hidden.w-full.h-auto(class="md:block" :src="`${baseUrl}/img/banner2.png`" alt="")
+        img.w-full.h-auto(class="md:hidden" :src="`${baseUrl}/img/banner1.png`" alt="")
       .px-4.text-gray-800(class="md:px-8")
         .flex.items-center.gap-4.mt-8
           button.flex.items-center.justify-between.px-4.py-2.font-medium.leading-5.text-white.transition-colors.duration-150.bg-orange-400.border.border-transparent.rounded-lg(class="hover:bg-orange-300 focus:outline-none")
@@ -43,6 +46,7 @@ const Home = defineComponent({
   },
   setup(props, { root }) {
     const { $router, $toast } = root
+    const baseUrl = process.env.VUE_APP_WEB_URL
     const classrooms = ref([])
     const openClassroom = (classroomId: number) => {
       $router.push({
@@ -67,9 +71,15 @@ const Home = defineComponent({
     })
     return {
       openClassroom,
-      classrooms
+      classrooms,
+      baseUrl
     }
   }
 })
 export default Home
 </script>
+
+<style lang="sass">
+.banner-content
+  padding-top: 72px
+</style>
