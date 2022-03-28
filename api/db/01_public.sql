@@ -119,6 +119,7 @@ DROP TABLE IF EXISTS roll_call CASCADE;
 CREATE TABLE roll_call
 (
   id bigserial NOT NULL,
+  date date,
   classroom_id bigint,
   student_id bigint,
   teacher_id bigint,date_of_week_id

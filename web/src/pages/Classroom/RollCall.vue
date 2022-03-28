@@ -7,11 +7,12 @@
         div Điểm danh
       .items-center.mt-4.gap-36(class='md:flex')
         h1.py-2
-          | Tên lớp:
-          span Toán cao cấp
+          span Tên lớp: {{ classroom.name }}
         h1.py-2
-          | Sĩ số:
-          span 32
+          span Sĩ số: {{ students.length }}
+
+        v-btn Add date
+
       // Danh sách sinh viên
       .rounded-lg.overflow-auto.shadow-xs.mt-4(class='lg:px-10')
         .w-full.overflow-auto.rounded-lg(style='max-height: 600px; max-width: 1550px;')
@@ -56,6 +57,20 @@ interface AbsentType {
   type: string
 }
 
+interface Master {
+  id: number
+  name: string
+}
+
+interface RollCallType {
+  id: number
+  date: string
+  classRoom: Master
+  teacher: Master
+  student: Master
+  absentType: AbsentType
+}
+
 const RollCall = defineComponent({
   props: {
     classroom: {
@@ -74,18 +89,25 @@ const RollCall = defineComponent({
   setup(props, { root }) {
     const { $toast } = root
     const absentType = ref<AbsentType[]>([])
-
+    const rollCalls = ref<RollCallType[]>([])
     const getData = async () => {
       try {
-        const { data } = await api.get(`${endpoints.ABSENTTYPE}`)
-        absentType.value = toCamelCase(data)
+        const data = await Promise.all([
+          api.get(`${endpoints.ABSENTTYPE}`),
+          api.get(`${endpoints.ROLLCALL}`)
+        ])
+
+        const [{ data: absentTypeData }, { data: rollCallData }] = data
+
+        absentType.value = toCamelCase(absentTypeData)
+        rollCalls.value = toCamelCase(rollCallData)
       } catch (e) {
         $toast.error('Get data failed')
       }
     }
 
     onMounted(async () => {
-      await getData
+      await getData()
     })
     return {
       absentType

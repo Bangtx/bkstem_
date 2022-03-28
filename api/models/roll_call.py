@@ -1,5 +1,5 @@
 from .base import BaseModel
-from peewee import CharField, ForeignKeyField, fn
+from peewee import CharField, ForeignKeyField, fn, DateField
 from .teacher import Teacher
 from .student import Student
 from .classroom import Classroom
@@ -8,6 +8,7 @@ from .absent_type import AbsentType
 
 class RollCall(BaseModel):
     classroom = ForeignKeyField(Classroom, column_name='classroom_id')
+    date = DateField()
     student = ForeignKeyField(Student, column_name='student_id')
     teacher = ForeignKeyField(Teacher, column_name='teacher_id')
     absent_type = ForeignKeyField(AbsentType, column_name='absent_type_id')
@@ -20,6 +21,7 @@ class RollCall(BaseModel):
         roll_calls = list(
             cls.select(
                 cls.id,
+                cls.date,
                 fn.json_build_object(
                     'id', Classroom.id,
                     'name', Classroom.name
