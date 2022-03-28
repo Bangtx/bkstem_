@@ -121,7 +121,7 @@ CREATE TABLE roll_call
   id bigserial NOT NULL,
   classroom_id bigint,
   student_id bigint,
-  teacher_id bigint,
+  teacher_id bigint,date_of_week_id
   absent_type_id int,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   created_by bigint,
