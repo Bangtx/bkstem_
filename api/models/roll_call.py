@@ -46,3 +46,27 @@ class RollCall(BaseModel):
             roll_call['teacher'] = Teacher.get_teacher_by_id(roll_call['teacher'])
 
         return roll_calls
+
+    @classmethod
+    def get_roll_call_by_date(cls, date, class_room):
+        roll_calls = list(
+            cls.select(
+                cls.id,
+                cls.teacher,
+                cls.student,
+                fn.json_build_object(
+                    'id', AbsentType.id,
+                    'type', AbsentType.type
+                ).alias('absent_type')
+            ).join(
+                Classroom, on=Classroom.id == cls.classroom
+            ).join(
+                AbsentType, on=AbsentType.id == cls.absent_type
+            ).where(
+                cls.active, Classroom.active, cls.date == date, cls.classroom == class_room
+            ).dicts()
+        )
+        for roll_call in roll_calls:
+            roll_call['student'] = Student.get_students_by_id(roll_call['student'])
+            roll_call['teacher'] = Teacher.get_teacher_by_id(roll_call['teacher'])
+        return roll_calls

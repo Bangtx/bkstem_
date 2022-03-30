@@ -74,7 +74,6 @@ const Classroom = defineComponent({
         classroom.value = toCamelCase(data)
         students.value = classroom.value.students
         teacher.value = classroom.value.teacher
-        console.log(students.value)
       } catch (e) {
         $toast.error('Get data failed')
       }
