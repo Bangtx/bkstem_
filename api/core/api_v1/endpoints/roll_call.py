@@ -1,10 +1,7 @@
-from builtins import enumerate
-
+from typing import List
 from fastapi import APIRouter
 import schemas.roll_call as schemas
 import models.roll_call as models
-from datetime import date
-
 
 router = APIRouter()
 
@@ -16,10 +13,11 @@ def get_roll_call(class_room: int):
             models.RollCall.date
         ).where(
             models.RollCall.active, models.RollCall.classroom == class_room
+        ).order_by(
+            models.RollCall.date.asc()
         ).dicts()
     )
     dates = list(set(list(map(lambda x: x['date'], dates))))
-    print(dates)
     data = []
     for date in dates:
         data.append({
@@ -32,3 +30,11 @@ def get_roll_call(class_room: int):
 @router.post('/')
 def create_roll_call(roll_call: schemas.RollCallCreate):
     return models.RollCall.create(**roll_call.dict())
+
+
+@router.post('/create_roll_calls')
+def create_roll_call(roll_call: List[schemas.RollCallCreate]):
+    roll_call_data = list(map(lambda x: x.dict(), roll_call))
+    return list(
+        models.RollCall.insert_many(roll_call_data).dicts().execute()
+    )

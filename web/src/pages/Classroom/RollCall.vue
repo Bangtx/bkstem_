@@ -11,7 +11,7 @@
         h1.py-2
           span Sĩ số: {{ students.length }}
 
-        v-btn(@click="addCols=!addCols") {{ addCols ? 'Hủy Điểm danh' : 'Điểm danh'}}
+        v-btn(@click="handleClickRollCall()") {{ addCols ? 'Hủy Điểm danh' : 'Điểm danh'}}
 
       // Danh sách sinh viên
       .rounded-lg.overflow-auto.shadow-xs.mt-4(class="lg:px-10")
@@ -31,14 +31,17 @@
                 //th.px-1.py-1.border 3/1/2020
                 //th.px-1.py-1.border Ghi chú
             tbody.bg-white
-              tr.text-gray-700(v-for="student in students" :key="student.id")
-                td.px-1.py-1.border.text-center 1
-                td.px-1.py-1.border {{ student.id }}
-                td.px-1.py-1.border {{ student.name }}
-                td.px-1.py-1.border(v-for="rollCall in rollCalls" :key="rollCall.id")
+              tr.text-gray-700(v-for="(student, index) in studentData" :key="student.id")
+                td.px-2.py-1.border.text-center {{ index + 1 }}
+                td.px-2.py-1.border {{ student.id }}
+                td.px-2.py-1.border {{ student.name }}
+                td.px-2.py-1.border(v-for="rollCall in rollCalls" :key="rollCall.id")
                   span {{ rollCall.rollCall.find(e => e.student.id === student.id).absentType.type }}
                 td.border(v-if="addCols")
-                  select.block.bg-white.rounded.w-full.mt-1.form-select(class="focus:outline-none")
+                  select.block.bg-white.rounded.w-full.mt-1.form-select(
+                    class="focus:outline-none"
+                    v-model="student.absentTypeName"
+                  )
                     option(v-for="absentType in absentTypes" :key="absentType.id") {{ absentType.type }}
                 //td.px-1.py-1.text-sm.border
                 //  select.block.bg-white.rounded.w-full.mt-1.form-select(class='focus:outline-none')
@@ -46,12 +49,15 @@
                 //    option Vắng
                 //td.px-1.py-1.text-sm.border
 
+      v-btn(v-if="addCols" style="margin-left: 77%" @click="onClickSubmit") submit
+
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from '@vue/composition-api'
 import { api } from 'plugins'
-import { endpoints, toCamelCase } from 'utils'
+import { endpoints, toCamelCase, toSnakeCase } from 'utils'
+import moment from 'moment'
 
 interface AbsentType {
   id: number
@@ -75,6 +81,14 @@ interface RollCallType {
   rollCall: RollCallDetail
 }
 
+interface RollCallCreate {
+  date: string
+  classroom: number
+  teacher: number
+  student: number
+  absentType?: number
+}
+
 const RollCall = defineComponent({
   props: {
     classroom: {
@@ -95,6 +109,12 @@ const RollCall = defineComponent({
     const absentTypes = ref<AbsentType[]>([])
     const rollCalls = ref<RollCallType[]>([])
     const addCols = ref<boolean>(false)
+    const studentData = ref<any[]>([])
+    const alreadyRollCall = ref(false)
+    studentData.value = props.students.map((student: any) => {
+      return { ...student, absentTypeName: 'Đúng giờ' }
+    })
+
     const getData = async () => {
       try {
         const data = await Promise.all([
@@ -111,14 +131,54 @@ const RollCall = defineComponent({
       }
     }
 
+    const reload = async () => {
+      await getData()
+      addCols.value = false
+    }
+
+    const saveRollCallAPI = async (query: RollCallCreate[]) => {
+      try {
+        await api.post(`${endpoints.ROLLCALL}create_roll_calls`, query)
+        await reload()
+      } catch (e) {
+        $toast.error('Save data failed')
+      }
+    }
+
+    const onClickSubmit = () => {
+      const query: RollCallCreate[] = []
+      studentData.value.forEach((student: any) => {
+        query.push({
+          date: moment(new Date()).format('YYYY-MM-DD'),
+          classroom: props.classroom.id,
+          teacher: props.teacher.id,
+          student: student.id,
+          absentType: absentTypes.value.find((e: AbsentType) => e.type === student.absentTypeName)
+            ?.id
+        })
+      })
+      saveRollCallAPI(toSnakeCase(query))
+    }
+
+    const handleClickRollCall = () => {
+      if (alreadyRollCall.value) $toast.info('Hôm nay đã điểm danh')
+      else addCols.value = !addCols.value
+    }
+
     onMounted(async () => {
       await getData()
-      console.log(rollCalls.value)
+      alreadyRollCall.value =
+        rollCalls.value.map((e: any) => e.date).indexOf(moment(new Date()).format('YYYY-MM-DD')) >
+        -1
     })
     return {
       absentTypes,
       rollCalls,
-      addCols
+      addCols,
+      onClickSubmit,
+      studentData,
+      alreadyRollCall,
+      handleClickRollCall
     }
   }
 })
