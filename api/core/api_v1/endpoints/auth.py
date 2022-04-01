@@ -3,6 +3,7 @@ from schemas.token import Token
 import models.account as models
 import schemas.account as schemas
 from fastapi import APIRouter, Depends
+from peewee import fn
 import jwt
 import hashlib
 import json
@@ -37,12 +38,13 @@ def login(account: schemas.AccountBase):
         models.Account.phone,
         models.Account.password.alias('key_member')
     ).where(
-        models.Account.name == account.name,
+        models.Account.mail == account.mail,
         models.Account.password == hashlib.md5(account.password.encode()).hexdigest(),
         models.Account.active
-    ).dicts()
+    ).dicts().get()
+    query['date_of_birth'] = str(query['date_of_birth'])
     if query:
-        return {'status': 200, 'token': jwt.encode(query[0], 'token', algorithm='HS256')}
+        return {'status': 200, 'token': jwt.encode(query, 'token', algorithm='HS256')}
     return {'status': 404}
 
 

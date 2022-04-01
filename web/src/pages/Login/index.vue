@@ -9,7 +9,7 @@
             v-card-text
               v-form
                 v-text-field(
-                  prepend-icon="mdi-account" :label="'Sđt/mail'" type="mai" v-model="userData.name"
+                  prepend-icon="mdi-account" :label="'Sđt/mail'" type="mai" v-model="userData.mail"
                 )
                 v-text-field#password(
                   prepend-icon="mdi-key"
@@ -31,13 +31,13 @@ import { endpoints, toSnakeCase, urlPath } from 'utils'
 const Login = defineComponent({
   setup(props, { root }) {
     const { $toast, $router } = root
-    const userData = ref({ name: '', password: '' })
+    const userData = ref({ mail: '', password: '' })
     const onClickLogin = async () => {
-      userData.value.name = userData.value.name.trim()
+      userData.value.mail = userData.value.mail.trim()
       userData.value.password = userData.value.password.trim()
-      if (userData.value.name.length === 0) $toast.error('Vui lòng nhập mail/sđt')
+      if (userData.value.mail.length === 0) $toast.error('Vui lòng nhập mail/sđt')
       if (userData.value.password.length === 0) $toast.error('Vui lòng nhập mật khẩu')
-      if (userData.value.name.length > 0 && userData.value.password.length > 0) {
+      if (userData.value.mail.length > 0 && userData.value.password.length > 0) {
         try {
           const { data } = await axios.post(`${endpoints.AUTH}login`, toSnakeCase(userData.value))
           if (data.status === 404) {

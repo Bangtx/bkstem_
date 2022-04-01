@@ -12,7 +12,9 @@
         roll-call(
           v-if="feature==='rollcall'" :classroom="classroom" :students="students" :teacher="teacher"
         )
-
+        schedule(
+          v-if="feature==='schedule'"
+        )
 
 </template>
 
@@ -23,6 +25,7 @@ import { endpoints, toCamelCase } from 'utils'
 import { api } from 'plugins'
 import ClassHome from './ClassHome.vue'
 import RollCall from './RollCall.vue'
+import Schedule from './schedule.vue'
 
 interface Teacher {
   id: number
@@ -55,7 +58,8 @@ const Classroom = defineComponent({
     HeaderBar,
     MenuComponent,
     ClassHome,
-    RollCall
+    RollCall,
+    Schedule
   },
   setup(props, { root }) {
     const { $toast, $route } = root
