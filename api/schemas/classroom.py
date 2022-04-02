@@ -5,6 +5,7 @@ from typing import List
 
 class ClassRoomBase(Schema):
     name: str
+    room: str
     student_ids: List[int]
     class_time_ids: List[int]
 

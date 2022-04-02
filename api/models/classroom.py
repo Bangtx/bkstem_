@@ -14,6 +14,7 @@ from .account import Account
 
 class Classroom(BaseModel):
     name = CharField()
+    room = CharField()
     teacher = ForeignKeyField(Teacher, column_name='teacher_id')
     student_ids = ArrayField()
     class_time_ids = ArrayField()
@@ -38,6 +39,7 @@ class Classroom(BaseModel):
             cls.select(
                 cls.id,
                 cls.name,
+                cls.room,
                 fn.json_build_object(
                     'id', teacher.c.id,
                     'name', teacher.c.name
@@ -73,6 +75,7 @@ class Classroom(BaseModel):
             cls.select(
                 cls.id,
                 cls.name,
+                cls.room,
                 fn.json_build_object(
                     'id', teacher.c.id,
                     'name', teacher.c.name

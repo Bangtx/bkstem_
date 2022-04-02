@@ -55,6 +55,7 @@ CREATE TABLE classroom
 (
   id bigserial NOT NULL,
   name text,
+  room text,
   teacher_id bigint,
   student_ids bigint[],
   class_time_ids bigint[],

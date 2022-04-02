@@ -9,7 +9,7 @@
             v-card-text
               v-form
                 v-text-field(
-                  prepend-icon="mdi-account" :label="'Sđt/mail'" type="mai" v-model="userData.mail"
+                  prepend-icon="mdi-account" :label="'Mail'" type="email" v-model="userData.mail"
                 )
                 v-text-field#password(
                   prepend-icon="mdi-key"
