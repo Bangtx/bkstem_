@@ -3,7 +3,8 @@ from peewee import (
     CharField,
     IntegerField,
     ForeignKeyField,
-    fn
+    fn,
+    DateField
 )
 from playhouse.postgres_ext import ArrayField
 from .teacher import Teacher
@@ -18,6 +19,8 @@ class Classroom(BaseModel):
     teacher = ForeignKeyField(Teacher, column_name='teacher_id')
     student_ids = ArrayField()
     class_time_ids = ArrayField()
+    start_date = DateField()
+    total_days = IntegerField()
 
     class Meta:
         db_table = 'classroom'
@@ -40,6 +43,8 @@ class Classroom(BaseModel):
                 cls.id,
                 cls.name,
                 cls.room,
+                cls.start_date,
+                cls.total_days,
                 fn.json_build_object(
                     'id', teacher.c.id,
                     'name', teacher.c.name
@@ -76,6 +81,8 @@ class Classroom(BaseModel):
                 cls.id,
                 cls.name,
                 cls.room,
+                cls.start_date,
+                cls.total_days,
                 fn.json_build_object(
                     'id', teacher.c.id,
                     'name', teacher.c.name

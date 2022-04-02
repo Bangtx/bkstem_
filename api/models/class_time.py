@@ -1,7 +1,5 @@
 from .base import BaseModel
 from peewee import (
-    CharField,
-    IntegerField,
     ForeignKeyField,
     TimeField
 )

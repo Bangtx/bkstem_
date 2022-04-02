@@ -17,7 +17,10 @@
           div
             h2.pb-2 Tuần
             .mb-3.w-64(class="md:w-96")
-              select.form-select.appearance-none.block.w-full.px-3.text-base.font-normal.text-gray-700.bg-white.bg-clip-padding.bg-no-repeat.border.border-solid.border-gray-300.rounded.transition.ease-in-out.m-0(class="py-1.5 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example")
+              select.form-select.appearance-none.block.w-full.px-3.text-base.font-normal.text-gray-700.bg-white.bg-clip-padding.bg-no-repeat.border.border-solid.border-gray-300.rounded.transition.ease-in-out.m-0(
+                class="py-1.5 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                aria-label="Default select example"
+              )
                 option(selected="") 1 ( từ 1/1/2021 - 7/1/2021)
                 option 2 ( từ 1/1/2021 - 7/1/2021)
                 option 3 ( từ 1/1/2021 - 7/1/2021)

@@ -59,6 +59,8 @@ CREATE TABLE classroom
   teacher_id bigint,
   student_ids bigint[],
   class_time_ids bigint[],
+  start_date date,
+  total_days int,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   created_by bigint,
   modified_at timestamp with time zone,
