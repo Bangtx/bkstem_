@@ -143,6 +143,7 @@ const Score = defineComponent({
       const validate = studentDatas.value.find((e: StudentData) => Number(e.score) > 10)
       if (validate) $toast.error('Điểm chỉ được phép từ 0 -> 10')
       else await addScoreAPI()
+      addCols.value = false
     }
 
     onMounted(async () => {

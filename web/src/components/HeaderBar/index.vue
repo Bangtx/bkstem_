@@ -1,7 +1,8 @@
 <template lang="pug">
   .w-full.bg-white.shadow.py-3.px-4.flex.justify-between.items-center.z-20.fixed(class="md:px-8")
-    div
-      h1.text-red-500.text-5xl BK
+    div(@click="goToHomePage")
+      //h1.text-red-500.text-5xl BK
+      v-img(:src="`/img/icons/android-chrome-192x192.png`" width="50")
     .flex.rounded-full.bg-gray-100
       input.px-4.py-2.w-32.text-gray-600.rounded-full.bg-gray-100(type="text" class="md:w-80 lg:w-96 focus:outline-none" placeholder="Tìm kiếm ...")
       button.flex.items-center.justify-center.px-4.text-orange-500
@@ -27,10 +28,17 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
+import { urlPath } from 'utils'
 
 const HeaderBar = defineComponent({
-  setup() {
-    return {}
+  setup(props, { root }) {
+    const { $router } = root
+    const goToHomePage = () => {
+      $router.push({ name: urlPath.START.name })
+    }
+    return {
+      goToHomePage
+    }
   }
 })
 export default HeaderBar
