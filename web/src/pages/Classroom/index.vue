@@ -15,6 +15,9 @@
         schedule(
           v-if="feature==='schedule'"
         )
+        score(
+          v-if="feature==='score'" :classroom="classroom" :students="students"
+        )
 
 </template>
 
@@ -25,7 +28,8 @@ import { endpoints, toCamelCase } from 'utils'
 import { api } from 'plugins'
 import ClassHome from './ClassHome.vue'
 import RollCall from './RollCall.vue'
-import Schedule from './schedule.vue'
+import Schedule from './Schedule.vue'
+import Score from './Score.vue'
 
 interface Teacher {
   id: number
@@ -59,7 +63,8 @@ const Classroom = defineComponent({
     MenuComponent,
     ClassHome,
     RollCall,
-    Schedule
+    Schedule,
+    Score
   },
   setup(props, { root }) {
     const { $toast, $route } = root

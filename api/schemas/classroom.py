@@ -9,8 +9,8 @@ class ClassRoomBase(Schema):
     room: str
     student_ids: List[int]
     class_time_ids: List[int]
-    start_date: date
-    total_days: int
+    start_date: date = None
+    total_days: int = None
 
 
 class ClassRoom(ClassRoomBase):

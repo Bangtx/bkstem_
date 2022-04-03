@@ -125,7 +125,7 @@ CREATE TABLE roll_call
   date date,
   classroom_id bigint,
   student_id bigint,
-  teacher_id bigint,date_of_week_id
+  teacher_id bigint,
   absent_type_id int,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   created_by bigint,
@@ -153,4 +153,23 @@ CREATE TABLE notification
   deleted_by bigint,
   active boolean DEFAULT TRUE,
   CONSTRAINT pkey_notification PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS score CASCADE;
+CREATE TABLE score
+(
+  id bigserial NOT NULL,
+  date date,
+  classroom_id bigint,
+  student_id bigint,
+  teacher_id bigint,
+  score float[],
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  created_by bigint,
+  modified_at timestamp with time zone,
+  modified_by bigint,
+  deleted_at timestamp with time zone,
+  deleted_by bigint,
+  active boolean DEFAULT TRUE,
+  CONSTRAINT pkey_score PRIMARY KEY (id)
 );

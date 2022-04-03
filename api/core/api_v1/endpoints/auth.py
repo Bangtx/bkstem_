@@ -3,7 +3,8 @@ from schemas.token import Token
 import models.account as models
 import schemas.account as schemas
 from fastapi import APIRouter, Depends
-from peewee import fn
+from models.teacher import Teacher
+from models.student import Student
 import jwt
 import hashlib
 import json
@@ -14,23 +15,13 @@ router = APIRouter()
 
 @router.get('/test_auth')
 def test(data=Depends(Auth())):
-    # encoded_jwt = jwt.encode(
-    #     {
-    #         'id': 1,
-    #         'name': 'bang'
-    #     },
-    #     'token',
-    #     algorithm='HS256'
-    # )
-    # encoded_jwt
-    # print(type(encoded_jwt))
     return {'msg': data}
 
 
 @router.post('/login')
 def login(account: schemas.AccountBase):
     query = models.Account.select(
-        models.Account.id,
+        models.Account.id.alias('account_id'),
         models.Account.name,
         models.Account.gender,
         models.Account.date_of_birth,
@@ -43,6 +34,19 @@ def login(account: schemas.AccountBase):
         models.Account.active
     ).dicts().get()
     query['date_of_birth'] = str(query['date_of_birth'])
+
+    student = list(Student.select().where(
+        Student.active, Student.account == query['account_id']
+    ).dicts())
+    teacher = list(Teacher.select().where(
+        Teacher.active, Teacher.account == query['account_id']
+    ).dicts())
+    if student:
+        query['type_member'] = 'student'
+        query['id'] = student[0]['id']
+    if teacher:
+        query['type_member'] = 'teacher'
+        query['id'] = teacher[0]['id']
     if query:
         return {'status': 200, 'token': jwt.encode(query, 'token', algorithm='HS256')}
     return {'status': 404}

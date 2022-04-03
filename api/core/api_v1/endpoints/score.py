@@ -1,0 +1,40 @@
+from typing import List
+from fastapi import APIRouter
+from playhouse.db_url import parse
+
+import schemas.score as schemas
+import models.score as models
+
+router = APIRouter()
+
+
+@router.get('/')
+def get_scores():
+    return models.Score.get_list()
+
+
+@router.post('/')
+def create_scores(params: List[schemas.ScoreCreate]):
+    result = []
+    for param in params:
+        data = {
+            'date': param.date,
+            'classroom': param.classroom,
+            'student': param.student,
+            'teacher': param.teacher,
+            'score': [param.score]
+        }
+
+        score_already_exists = models.Score.get_score_by_date(
+            param.date, param.student, param.classroom
+        )
+        if score_already_exists:
+            data['score'] = score_already_exists['score'] + [param.score]
+            result.append(
+                models.Score.update_one(score_already_exists['id'], data)
+            )
+        else:
+            result.append(
+                models.Score.create(**data)
+            )
+    return result

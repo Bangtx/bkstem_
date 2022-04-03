@@ -7,7 +7,8 @@ from .endpoints import (
     class_time,
     classroom,
     roll_call,
-    absent_type
+    absent_type,
+    score
 )
 
 
@@ -20,3 +21,4 @@ api_router.include_router(classroom.router, prefix='/classroom', tags=['classroo
 api_router.include_router(class_time.router, prefix='/class_time', tags=['class_time'])
 api_router.include_router(roll_call.router, prefix='/roll_call', tags=['roll_call'])
 api_router.include_router(absent_type.router, prefix='/absent_type', tags=['absent_type'])
+api_router.include_router(score.router, prefix='/score', tags=['score'])

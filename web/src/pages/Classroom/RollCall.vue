@@ -140,6 +140,7 @@ const RollCall = defineComponent({
       try {
         await api.post(`${endpoints.ROLLCALL}create_roll_calls`, query)
         await reload()
+        $toast.success('Save data successful')
       } catch (e) {
         $toast.error('Save data failed')
       }
