@@ -9,8 +9,8 @@ router = APIRouter()
 
 
 @router.get('/')
-def get_scores():
-    return models.Score.get_list()
+def get_scores(class_room: int):
+    return models.Score.get_class_room(class_room)
 
 
 @router.post('/')

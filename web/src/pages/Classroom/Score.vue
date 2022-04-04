@@ -108,7 +108,7 @@ const Score = defineComponent({
 
     const getData = async () => {
       try {
-        const { data } = await api.get(`${endpoints.SCORE}`)
+        const { data } = await api.get(`${endpoints.SCORE}?class_room=${props.classroom.id}`)
         scoreDatas.value = toCamelCase(data)
       } catch {
         $toast.error('Get data failed')

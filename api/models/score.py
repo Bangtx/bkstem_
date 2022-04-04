@@ -18,7 +18,7 @@ class Score(BaseModel):
         db_table = 'score'
 
     @classmethod
-    def get_list(cls):
+    def get_class_room(cls, class_room):
         students = (
             Student.select(
                 Student.id,
@@ -64,7 +64,7 @@ class Score(BaseModel):
             ).join(
                 teachers, on=teachers.c.id == cls.teacher
             ).where(
-                cls.active
+                cls.active, cls.classroom == class_room
             ).dicts()
         )
         dates = list(set(list(map(lambda x: str(x['date']), query))))
