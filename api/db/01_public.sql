@@ -141,6 +141,7 @@ DROP TABLE IF EXISTS notification CASCADE;
 CREATE TABLE notification
 (
   id bigserial NOT NULL,
+  date date,
   classroom_id bigint,
   student_id bigint[],
   teacher_id bigint,

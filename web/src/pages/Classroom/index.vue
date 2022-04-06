@@ -18,6 +18,9 @@
         score(
           v-if="feature==='score'" :classroom="classroom" :students="students"
         )
+        learn(
+          v-if="feature==='learn'" :classroom="classroom" :students="students"
+        )
 
 </template>
 
@@ -30,6 +33,7 @@ import ClassHome from './ClassHome.vue'
 import RollCall from './RollCall.vue'
 import Schedule from './Schedule.vue'
 import Score from './Score.vue'
+import Learn from './Learn.vue'
 
 interface Teacher {
   id: number
@@ -64,7 +68,8 @@ const Classroom = defineComponent({
     ClassHome,
     RollCall,
     Schedule,
-    Score
+    Score,
+    Learn
   },
   setup(props, { root }) {
     const { $toast, $route } = root
