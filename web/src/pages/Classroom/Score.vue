@@ -40,7 +40,8 @@
                   v-text-field.pa-0.ma-0(
                     type="number" v-model="student.score"
                   )
-                td.px-2.py-1.text-sm.border.text-center 9
+                td.px-2.py-1.text-sm.border.text-center
+                  span {{ student.average.toFixed(2) }}
                 td.px-2.py-1.text-sm.border
       v-btn(v-if="addCols" style="margin-left: 77%" @click="onSave()") Lưu
 
@@ -59,6 +60,7 @@ interface StudentData {
   dateOfBirth: string
   gender: string
   score: number | null | string
+  average?: number
 }
 
 interface Master {
@@ -70,12 +72,12 @@ interface ScoreData {
   classroom: Master
   teacher: Master
   student: Master
-  score: number
+  score: number[]
 }
 
 interface ScoreType {
   date: string
-  data: ScoreData
+  data: ScoreData[]
 }
 
 const Score = defineComponent({
@@ -95,7 +97,6 @@ const Score = defineComponent({
     const studentDatas = ref<StudentData[]>([])
     studentDatas.value = JSON.parse(JSON.stringify(props.students))
     const teacher: any = jwtDecode(String(localStorage.getItem('token')))
-    console.log(teacher)
     const dateAddScore = ref(moment(new Date()).format('YYYY-MM-DD'))
     const scoreDatas = ref<ScoreType[]>([])
 
@@ -106,6 +107,14 @@ const Score = defineComponent({
       addCols.value = !addCols.value
     }
 
+    const averageInArray = (array: number[]): number => {
+      let total = 0
+      array.forEach((e: number) => {
+        total += e
+      })
+      return total / array.length
+    }
+
     const getData = async () => {
       try {
         const { data } = await api.get(`${endpoints.SCORE}?class_room=${props.classroom.id}`)
@@ -113,6 +122,24 @@ const Score = defineComponent({
       } catch {
         $toast.error('Get data failed')
       }
+
+      // total score
+      studentDatas.value = props.students.map((studentData: any) => {
+        const average = ref<number[]>([])
+        scoreDatas.value
+          .map((scoreData: ScoreType) => {
+            return scoreData.data.find((e: ScoreData) => {
+              return e.student.id === studentData.id
+            })?.score
+          })
+          .forEach((e: any) => {
+            average.value.push(...e)
+          })
+        return {
+          ...studentData,
+          average: averageInArray(average.value)
+        }
+      })
     }
 
     const reload = async () => {

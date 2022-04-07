@@ -26,9 +26,9 @@
                     th.px-4.py-3.px-6.text-center Điểm trung bình
                     th.px-4.py-3.px-6.text-center Nhận xét giáo viên
                 tbody.bg-white.divide-y
-                  tr.text-gray-700
-                    td.px-4.py-3.text-sm 123
-                    td.px-4.py-3.text-sm Nguyễn minh khôi
+                  tr.text-gray-700(v-for="stident in students" :key="stident.id")
+                    td.px-4.py-3.text-sm {{ stident.id }}
+                    td.px-4.py-3.text-sm {{ stident.name }}
                     td.px-4.py-3.text-sm.text-center 6.7
                     td.px-4.py-3.text-xs.text-center.flex.items-center.justify-center.gap-2
                       button.bg-orange-400.w-14.text-white.py-1.px-2.rounded-full(@click="openNotiDialog('see')") Xem
@@ -47,6 +47,16 @@ import { defineComponent, ref } from '@vue/composition-api'
 import { NotificationDialog } from 'components'
 
 const Learn = defineComponent({
+  props: {
+    classroom: {
+      type: Object,
+      required: true
+    },
+    students: {
+      type: Array,
+      required: true
+    }
+  },
   components: {
     NotificationDialog
   },
@@ -56,7 +66,6 @@ const Learn = defineComponent({
     const openNotiDialog = (mode: string) => {
       isOpenNotiDialog.value = true
       modeOpen.value = mode
-      console.log(mode, isOpenNotiDialog.value)
     }
     return {
       openNotiDialog,
