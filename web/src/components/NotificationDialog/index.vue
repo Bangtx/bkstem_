@@ -13,20 +13,25 @@
         h1 Tran xuan banh
         v-container.padding(fluid)
           v-text-field(
-            autocomplete="email"
-            label="Email"
+            autocomplete="Mess"
+            label="Mess"
             height="100px"
+            v-model="msg"
           )
 
       v-divider
       v-card-actions
         v-spacer
-        v-btn.title-color(@click="$emit('on-close')") Gửi
+        v-btn.title-color(@click="postNotiAPI()") Gửi
 
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent, ref, onMounted } from '@vue/composition-api'
+import { api } from 'plugins'
+import { endpoints } from 'utils'
+import jwtDecode from 'jwt-decode'
+import moment from 'moment'
 
 const NotificationDialog = defineComponent({
   props: {
@@ -38,10 +43,61 @@ const NotificationDialog = defineComponent({
       type: String,
       required: false,
       default: 'add'
+    },
+    isAll: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    classroom: {
+      type: Object,
+      required: true
+    },
+    studentId: {
+      type: Number,
+      required: true
     }
   },
-  setup() {
-    return {}
+  setup(props, { emit, root }) {
+    const { $toast } = root
+    const msg = ref('')
+    const teacher: any = jwtDecode(String(localStorage.getItem('token')))
+
+    const postNotiAPI = async () => {
+      const body = {
+        classroom: props.classroom.id,
+        student: props.studentId,
+        teacher: teacher.id,
+        notification: msg.value,
+        date: moment(new Date()).format('YYYY-MM-DD')
+      }
+
+      try {
+        await api.post(`${endpoints.NOTIFICATION}`, body)
+
+        $toast.success('Save data successful')
+        emit('on-close')
+      } catch {
+        $toast.error('Save msg failed')
+      }
+    }
+
+    const getData = async () => {
+      try {
+        const { data } = await api.get(`${endpoints.NOTIFICATION}`)
+      } catch {
+        $toast.error('Get data failed')
+      }
+    }
+
+    onMounted(async () => {
+      await getData()
+    })
+
+    return {
+      msg,
+      postNotiAPI
+    }
   }
 })
 export default NotificationDialog

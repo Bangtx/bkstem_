@@ -143,7 +143,7 @@ CREATE TABLE notification
   id bigserial NOT NULL,
   date date,
   classroom_id bigint,
-  student_id bigint[],
+  student_id bigint,
   teacher_id bigint,
   notification text,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
@@ -173,4 +173,58 @@ CREATE TABLE score
   deleted_by bigint,
   active boolean DEFAULT TRUE,
   CONSTRAINT pkey_score PRIMARY KEY (id)
+);
+
+
+DROP TABLE IF EXISTS homework CASCADE;
+CREATE TABLE homework
+(
+  id bigserial NOT NULL,
+  date date,
+  deadline date,
+  classroom_id bigint,
+  teacher_id bigint,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  created_by bigint,
+  modified_at timestamp with time zone,
+  modified_by bigint,
+  deleted_at timestamp with time zone,
+  deleted_by bigint,
+  active boolean DEFAULT TRUE,
+  CONSTRAINT pkey_homework PRIMARY KEY (id)
+);
+
+
+DROP TABLE IF EXISTS question CASCADE;
+CREATE TABLE question
+(
+  id bigserial NOT NULL,
+  homework_id bigint,
+  answers json,
+  result text,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  created_by bigint,
+  modified_at timestamp with time zone,
+  modified_by bigint,
+  deleted_at timestamp with time zone,
+  deleted_by bigint,
+  active boolean DEFAULT TRUE,
+  CONSTRAINT pkey_question PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS question_student CASCADE;
+CREATE TABLE question_student
+(
+  id bigserial NOT NULL,
+  question_id bigint,
+  student_id bigint,
+  result text,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  created_by bigint,
+  modified_at timestamp with time zone,
+  modified_by bigint,
+  deleted_at timestamp with time zone,
+  deleted_by bigint,
+  active boolean DEFAULT TRUE,
+  CONSTRAINT pkey_question_student PRIMARY KEY (id)
 );

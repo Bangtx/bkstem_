@@ -26,17 +26,28 @@
                     th.px-4.py-3.px-6.text-center Điểm trung bình
                     th.px-4.py-3.px-6.text-center Nhận xét giáo viên
                 tbody.bg-white.divide-y
-                  tr.text-gray-700(v-for="stident in students" :key="stident.id")
-                    td.px-4.py-3.text-sm {{ stident.id }}
-                    td.px-4.py-3.text-sm {{ stident.name }}
+                  tr.text-gray-700(v-for="student in students" :key="student.id")
+                    td.px-4.py-3.text-sm {{ student.id }}
+                    td.px-4.py-3.text-sm {{ student.name }}
                     td.px-4.py-3.text-sm.text-center 6.7
                     td.px-4.py-3.text-xs.text-center.flex.items-center.justify-center.gap-2
-                      button.bg-orange-400.w-14.text-white.py-1.px-2.rounded-full(@click="openNotiDialog('see')") Xem
-                      button.bg-green-500.w-14.text-white.py-1.px-2.rounded-full(@click="openNotiDialog('add')") Nhập
+                      button.bg-orange-400.w-14.text-white.py-1.px-2.rounded-full(
+                        @click="openNotiDialog(student.id, 'see')"
+                      ) Xem
+                      button.bg-green-500.w-14.text-white.py-1.px-2.rounded-full(
+                        @click="openNotiDialog(student.id, 'add')"
+                      ) Nhập
+
+            button.bg-green-500.w-34.text-white.py-1.px-2.rounded-full.mt-5.input-all(
+              @click="openNotiDialog(null, 'add', true)"
+            ) Nhập cho tất cả
 
     notification-dialog(
       :value="isOpenNotiDialog"
+      :isAll="isAll"
       :mode="modeOpen"
+      :classroom="classroom"
+      :studentId="studentSelectedId"
       @on-close="isOpenNotiDialog = false"
     )
 
@@ -62,18 +73,30 @@ const Learn = defineComponent({
   },
   setup() {
     const isOpenNotiDialog = ref(false)
+    const studentSelectedId = ref(0)
     const modeOpen = ref('')
-    const openNotiDialog = (mode: string) => {
-      isOpenNotiDialog.value = true
+    const isAll = ref(false)
+
+    const openNotiDialog = (studentId: number, mode: string, all = false) => {
+      studentSelectedId.value = studentId
       modeOpen.value = mode
+      isAll.value = all
+      isOpenNotiDialog.value = true
     }
     return {
       openNotiDialog,
       isOpenNotiDialog,
-      modeOpen
+      modeOpen,
+      studentSelectedId,
+      isAll
     }
   }
 })
 
 export default Learn
 </script>
+
+<style lang="sass">
+.input-all
+  margin-left: 77%
+</style>

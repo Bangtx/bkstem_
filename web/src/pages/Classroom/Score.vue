@@ -41,7 +41,7 @@
                     type="number" v-model="student.score"
                   )
                 td.px-2.py-1.text-sm.border.text-center
-                  span {{ student.average.toFixed(2) }}
+                  span {{ student.average ? student.average.toFixed(2) : '' }}
                 td.px-2.py-1.text-sm.border
       v-btn(v-if="addCols" style="margin-left: 77%" @click="onSave()") Lưu
 
