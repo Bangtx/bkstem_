@@ -20,6 +20,7 @@ class Notification(BaseModel):
         query = cls.select(
             cls.id,
             cls.date,
+            cls.notification,
             fn.json_build_object(
                 'id', Classroom.id,
                 'name', Classroom.name

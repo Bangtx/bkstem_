@@ -26,14 +26,14 @@
                     th.px-4.py-3.px-6.text-center Điểm trung bình
                     th.px-4.py-3.px-6.text-center Nhận xét giáo viên
                 tbody.bg-white.divide-y
-                  tr.text-gray-700(v-for="student in students" :key="student.id")
+                  tr.text-gray-700(v-for="student in studentDatas" :key="student.id")
                     td.px-4.py-3.text-sm {{ student.id }}
                     td.px-4.py-3.text-sm {{ student.name }}
                     td.px-4.py-3.text-sm.text-center 6.7
                     td.px-4.py-3.text-xs.text-center.flex.items-center.justify-center.gap-2
                       button.bg-orange-400.w-14.text-white.py-1.px-2.rounded-full(
                         @click="openNotiDialog(student.id, 'see')"
-                      ) Xem
+                      ) Xem ({{ student.notification? student.notification.length : 0 }})
                       button.bg-green-500.w-14.text-white.py-1.px-2.rounded-full(
                         @click="openNotiDialog(student.id, 'add')"
                       ) Nhập
@@ -54,8 +54,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent, ref, onMounted } from '@vue/composition-api'
 import { NotificationDialog } from 'components'
+import { api } from 'plugins'
+import { endpoints, toCamelCase } from 'utils'
+
+interface Student {
+  id: number
+  name: string
+  notification?: string[]
+}
+
+interface Notification {
+  id: number
+  student: Student
+  notification: string
+}
 
 const Learn = defineComponent({
   props: {
@@ -71,11 +85,13 @@ const Learn = defineComponent({
   components: {
     NotificationDialog
   },
-  setup() {
+  setup(props, { root }) {
+    const { $toast } = root
     const isOpenNotiDialog = ref(false)
     const studentSelectedId = ref(0)
     const modeOpen = ref('')
     const isAll = ref(false)
+    const studentDatas = ref<Student[]>(JSON.parse(JSON.stringify(props.students)))
 
     const openNotiDialog = (studentId: number, mode: string, all = false) => {
       studentSelectedId.value = studentId
@@ -83,12 +99,36 @@ const Learn = defineComponent({
       isAll.value = all
       isOpenNotiDialog.value = true
     }
+
+    const getData = async () => {
+      try {
+        const { data } = await api.get(`${endpoints.NOTIFICATION}`)
+
+        studentDatas.value = studentDatas.value.map((student: Student) => {
+          return {
+            ...student,
+            notification: toCamelCase(data).filter((noti: Notification) => {
+              return noti.student.id === student.id
+            })
+          }
+        })
+        // console.log(toCamelCase(studentDatas.value))
+      } catch {
+        $toast.error('Get data failed')
+      }
+    }
+
+    onMounted(async () => {
+      await getData()
+    })
+
     return {
       openNotiDialog,
       isOpenNotiDialog,
       modeOpen,
       studentSelectedId,
-      isAll
+      isAll,
+      studentDatas
     }
   }
 })

@@ -82,18 +82,6 @@ const NotificationDialog = defineComponent({
       }
     }
 
-    const getData = async () => {
-      try {
-        const { data } = await api.get(`${endpoints.NOTIFICATION}`)
-      } catch {
-        $toast.error('Get data failed')
-      }
-    }
-
-    onMounted(async () => {
-      await getData()
-    })
-
     return {
       msg,
       postNotiAPI
