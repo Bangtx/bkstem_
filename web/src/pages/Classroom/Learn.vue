@@ -48,7 +48,9 @@
       :mode="modeOpen"
       :classroom="classroom"
       :student="studentSelected"
+      :students="students"
       @on-close="isOpenNotiDialog = false"
+      @reload="getData()"
     )
 
 </template>
@@ -128,7 +130,8 @@ const Learn = defineComponent({
       modeOpen,
       studentSelected,
       isAll,
-      studentDatas
+      studentDatas,
+      getData
     }
   }
 })

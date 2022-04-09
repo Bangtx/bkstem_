@@ -2,7 +2,7 @@
   v-dialog(:value="value" max-width="500" persistent)
     v-card
       v-card-title.text-h5.title-color.lighten-2
-        span Privacy Policy
+        span {{ mode==='add' ? 'Gửi Thông Báo' : 'Xem Thông Báo' }}
         v-spacer
         v-btn(icon @click="$emit('on-close')")
           v-icon mdi-close
@@ -15,7 +15,7 @@
           p.msg Không có thông báo nào
 
       .p-4(v-if="mode==='add'")
-        h1 {{ student.name }}
+        h1 {{ isAll ? 'Gửi cho tất cả' : student.name }}
         v-container.padding(fluid)
           v-text-field(
             autocomplete="Mess"
@@ -27,7 +27,7 @@
       v-divider
       v-card-actions(v-if="mode==='add'")
         v-spacer
-        v-btn.title-color(@click="postNotiAPI()") Gửi
+        v-btn.title-color(@click="postNoti()") Gửi
 
 </template>
 
@@ -62,6 +62,11 @@ const NotificationDialog = defineComponent({
       type: Object || null,
       required: true
     },
+    students: {
+      type: Array,
+      required: false,
+      default: () => []
+    },
     notifications: {
       type: Array,
       required: false,
@@ -87,6 +92,7 @@ const NotificationDialog = defineComponent({
           await api.post(`${endpoints.NOTIFICATION}`, body)
           $toast.success('Save data successful')
           emit('on-close')
+          emit('reload')
         } else {
           $toast.error('Chưa nhập tin nhắn')
         }
@@ -95,9 +101,42 @@ const NotificationDialog = defineComponent({
       }
     }
 
+    const postMultipleNotiAPI = async () => {
+      const body = props.students?.map((e: any) => {
+        return {
+          classroom: props.classroom.id,
+          student: e.id,
+          teacher: teacher.id,
+          notification: msg.value,
+          date: moment(new Date()).format('YYYY-MM-DD')
+        }
+      })
+
+      try {
+        if (msg.value !== '') {
+          await api.post(`${endpoints.NOTIFICATION}multiple_notifications`, body)
+          $toast.success('Save data successful')
+          emit('on-close')
+          emit('reload')
+        } else {
+          $toast.error('Chưa nhập tin nhắn')
+        }
+      } catch {
+        $toast.error('Save msg failed')
+      }
+    }
+
+    const postNoti = async () => {
+      if (props.isAll) {
+        await postMultipleNotiAPI()
+      } else {
+        await postNotiAPI()
+      }
+    }
+
     return {
       msg,
-      postNotiAPI
+      postNoti
     }
   }
 })
