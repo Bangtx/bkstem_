@@ -6,11 +6,16 @@
         v-spacer
         v-btn(icon @click="$emit('on-close')")
           v-icon mdi-close
-      .p-4(v-if="mode==='see'")
-        p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      v-card-text.mt-4(v-if="mode==='see'")
+        div(v-if="student.notification.length > 0" v-for="notification in student.notification" :key="notification.id")
+          h1 {{ notification.date }}
+          p.msg {{ notification.notification }}
+          v-divider
+        div(v-if="student.notification.length === 0")
+          p.msg Không có thông báo nào
 
       .p-4(v-if="mode==='add'")
-        h1 Tran xuan banh
+        h1 {{ student.name }}
         v-container.padding(fluid)
           v-text-field(
             autocomplete="Mess"
@@ -20,14 +25,14 @@
           )
 
       v-divider
-      v-card-actions
+      v-card-actions(v-if="mode==='add'")
         v-spacer
         v-btn.title-color(@click="postNotiAPI()") Gửi
 
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from '@vue/composition-api'
+import { defineComponent, ref } from '@vue/composition-api'
 import { api } from 'plugins'
 import { endpoints } from 'utils'
 import jwtDecode from 'jwt-decode'
@@ -53,9 +58,14 @@ const NotificationDialog = defineComponent({
       type: Object,
       required: true
     },
-    studentId: {
-      type: Number,
+    student: {
+      type: Object || null,
       required: true
+    },
+    notifications: {
+      type: Array,
+      required: false,
+      default: () => []
     }
   },
   setup(props, { emit, root }) {
@@ -66,17 +76,20 @@ const NotificationDialog = defineComponent({
     const postNotiAPI = async () => {
       const body = {
         classroom: props.classroom.id,
-        student: props.studentId,
+        student: props.student.id,
         teacher: teacher.id,
         notification: msg.value,
         date: moment(new Date()).format('YYYY-MM-DD')
       }
 
       try {
-        await api.post(`${endpoints.NOTIFICATION}`, body)
-
-        $toast.success('Save data successful')
-        emit('on-close')
+        if (msg.value !== '') {
+          await api.post(`${endpoints.NOTIFICATION}`, body)
+          $toast.success('Save data successful')
+          emit('on-close')
+        } else {
+          $toast.error('Chưa nhập tin nhắn')
+        }
       } catch {
         $toast.error('Save msg failed')
       }
@@ -98,4 +111,7 @@ export default NotificationDialog
   padding: 0 !important
 .v-input__slot
   display: block !important
+.msg
+  font-size: 17px
+  color: #111111
 </style>

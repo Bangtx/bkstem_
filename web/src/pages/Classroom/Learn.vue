@@ -32,14 +32,14 @@
                     td.px-4.py-3.text-sm.text-center 6.7
                     td.px-4.py-3.text-xs.text-center.flex.items-center.justify-center.gap-2
                       button.bg-orange-400.w-14.text-white.py-1.px-2.rounded-full(
-                        @click="openNotiDialog(student.id, 'see')"
+                        @click="openNotiDialog(student, 'see')"
                       ) Xem ({{ student.notification? student.notification.length : 0 }})
                       button.bg-green-500.w-14.text-white.py-1.px-2.rounded-full(
-                        @click="openNotiDialog(student.id, 'add')"
+                        @click="openNotiDialog(student, 'add')"
                       ) Nhập
 
             button.bg-green-500.w-34.text-white.py-1.px-2.rounded-full.mt-5.input-all(
-              @click="openNotiDialog(null, 'add', true)"
+              @click="openNotiDialog({}, 'add', true)"
             ) Nhập cho tất cả
 
     notification-dialog(
@@ -47,7 +47,7 @@
       :isAll="isAll"
       :mode="modeOpen"
       :classroom="classroom"
-      :studentId="studentSelectedId"
+      :student="studentSelected"
       @on-close="isOpenNotiDialog = false"
     )
 
@@ -88,13 +88,13 @@ const Learn = defineComponent({
   setup(props, { root }) {
     const { $toast } = root
     const isOpenNotiDialog = ref(false)
-    const studentSelectedId = ref(0)
+    const studentSelected = ref<any>({})
     const modeOpen = ref('')
     const isAll = ref(false)
     const studentDatas = ref<Student[]>(JSON.parse(JSON.stringify(props.students)))
 
-    const openNotiDialog = (studentId: number, mode: string, all = false) => {
-      studentSelectedId.value = studentId
+    const openNotiDialog = (student: any, mode: string, all = false) => {
+      studentSelected.value = student
       modeOpen.value = mode
       isAll.value = all
       isOpenNotiDialog.value = true
@@ -126,7 +126,7 @@ const Learn = defineComponent({
       openNotiDialog,
       isOpenNotiDialog,
       modeOpen,
-      studentSelectedId,
+      studentSelected,
       isAll,
       studentDatas
     }
