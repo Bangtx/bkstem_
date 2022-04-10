@@ -17,7 +17,7 @@
       button.flex.items-center.gap-2
         img.object-cover.w-6.h-6.rounded-full(src="https://images.unsplash.com/photo-1502378735452-bc7d86632805?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=aa3a807e1bbdfd4364d1f449eaa96d82" alt="" aria-hidden="true")
         h2.text-gray-800.font-medium.hidden(class="md:block") Hi, Nam
-      button.flex.items-center.gap-2
+      button.flex.items-center.gap-2(@click="logout()")
         v-icon mdi-logout
         span Đăng xuất
 
@@ -33,8 +33,15 @@ const HeaderBar = defineComponent({
     const goToHomePage = () => {
       $router.push({ name: urlPath.START.name })
     }
+
+    const logout = () => {
+      localStorage.removeItem('token')
+      $router.push({ name: urlPath.Login.name })
+    }
+
     return {
-      goToHomePage
+      goToHomePage,
+      logout
     }
   }
 })
