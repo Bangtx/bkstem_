@@ -32,6 +32,10 @@ const routes: Array<RouteConfig> = [
   {
     ...urlPath.Login,
     component: () => import(/* webpackChunkName: "home" */ '../pages/Login/index.vue')
+  },
+  {
+    ...urlPath.Admin,
+    component: () => import(/* webpackChunkName: "admin" */ '../pages/Admin/index.vue')
   }
 ]
 

@@ -3,7 +3,9 @@
     div(@click="goToHomePage")
       //h1.text-red-500.text-5xl BK
       v-img(:src="`/img/icons/android-chrome-192x192.png`" width="40")
-    .flex.rounded-full.bg-gray-100
+    .hidden.text-3xl.font-bold(v-if="isAdmin" class='md:block')
+      h1 Trang quản lí dành cho Admin
+    .flex.rounded-full.bg-gray-100(v-if="!isAdmin")
       input.px-4.py-2.w-32.text-gray-600.rounded-full.bg-gray-100(type="text" class="md:w-80 lg:w-96 focus:outline-none" placeholder="Tìm kiếm ...")
       button.flex.items-center.justify-center.px-4.text-orange-500
         svg.h-5.w-5(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2")
@@ -30,6 +32,13 @@ import { defineComponent } from '@vue/composition-api'
 import { urlPath } from 'utils'
 
 const HeaderBar = defineComponent({
+  props: {
+    isAdmin: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
+  },
   setup(props, { root }) {
     const { $router } = root
     const goToHomePage = () => {

@@ -3,6 +3,7 @@
     header-bar
     .flex.flex-col(class="md:flex-row")
       menu-component(
+        :is-admin="false"
         @on-click="onSelectFeature"
       )
       .w-full.border-l
