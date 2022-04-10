@@ -104,7 +104,7 @@ const Learn = defineComponent({
 
     const getData = async () => {
       try {
-        const { data } = await api.get(`${endpoints.NOTIFICATION}`)
+        const { data } = await api.get(`${endpoints.NOTIFICATION}?class_room=${props.classroom.id}`)
 
         studentDatas.value = studentDatas.value.map((student: Student) => {
           return {

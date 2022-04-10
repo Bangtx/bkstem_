@@ -21,6 +21,9 @@
         learn(
           v-if="feature==='learn'" :classroom="classroom" :students="students"
         )
+        notification-student(
+          v-if="feature==='noti'" :classroom="classroom"
+        )
 
 </template>
 
@@ -34,6 +37,7 @@ import RollCall from './RollCall.vue'
 import Schedule from './Schedule.vue'
 import Score from './Score.vue'
 import Learn from './Learn.vue'
+import NotificationStudent from './NotificationStudent.vue'
 
 interface Teacher {
   id: number
@@ -69,7 +73,8 @@ const Classroom = defineComponent({
     RollCall,
     Schedule,
     Score,
-    Learn
+    Learn,
+    NotificationStudent
   },
   setup(props, { root }) {
     const { $toast, $route } = root
