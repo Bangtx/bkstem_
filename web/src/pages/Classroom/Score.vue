@@ -13,10 +13,16 @@
         h1.py-2
           | Sĩ số:
           span 32
-        v-btn(@click="handleClickAddCol()") {{ addCols ? 'Hủy nhập' : 'Nhập điểm'}}
+        v-btn(
+          v-if="member.typeMember === 'teacher'"
+          @click="handleClickAddCol()"
+        ) {{ addCols ? 'Hủy nhập' : 'Nhập điểm'}}
       // Danh sách sinh viên
       .rounded-lg.overflow-auto.shadow-xs.mt-4(class='lg:px-10')
-        .w-full.overflow-auto.rounded-lg(style='max-height: 600px; max-width: 1550px;')
+        .w-full.overflow-auto.rounded-lg(
+           v-if="member.typeMember === 'teacher'"
+          style='max-height: 600px; max-width: 1550px;'
+        )
           table.w-full.whitespace-nowrap.rounded-lg.border
             thead
               tr.text-md.font-semibold.text-left.text-gray-900.bg-gray-100.uppercase.border-b.border-gray-600.rounded-t-lg
@@ -43,6 +49,32 @@
                 td.px-2.py-1.text-sm.border.text-center
                   span {{ student.average ? student.average.toFixed(2) : '' }}
                 td.px-2.py-1.text-sm.border
+
+        .w-full.overflow-auto.rounded-lg(
+           v-if="member.typeMember === 'student'"
+          style='max-height: 600px; max-width: 1550px;'
+        )
+          table.w-full.whitespace-nowrap.rounded-lg.border
+            thead
+              tr.text-md.font-semibold.text-left.text-gray-900.bg-gray-100.uppercase.border-b.border-gray-600.rounded-t-lg
+                th.px-2.py-1.text-center.border.sticky.w-44.l-0 STT
+                th.px-2.py-1.border.w-44 Mã học viên
+                th.px-2.py-1.border.w-44 Họ tên
+                th.px-2.py-1.border.w-44 Ngày
+                th.px-2.py-1.border.w-44 Điểm
+            tbody.bg-white
+              tr.text-gray-700(v-for="(scoreData, index) in scoreDatas" :key="scoreData.id")
+                td.px-2.py-1.border.text-center {{ index + 1 }}
+                td.px-2.py-1.border {{ member.id }}
+                td.px-2.py-1.border {{ member.name }}
+                td.px-2.py-1.border {{ scoreData.data.find(e => e.student.id === member.id).date }}
+                td.px-2.py-1.border {{ scoreData.data.find(e => e.student.id === member.id).score.join(', ') }}
+              tr.text-gray-700
+                td.px-2.py-1.border
+                td.px-2.py-1.border
+                td.px-2.py-1.border
+                td.px-2.py-1.border
+                td.px-2.py-1.border Điểm trung bình: {{ studentDatas.find(e => e.id === member.id).average }}
       v-btn(v-if="addCols" style="margin-left: 77%" @click="onSave()") Lưu
 
 </template>
@@ -96,7 +128,7 @@ const Score = defineComponent({
     const addCols = ref(false)
     const studentDatas = ref<StudentData[]>([])
     studentDatas.value = JSON.parse(JSON.stringify(props.students))
-    const teacher: any = jwtDecode(String(localStorage.getItem('token')))
+    const member: any = toCamelCase(jwtDecode(String(localStorage.getItem('token'))))
     const dateAddScore = ref(moment(new Date()).format('YYYY-MM-DD'))
     const scoreDatas = ref<ScoreType[]>([])
 
@@ -153,7 +185,7 @@ const Score = defineComponent({
           date: dateAddScore.value,
           classroom: props.classroom.id,
           student: studentData.id,
-          teacher: teacher.id,
+          teacher: member.id,
           score: studentData.score
         })
       })
@@ -183,7 +215,8 @@ const Score = defineComponent({
       handleClickAddCol,
       onSave,
       dateAddScore,
-      scoreDatas
+      scoreDatas,
+      member
     }
   }
 })

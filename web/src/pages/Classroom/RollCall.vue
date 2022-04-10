@@ -11,12 +11,16 @@
         h1.py-2
           span Sĩ số: {{ students.length }}
 
-        v-btn(@click="handleClickRollCall()") {{ addCols ? 'Hủy Điểm danh' : 'Điểm danh'}}
+        v-btn(
+          v-if="member.typeMember === 'teacher'"
+          @click="handleClickRollCall()"
+        ) {{ addCols ? 'Hủy Điểm danh' : 'Điểm danh'}}
 
-      // Danh sách sinh viên
       .rounded-lg.overflow-auto.shadow-xs.mt-4(class="lg:px-10")
         .w-full.overflow-auto.rounded-lg(style="max-height: 600px; max-width: 1550px;")
-          table.w-full.whitespace-nowrap.rounded-lg.border
+          table.w-full.whitespace-nowrap.rounded-lg.border(
+            v-if="member.typeMember === 'teacher'"
+          )
             thead
               tr.text-md.font-semibold.text-left.text-gray-900.bg-gray-100.uppercase.border-b.border-gray-600.rounded-t-lg
                 th.px-1.py-1.text-center.border.sticky.w-10.l-0 STT
@@ -26,10 +30,7 @@
                   span {{ rollCall.date }}
                 th.px-1.py-1.border(v-if="addCols")
                   span {{ moment(new Date()).format('YYYY-MM-DD') }}
-                //th.px-1.py-1.border 1/1/2020
-                //th.px-1.py-1.border 2/1/2020
-                //th.px-1.py-1.border 3/1/2020
-                //th.px-1.py-1.border Ghi chú
+
             tbody.bg-white
               tr.text-gray-700(v-for="(student, index) in studentData" :key="student.id")
                 td.px-2.py-1.border.text-center {{ index + 1 }}
@@ -43,11 +44,23 @@
                     v-model="student.absentTypeName"
                   )
                     option(v-for="absentType in absentTypes" :key="absentType.id") {{ absentType.type }}
-                //td.px-1.py-1.text-sm.border
-                //  select.block.bg-white.rounded.w-full.mt-1.form-select(class='focus:outline-none')
-                //    option Có mặt
-                //    option Vắng
-                //td.px-1.py-1.text-sm.border
+
+        .w-full.overflow-auto.rounded-lg(style="max-height: 600px; max-width: 1550px;")
+          table.w-full.whitespace-nowrap.rounded-lg.border(
+            v-if="member.typeMember === 'student'"
+          )
+            thead
+              tr.text-md.font-semibold.text-left.text-gray-900.bg-gray-100.uppercase.border-b.border-gray-600.rounded-t-lg
+                th.px-1.py-1.border STT
+                th.px-1.py-1.border Ngày
+                th.px-1.py-1.border Tên
+                th.px-1.py-1.border Điểm danh
+            tbody.bg-white
+              tr.text-gray-700(v-for="(roll, index) in rollCalls" :key="roll.id")
+                td.px-2.py-1.border.text-center {{ index + 1 }}
+                td.px-2.py-1.border {{ roll.date }}
+                td.px-2.py-1.border {{ member.name }}
+                td.px-2.py-1.border {{ roll.rollCall.find(e => e.student.id === member.id).absentType.type }}
 
       v-btn(v-if="addCols" style="margin-left: 77%" @click="onClickSubmit") submit
 
@@ -58,6 +71,7 @@ import { defineComponent, ref, onMounted } from '@vue/composition-api'
 import { api } from 'plugins'
 import { endpoints, toCamelCase, toSnakeCase } from 'utils'
 import moment from 'moment'
+import jwtDecode from 'jwt-decode'
 
 interface AbsentType {
   id: number
@@ -114,6 +128,8 @@ const RollCall = defineComponent({
     studentData.value = props.students.map((student: any) => {
       return { ...student, absentTypeName: 'Đúng giờ' }
     })
+
+    const member: any = toCamelCase(jwtDecode(String(localStorage.getItem('token'))))
 
     const getData = async () => {
       try {
@@ -179,7 +195,8 @@ const RollCall = defineComponent({
       onClickSubmit,
       studentData,
       alreadyRollCall,
-      handleClickRollCall
+      handleClickRollCall,
+      member
     }
   }
 })

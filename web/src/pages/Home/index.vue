@@ -38,6 +38,7 @@ import { defineComponent, onMounted, ref } from '@vue/composition-api'
 import { HeaderBar, ClassButton } from 'components'
 import { urlPath, endpoints, toCamelCase } from 'utils'
 import { api } from 'plugins'
+import jwtDecode from 'jwt-decode'
 
 const Home = defineComponent({
   components: {
@@ -48,6 +49,9 @@ const Home = defineComponent({
     const { $router, $toast } = root
     const baseUrl = process.env.VUE_APP_WEB_URL
     const classrooms = ref([])
+
+    const member: any = jwtDecode(String(localStorage.getItem('token')))
+
     const openClassroom = (classroomId: number) => {
       $router.push({
         name: urlPath.CLASSROOM.name,
@@ -59,7 +63,11 @@ const Home = defineComponent({
 
     const getData = async () => {
       try {
-        const { data } = await api.get(`${endpoints.CLASSROOM}`)
+        const url =
+          member.type_member === 'teacher'
+            ? `${endpoints.CLASSROOM}?teacher_id=${member.id}`
+            : `${endpoints.CLASSROOM}?student_id=${member.id}`
+        const { data } = await api.get(url)
         classrooms.value = toCamelCase(data)
       } catch (e) {
         $toast.error('Get data failed')

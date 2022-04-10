@@ -11,9 +11,9 @@ router = APIRouter()
 
 
 @router.get('/')
-def get_classrooms():
+def get_classrooms(teacher_id: int = None, student_id: int = None):
     # print(models.Classroom.get_list())
-    return models.Classroom.get_list()
+    return models.Classroom.get_classrooms(teacher_id, student_id)
 
 
 @router.get('/{id}')

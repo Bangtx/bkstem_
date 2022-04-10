@@ -26,7 +26,7 @@ class Classroom(BaseModel):
         db_table = 'classroom'
 
     @classmethod
-    def get_list(cls):
+    def get_classrooms(cls, teacher_id, student_id):
         teacher = (
             Teacher.select(
                 Teacher.id,
@@ -38,7 +38,7 @@ class Classroom(BaseModel):
             ).alias('teacher')
         )
 
-        classrooms = list(
+        classrooms = (
             cls.select(
                 cls.id,
                 cls.name,
@@ -55,8 +55,14 @@ class Classroom(BaseModel):
                 teacher, on=teacher.c.id == cls.teacher
             ).where(
                 cls.active
-            ).dicts()
+            )
         )
+
+        if teacher_id:
+            classrooms = list(classrooms.where(cls.teacher == teacher_id).dicts())
+        if student_id:
+            classrooms = list(classrooms.dicts())
+            classrooms = list(filter(lambda x: student_id in x['students'], classrooms))
 
         for classroom in classrooms:
             classroom['students'] = Student.get_students_by_ids(classroom['students'])
