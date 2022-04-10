@@ -3,7 +3,7 @@
     .bg-white.border-r.pb-2.fixed.bottom-0.z-10.w-full.content-center(class="md:bg-gray-50 md:relative md:h-screen md:w-60")
       .text-sm.content-center.text-left.justify-between(class="md:mt-12 md:w-60 md:fixed md:left-0 md:top-0 md:content-start")
         .list-reset.flex.justify-between.flex-row.pt-3.px-2.text-center.text-gray-600(class="md:flex-col md:py-3 md:px-2 md:text-left")
-          .flex.justify-between(v-if="!isAdmin")
+          div(v-if="!isAdmin")
             .relative(class="md:block md:px-6 md:py-3 md:pt-6")
               a.items-center.w-full.font-semibold.transition-colors.duration-150(class="md:inline-flex hover:text-gray-800" @click="$emit('on-click', 'index')")
                 .flex.justify-center
@@ -52,7 +52,7 @@
                 span.hidden(class="md:ml-4 md:block") Giao bài tập
                 span(class="md:hidden ") Bài tập
 
-          .flex.justify-between(v-if="isAdmin")
+          div(v-if="isAdmin")
             .relative(class='lg:px-6 lg:py-3')
               a.items-center.w-full.font-semibold.transition-colors.duration-150(class='lg:inline-flex hover:text-gray-800' @click="$emit('on-click', 'class_management')")
                 .flex.justify-center
