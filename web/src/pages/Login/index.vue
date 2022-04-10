@@ -1,11 +1,15 @@
 <template lang="pug">
-  div(:style="{backgroundColor: '#FFF', marginTop: '20vh'}")
-    v-container(fluid fill-height)
+  div(:style="{backgroundColor: '#FFF', marginTop: '16vh'}")
+    div.text-red-600.text-center.font-bold.text-3xl.pb-6.hidden(class="md:block")
+      div.flex.justify-center
+        img.w-14(:src="`/img/icons/android-chrome-192x192.png`")
+      div HỌC VIỆN STEAM BÁCH KHOA
+    div
       v-layout(align-center justify-center)
-        v-flex(xs12 sm8 md4)
-          v-card.elevation-12
-            v-toolbar(dark color="primary")
-              v-toolbar-title Đăng Nhập
+        v-flex.justify-center
+          div.bg-gray-50.border.rounded-lg.w-500.pb-2
+            div.rounded-t-lg.bg-orange
+              v-toolbar-title.py-3.ml-6.text-white.font-semibold Đăng Nhập
             v-card-text
               v-form
                 v-text-field(
@@ -19,8 +23,8 @@
                 )
             v-card-actions
               v-spacer
-              v-btn(color="primary" @click="onClickLogin()") Đăng Nhập
-              v-btn(color="primary") Quên Mật Khẩu
+              v-btn.bg-orange.mr-4( @click="onClickLogin()") Đăng Nhập
+              v-btn Quên Mật Khẩu
 </template>
 
 <script lang="ts">
@@ -61,4 +65,13 @@ const Login = defineComponent({
 export default Login
 </script>
 
-<style lang="sass"></style>
+<style lang="sass">
+.bg-orange
+  background: #fb923c !important
+  color: white !important
+.w-500
+  width: 300px
+@media (min-width: 500px)
+  .w-500
+    width: 500px
+</style>
