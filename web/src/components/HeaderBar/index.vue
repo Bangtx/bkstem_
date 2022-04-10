@@ -2,7 +2,7 @@
   .w-full.bg-white.shadow.py-3.px-4.flex.justify-between.items-center.z-20.fixed(class="md:px-8")
     div(@click="goToHomePage")
       //h1.text-red-500.text-5xl BK
-      v-img(:src="`/img/icons/android-chrome-192x192.png`" width="50")
+      v-img(:src="`/img/icons/android-chrome-192x192.png`" width="40")
     .flex.rounded-full.bg-gray-100
       input.px-4.py-2.w-32.text-gray-600.rounded-full.bg-gray-100(type="text" class="md:w-80 lg:w-96 focus:outline-none" placeholder="Tìm kiếm ...")
       button.flex.items-center.justify-center.px-4.text-orange-500
@@ -17,10 +17,6 @@
       button.flex.items-center.gap-2
         img.object-cover.w-6.h-6.rounded-full(src="https://images.unsplash.com/photo-1502378735452-bc7d86632805?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=aa3a807e1bbdfd4364d1f449eaa96d82" alt="" aria-hidden="true")
         h2.text-gray-800.font-medium.hidden(class="md:block") Hi, Nam
-      button.flex.items-center.gap-2(@click="logout()")
-        v-icon mdi-logout
-        span Đăng xuất
-
 </template>
 
 <script lang="ts">
@@ -65,4 +61,7 @@ export default HeaderBar
   float: left
 .dropdown-toggle:hover
   cursor: pointer
+.flex
+  flex: none !important
+  max-width: 100% !important
 </style>
