@@ -19,29 +19,42 @@
               thead
                 tr.text-md.font-semibold.text-left.text-gray-900.bg-gray-100.uppercase.border-b.border-gray-600.rounded-t-lg
                   th.px-4.py-3.text-center.border STT
-                  th.px-4.py-3.border Mã giáo viên
-                  th.px-4.py-3.border Họ tên
-                  th.px-4.py-3.border Ngày sinh
-                  th.px-4.py-3.border Giới tính
-                  th.px-4.py-3.border.text-center Lớp học đang dạy
+                  th.px-4.py-3.border(v-if="title !== 'lớp học'") Mã gv
+                  th.px-4.py-3.border(v-if="title === 'lớp học'") Mã Lớp
+                  th.px-4.py-3.border(v-if="title !== 'lớp học'") Họ tên
+                  th.px-4.py-3.border(v-if="title === 'lớp học'") Môn
+                  th.px-4.py-3.border.text-center(v-if="title !== 'lớp học'") Lớp học
+                  th.px-4.py-3.border(v-if="title === 'lớp học'") Gv
+                  th.px-4.py-3.border(v-if="title === 'lớp học'") Thông tin
                   th.px-4.py-3.border.text-center Tùy chọn
               tbody.bg-white
-                tr.text-gray-700
-                  td.px-4.py-3.border.text-center 1
-                  td.px-4.py-3.border B18DCCB423
-                  td.px-4.py-3.border Lê Hoàng Nam
-                  td.px-4.py-3.text-sm.border 6/4/2000
-                  td.px-4.py-3.text-sm.border Nam
+                tr.text-gray-700(v-for="(item, index) in data" :key="item.id")
+                  td.px-4.py-3.border.text-center {{ index + 1 }}
+                  td.px-4.py-3.border.text-center {{ item.id }}
+                  td.px-4.py-3.border {{ item.name }}
+                  td.px-4.py-3.border(v-if="title === 'lớp học'") {{ item.teacher.name }}
                   td.px-4.py-3.text-sm.border
                     .flex.justify-center
                       button.bg-blue-500.text-white.px-4.py-2.rounded.mt-6(class='hover:bg-blue-400 md:mt-0' data-modal-toggle='xem')
                         | Xem
                   td.px-4.py-3.text-sm.border
                     .flex.items-center.justify-center.gap-4
-                      button.bg-green-600.text-white.px-4.py-2.rounded.mt-6(class='hover:bg-green-500 md:mt-0' data-modal-toggle='themgv')
-                        | Sửa
+                      button.bg-green-600.text-white.px-4.py-2.rounded.mt-6(
+                        v-if="title === 'giáo viên'"
+                        class='hover:bg-green-500 md:mt-0'
+                      ) Sửa thông tin
+                      button.bg-green-600.text-white.px-4.py-2.rounded.mt-6(
+                        v-if="title === 'giáo viên'"
+                        class='hover:bg-green-500 md:mt-0'
+                      ) Thêm học viên
+
+                      button.bg-green-600.text-white.px-4.py-2.rounded.mt-6(
+                        v-if="title !== 'giáo viên'"
+                        class='hover:bg-green-500 md:mt-0' data-modal-toggle='themgv'
+                      )
+                        span Sửa
                       button.bg-red-500.text-white.px-4.py-2.rounded.mt-6(class='hover:bg-red-400 md:mt-0')
-                        | Xóa
+                        span Xóa
 
 </template>
 
@@ -53,9 +66,18 @@ const ManagementComponent = defineComponent({
     title: {
       type: String,
       required: true
+    },
+    data: {
+      type: Array,
+      required: true
+    },
+    classrooms: {
+      type: Array,
+      required: false,
+      default: () => []
     }
   },
-  setup() {
+  setup(props, { emit }) {
     return {}
   }
 })

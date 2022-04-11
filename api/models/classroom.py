@@ -60,9 +60,11 @@ class Classroom(BaseModel):
 
         if teacher_id:
             classrooms = list(classrooms.where(cls.teacher == teacher_id).dicts())
-        if student_id:
+        elif student_id:
             classrooms = list(classrooms.dicts())
             classrooms = list(filter(lambda x: student_id in x['students'], classrooms))
+        else:
+            classrooms = list(classrooms.dicts())
 
         for classroom in classrooms:
             classroom['students'] = Student.get_students_by_ids(classroom['students'])
