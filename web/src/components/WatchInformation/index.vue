@@ -7,7 +7,7 @@
         v-btn(icon @click="$emit('on-close')")
           v-icon mdi-close
 
-      .p-4
+      .p-4(v-if="type !== 'lớp học'")
         v-list-item
           span Họ Tên: {{ info.name }}
         v-divider
@@ -21,6 +21,32 @@
           span Mail: {{ info.mail }}
         v-list-item
           span Điện thoại: {{ info.phone }}
+
+      v-card-text(v-if="type === 'lớp học'")
+        v-list-item
+          span Môn: {{ info.name }}
+        v-divider
+        v-list-item
+          span Ngày tạo: {{ info.startDate }}
+        v-list-item
+          span Giáo viên: {{ info.teacher? info.teacher.name : ''}}
+        .w-full.overflow-hidden.rounded-lg.shadow-xs.mt-4
+          .w-full.overflow-auto.rounded-lg(style='max-height: 600px;')
+            table.w-full.whitespace-nowrap.rounded-lg.border
+              thead
+                tr.text-md.font-semibold.text-left.text-gray-900.bg-gray-100.uppercase.border-b.border-gray-600.rounded-t-lg
+                  th.px-4.py-3.text-center.border STT
+                  th.px-4.py-3.border Mã HS
+                  th.px-4.py-3.border Tên HS
+                  th.px-4.py-3.border.text-center Xóa
+              tbody.bg-white
+                tr.text-gray-700(v-for="(student, index) in info.students" :key="student.id")
+                  td.px-4.py-3.border.text-center {{ index + 1 }}
+                  td.px-4.py-3.border {{ student.id }}
+                  td.px-4.py-3.text-sm.border {{ student.name }}
+                  td.px-4.py-3.text-sm.border
+                    .flex.justify-center
+                      button.bg-red-500.text-white.px-4.py-2.rounded.mt-6(class='hover:bg-red-400 md:mt-0') Xóa
 
 </template>
 
@@ -60,10 +86,12 @@ const WatchNotification = defineComponent({
       if (props.type === 'học sinh') {
         url = `${endpoints.STUDENT}${props.data}`
       }
+      if (props.type === 'lớp học') {
+        url = `${endpoints.CLASSROOM}${props.data}`
+      }
       try {
         const { data } = await api.get(url)
         info.value = toCamelCase(data)
-        console.log(toCamelCase(data))
       } catch {
         $toast.error('Get data failed')
       }
