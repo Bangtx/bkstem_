@@ -8,7 +8,15 @@
           @on-click="onSelectFeature"
         )
         .w-full(class="md:border-l")
-          teacher-management
+          teacher-management(
+            v-if="feature === 'teacher_management'"
+          )
+          classroom-management(
+            v-if="feature === 'class_management'"
+          )
+          student-management(
+            v-if="feature === 'student_management'"
+          )
 
 </template>
 
@@ -16,12 +24,16 @@
 import { defineComponent, onMounted, ref } from '@vue/composition-api'
 import { HeaderBar, MenuComponent } from 'components'
 import TeacherManagement from './TeacherManagement.vue'
+import StudentManagement from './StudentManagement.vue'
+import ClassroomManagement from './ClassroomManagement.vue'
 
 const Admin = defineComponent({
   components: {
     HeaderBar,
     MenuComponent,
-    TeacherManagement
+    TeacherManagement,
+    ClassroomManagement,
+    StudentManagement
   },
   setup() {
     const feature = ref('index')
