@@ -35,8 +35,11 @@
                   td.px-4.py-3.border(v-if="title === 'lớp học'") {{ item.teacher.name }}
                   td.px-4.py-3.text-sm.border
                     .flex.justify-center
-                      button.bg-blue-500.text-white.px-4.py-2.rounded.mt-6(class='hover:bg-blue-400 md:mt-0' data-modal-toggle='xem')
-                        | Xem
+                      button.bg-blue-500.text-white.px-4.py-2.rounded.mt-6(
+                        @click="openWatchDialog(item.id)"
+                        class='hover:bg-blue-400 md:mt-0'
+                      )
+                        span Xem
                   td.px-4.py-3.text-sm.border
                     .flex.items-center.justify-center.gap-4
                       button.bg-green-600.text-white.px-4.py-2.rounded.mt-6(
@@ -56,10 +59,19 @@
                       button.bg-red-500.text-white.px-4.py-2.rounded.mt-6(class='hover:bg-red-400 md:mt-0')
                         span Xóa
 
+    watch-information(
+      :value="isOpenWatchDialog"
+      :title="'Thông tin chung'"
+      :type="title"
+      :data="dataWatch"
+      @on-close="isOpenWatchDialog = false"
+    )
+
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, ref } from '@vue/composition-api'
+import WatchInformation from '@/components/WatchInformation/index.vue'
 
 const ManagementComponent = defineComponent({
   props: {
@@ -77,8 +89,23 @@ const ManagementComponent = defineComponent({
       default: () => []
     }
   },
+  components: {
+    WatchInformation
+  },
   setup(props, { emit }) {
-    return {}
+    const isOpenWatchDialog = ref(false)
+    const dataWatch = ref(0)
+
+    const openWatchDialog = (data: any) => {
+      dataWatch.value = data
+      isOpenWatchDialog.value = true
+    }
+
+    return {
+      openWatchDialog,
+      isOpenWatchDialog,
+      dataWatch
+    }
   }
 })
 

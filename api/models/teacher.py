@@ -22,8 +22,8 @@ class Teacher(BaseModel):
                 Account.date_of_birth,
                 fn.json_build_object(
                     'id', Account.id,
-                    'mail', Account.name,
-                    'phone', Account.name
+                    'mail', Account.mail,
+                    'phone', Account.phone
                 ).alias('account')
             )
             .join(
@@ -39,7 +39,11 @@ class Teacher(BaseModel):
         teacher = (
             Teacher.select(
                 Teacher.id,
-                Account.name
+                Account.name,
+                Account.gender,
+                Account.date_of_birth,
+                Account.mail,
+                Account.phone
             ).join(
                 Account, on=Account.id == Teacher.account
             ).where(

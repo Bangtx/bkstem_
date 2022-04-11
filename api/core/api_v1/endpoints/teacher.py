@@ -16,6 +16,11 @@ def get_teachers():
     return models.Teacher.get_list()
 
 
+@router.get('/{id}')
+def get_teachers(id: int):
+    return models.Teacher.get_teacher_by_id(id)
+
+
 @router.post('/', response_model=AccountCreate)
 def create_teacher(teacher: AccountCreate):
     if Account.is_duplicate(teacher.mail, teacher.phone):

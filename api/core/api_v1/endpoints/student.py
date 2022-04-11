@@ -16,6 +16,11 @@ def get_students():
     return models.Student.get_list()
 
 
+@router.get('/{id}')
+def get_students(id: int):
+    return models.Student.get_students_by_id(id)
+
+
 @router.post('/', response_model=AccountCreate)
 def create_student(student: AccountCreate):
     if Account.is_duplicate(student.mail, student.phone):
