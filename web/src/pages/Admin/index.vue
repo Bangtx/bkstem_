@@ -36,7 +36,7 @@ const Admin = defineComponent({
     StudentManagement
   },
   setup() {
-    const feature = ref('index')
+    const feature = ref('class_management')
 
     const onSelectFeature = (data: string) => {
       feature.value = data

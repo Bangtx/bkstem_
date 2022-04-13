@@ -11,7 +11,11 @@
             input.px-4.py-2.w-80(type='text' class='focus:outline-none' placeholder='Search...')
             button.px-4.text-white.bg-orange-400.border-l.border-l-orange-400(class='hover:bg-orange-300')
               span Search
-          button.bg-green-600.text-white.px-4.py-2.rounded.mt-6(class='hover:bg-green-500 md:mt-0')
+          button.bg-green-600.text-white.px-4.py-2.rounded.mt-6(
+            v-if="title === 'giáo viên'"
+            class='hover:bg-green-500 md:mt-0'
+            @click="openTeacherDialog('add')"
+          )
             span + Thêm {{ title }}
         .w-full.overflow-hidden.rounded-lg.shadow-xs.mt-4(class='lg:px-10')
           .w-full.overflow-auto.rounded-lg(style='max-height: 600px;')
@@ -45,6 +49,7 @@
                       button.bg-green-600.text-white.px-4.py-2.rounded.mt-6(
                         v-if="title === 'giáo viên'"
                         class='hover:bg-green-500 md:mt-0'
+                        @click="openTeacherDialog('edit', item)"
                       ) Sửa thông tin
                       button.bg-green-600.text-white.px-4.py-2.rounded.mt-6(
                         v-if="title === 'giáo viên'"
@@ -67,11 +72,20 @@
       @on-close="isOpenWatchDialog = false"
     )
 
+    teacher-dialog(
+      :value="isOpenAddOrEditDialog"
+      :title="title"
+      :teacher="teacherProp"
+      :mode="mode"
+      @on-close="isOpenAddOrEditDialog = false"
+    )
+
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api'
 import WatchInformation from '@/components/WatchInformation/index.vue'
+import TeacherDialog from '@/components/TeacherDialog/index.vue'
 
 const ManagementComponent = defineComponent({
   props: {
@@ -90,20 +104,51 @@ const ManagementComponent = defineComponent({
     }
   },
   components: {
-    WatchInformation
+    WatchInformation,
+    TeacherDialog
   },
   setup(props, { emit }) {
     const isOpenWatchDialog = ref(false)
+    const teacherProp = ref({})
     const dataWatch = ref(0)
+    const isOpenAddOrEditDialog = ref(false)
+    const mode = ref('')
 
     const openWatchDialog = (data: any) => {
       dataWatch.value = data
       isOpenWatchDialog.value = true
     }
 
+    const openTeacherDialog = (mdo: string, data?: any) => {
+      mode.value = mdo
+      if (data) {
+        teacherProp.value = {
+          name: data.name,
+          gender: data.gender,
+          phone: data.account.phone,
+          mail: data.account.mail,
+          dateOfBirth: data.dateOfBirth
+        }
+      } else {
+        teacherProp.value = {
+          name: '',
+          gender: '',
+          phone: '',
+          mail: '',
+          dateOfBirth: ''
+        }
+      }
+      console.log(teacherProp.value)
+      isOpenAddOrEditDialog.value = true
+    }
+
     return {
       openWatchDialog,
       isOpenWatchDialog,
+      teacherProp,
+      openTeacherDialog,
+      isOpenAddOrEditDialog,
+      mode,
       dataWatch
     }
   }
