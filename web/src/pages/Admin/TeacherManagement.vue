@@ -4,6 +4,7 @@
       :title="'giáo viên'"
       :data="teachers"
       :classrooms="classrooms"
+      @reload="reload()"
     )
 </template>
 
@@ -61,13 +62,18 @@ const TeacherManagement = defineComponent({
       }
     }
 
+    const reload = async () => {
+      await getData()
+    }
+
     onMounted(async () => {
       await getData()
     })
 
     return {
       teachers,
-      classrooms
+      classrooms,
+      reload
     }
   }
 })

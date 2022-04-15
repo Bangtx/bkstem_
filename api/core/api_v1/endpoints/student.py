@@ -32,3 +32,12 @@ def create_student(student: AccountCreate):
     account = Account.create(**student_data)
     models.Student.create(account_id=account.id)
     return account
+
+
+@router.put('/{id}')
+def update_teacher(id: int, student: schemas.StudentUpdate):
+    teacher = student.dict()
+    account_id = models.Student.select().where(
+        models.Student.active, models.Student.id == id
+    ).get().account
+    return Account.update_one(account_id, teacher)

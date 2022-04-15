@@ -24,8 +24,8 @@ class Student(BaseModel):
                 Account.date_of_birth,
                 fn.json_build_object(
                     'id', Account.id,
-                    'mail', Account.name,
-                    'phone', Account.name
+                    'mail', Account.mail,
+                    'phone', Account.phone
                 ).alias('account')
             ).join(
                 Account, on=cls.account_id == Account.id

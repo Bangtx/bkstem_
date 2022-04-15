@@ -17,6 +17,12 @@
             @click="openTeacherDialog('add')"
           )
             span + Thêm {{ title }}
+          button.bg-green-600.text-white.px-4.py-2.rounded.mt-6(
+            v-if="title === 'học sinh'"
+            class='hover:bg-green-500 md:mt-0'
+            @click="openStudentDialog('add')"
+          )
+            span + Thêm {{ title }}
         .w-full.overflow-hidden.rounded-lg.shadow-xs.mt-4(class='lg:px-10')
           .w-full.overflow-auto.rounded-lg(style='max-height: 600px;')
             table.w-full.whitespace-nowrap.rounded-lg.border
@@ -27,7 +33,7 @@
                   th.px-4.py-3.border(v-if="title === 'lớp học'") Mã Lớp
                   th.px-4.py-3.border(v-if="title !== 'lớp học'") Họ tên
                   th.px-4.py-3.border(v-if="title === 'lớp học'") Môn
-                  th.px-4.py-3.border.text-center(v-if="title !== 'lớp học'") Lớp học
+                  th.px-4.py-3.border.text-center(v-if="title !== 'lớp học'") Thông tin
                   th.px-4.py-3.border(v-if="title === 'lớp học'") Gv
                   th.px-4.py-3.border(v-if="title === 'lớp học'") Thông tin
                   th.px-4.py-3.border.text-center Tùy chọn
@@ -50,15 +56,12 @@
                         v-if="title === 'giáo viên'"
                         class='hover:bg-green-500 md:mt-0'
                         @click="openTeacherDialog('edit', item)"
-                      ) Sửa thông tin
-                      button.bg-green-600.text-white.px-4.py-2.rounded.mt-6(
-                        v-if="title === 'giáo viên'"
-                        class='hover:bg-green-500 md:mt-0'
-                      ) Thêm học viên
+                      ) Sửa
 
                       button.bg-green-600.text-white.px-4.py-2.rounded.mt-6(
-                        v-if="title !== 'giáo viên'"
-                        class='hover:bg-green-500 md:mt-0' data-modal-toggle='themgv'
+                        v-if="title === 'học sinh'"
+                        class='hover:bg-green-500 md:mt-0'
+                        @click="openStudentDialog('edit', item)"
                       )
                         span Sửa
                       button.bg-red-500.text-white.px-4.py-2.rounded.mt-6(class='hover:bg-red-400 md:mt-0')
@@ -73,11 +76,21 @@
     )
 
     teacher-dialog(
-      :value="isOpenAddOrEditDialog"
+      :value="isOpenTeacherDialog"
       :title="title"
       :teacher="teacherProp"
       :mode="mode"
-      @on-close="isOpenAddOrEditDialog = false"
+      @on-close="isOpenTeacherDialog = false"
+      @reload="$emit('reload')"
+    )
+
+    student-dialog(
+      :value="isOpenStudentDialog"
+      :title="title"
+      :student="studentProp"
+      :mode="mode"
+      @on-close="isOpenStudentDialog = false"
+      @reload="$emit('reload')"
     )
 
 </template>
@@ -86,6 +99,7 @@
 import { defineComponent, ref } from '@vue/composition-api'
 import WatchInformation from '@/components/WatchInformation/index.vue'
 import TeacherDialog from '@/components/TeacherDialog/index.vue'
+import StudentDialog from '@/components/StudentDialog/index.vue'
 
 const ManagementComponent = defineComponent({
   props: {
@@ -105,13 +119,16 @@ const ManagementComponent = defineComponent({
   },
   components: {
     WatchInformation,
-    TeacherDialog
+    TeacherDialog,
+    StudentDialog
   },
   setup(props, { emit }) {
     const isOpenWatchDialog = ref(false)
     const teacherProp = ref({})
+    const studentProp = ref({})
     const dataWatch = ref(0)
-    const isOpenAddOrEditDialog = ref(false)
+    const isOpenTeacherDialog = ref(false)
+    const isOpenStudentDialog = ref(false)
     const mode = ref('')
 
     const openWatchDialog = (data: any) => {
@@ -123,6 +140,7 @@ const ManagementComponent = defineComponent({
       mode.value = mdo
       if (data) {
         teacherProp.value = {
+          id: data.id,
           name: data.name,
           gender: data.gender,
           phone: data.account.phone,
@@ -131,6 +149,7 @@ const ManagementComponent = defineComponent({
         }
       } else {
         teacherProp.value = {
+          id: null,
           name: '',
           gender: '',
           phone: '',
@@ -138,8 +157,31 @@ const ManagementComponent = defineComponent({
           dateOfBirth: ''
         }
       }
-      console.log(teacherProp.value)
-      isOpenAddOrEditDialog.value = true
+      isOpenTeacherDialog.value = true
+    }
+
+    const openStudentDialog = (mdo: string, data?: any) => {
+      mode.value = mdo
+      if (data) {
+        studentProp.value = {
+          id: data.id,
+          name: data.name,
+          gender: data.gender,
+          phone: data.account.phone,
+          mail: data.account.mail,
+          dateOfBirth: data.dateOfBirth
+        }
+      } else {
+        studentProp.value = {
+          id: null,
+          name: '',
+          gender: '',
+          phone: '',
+          mail: '',
+          dateOfBirth: ''
+        }
+      }
+      isOpenStudentDialog.value = true
     }
 
     return {
@@ -147,9 +189,12 @@ const ManagementComponent = defineComponent({
       isOpenWatchDialog,
       teacherProp,
       openTeacherDialog,
-      isOpenAddOrEditDialog,
+      isOpenTeacherDialog,
       mode,
-      dataWatch
+      dataWatch,
+      openStudentDialog,
+      isOpenStudentDialog,
+      studentProp
     }
   }
 })

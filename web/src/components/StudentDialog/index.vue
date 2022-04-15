@@ -8,20 +8,20 @@
           v-icon mdi-close
 
       v-card-text
-        v-text-field.p-0(:label="'tên'" v-model="teacher.name")
+        v-text-field.p-0(:label="'tên'" v-model="student.name")
         v-text-field.p-0(v-if="mode==='add'" :label="'password'" v-model="password")
-        v-text-field.p-0(:label="'mail'" v-model="teacher.mail")
-        v-text-field.p-0(:label="'điện thoại'" v-model="teacher.phone")
+        v-text-field.p-0(:label="'mail'" v-model="student.mail")
+        v-text-field.p-0(:label="'điện thoại'" v-model="student.phone")
         v-select.p-0(
           :label="'giới tính'"
           :items="['Nam', 'Nữ']"
-          v-model="teacher.gender"
+          v-model="student.gender"
         )
         v-dialog.title-color(
           ref="dialog"
           persistent
           max-width="400"
-          :return-value.sync="teacher.dateOfBirth"
+          :return-value.sync="student.dateOfBirth"
           v-model="modal"
         )
           template(v-slot:activator="{ on, attrs }")
@@ -32,7 +32,7 @@
               append-outer-icon="mdi-calendar"
               v-bind="attrs"
               v-on="on"
-              :value="teacher.dateOfBirth"
+              :value="student.dateOfBirth"
               @click:append-outer="modal = true"
             )
           v-date-picker(full-width scrollable color="rough_black" header-color="rough_black" v-model="date")
@@ -57,7 +57,7 @@ import moment from 'moment'
 import { api } from 'plugins'
 import { endpoints, toSnakeCase } from 'utils'
 
-const TeacherDialog = defineComponent({
+const StudentDialog = defineComponent({
   props: {
     value: {
       type: Boolean,
@@ -72,7 +72,7 @@ const TeacherDialog = defineComponent({
       required: false,
       default: 'edit'
     },
-    teacher: {
+    student: {
       type: Object,
       required: true
     }
@@ -87,17 +87,17 @@ const TeacherDialog = defineComponent({
       try {
         if (props.mode === 'add') {
           const body = {
-            id: props.teacher.id,
-            name: props.teacher.name,
-            gender: props.teacher.gender,
-            mail: props.teacher.mail,
-            phone: props.teacher.phone,
-            dateOfBirth: props.teacher.dateOfBirth,
+            id: props.student.id,
+            name: props.student.name,
+            gender: props.student.gender,
+            mail: props.student.mail,
+            phone: props.student.phone,
+            dateOfBirth: props.student.dateOfBirth,
             password: password.value
           }
-          await api.post(`${endpoints.TEACHER}`, toSnakeCase(body))
+          await api.post(`${endpoints.STUDENT}`, toSnakeCase(body))
         } else {
-          await api.put(`${endpoints.TEACHER}${props.teacher.id}`, toSnakeCase(props.teacher))
+          await api.put(`${endpoints.STUDENT}${props.student.id}`, toSnakeCase(props.student))
         }
         emit('reload')
         emit('on-close')
@@ -116,7 +116,7 @@ const TeacherDialog = defineComponent({
   }
 })
 
-export default TeacherDialog
+export default StudentDialog
 </script>
 
 <style lang="sass">
