@@ -4,6 +4,7 @@
       :title="'học sinh'"
       :data="students"
       :classrooms="classrooms"
+      @reload="reload()"
     )
 </template>
 
@@ -61,13 +62,18 @@ const StudentManagement = defineComponent({
       }
     }
 
+    const reload = async () => {
+      await getData()
+    }
+
     onMounted(async () => {
       await getData()
     })
 
     return {
       students,
-      classrooms
+      classrooms,
+      reload
     }
   }
 })

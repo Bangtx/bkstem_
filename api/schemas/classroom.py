@@ -19,3 +19,7 @@ class ClassRoom(ClassRoomBase):
 
 class ClassRoomCreate(ClassRoomBase):
     teacher: int
+
+
+class ClassRoomUpdate(ClassRoomBase):
+    teacher: int

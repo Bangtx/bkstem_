@@ -91,6 +91,7 @@ class Classroom(BaseModel):
                 cls.room,
                 cls.start_date,
                 cls.total_days,
+                cls.room,
                 fn.json_build_object(
                     'id', teacher.c.id,
                     'name', teacher.c.name

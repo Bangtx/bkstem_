@@ -18,6 +18,7 @@ class ClassTime(BaseModel):
     def get_class_times_by_ids(cls, ids):
         class_times = (
             cls.select(
+                cls.id,
                 DateOfWeek.name.alias('date_of_week'),
                 cls.start_time,
                 cls.stop_time

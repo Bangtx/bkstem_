@@ -64,6 +64,17 @@
                         @click="openStudentDialog('edit', item)"
                       )
                         span Sửa
+                      button.bg-green-600.text-white.px-4.py-2.rounded.mt-6(
+                        v-if="title === 'lớp học'"
+                        class='hover:bg-green-500 md:mt-0'
+                        @click="openClassroomDialog('edit', item)"
+                      )
+                        span Sửa
+                      button.bg-green-600.text-white.px-4.py-2.rounded.mt-6(
+                        v-if="title === 'lớp học'"
+                        class='hover:bg-green-500 md:mt-0'
+                      )
+                        span Thêm học sinh
                       button.bg-red-500.text-white.px-4.py-2.rounded.mt-6(class='hover:bg-red-400 md:mt-0')
                         span Xóa
 
@@ -93,6 +104,15 @@
       @reload="$emit('reload')"
     )
 
+    classroom-dialog(
+      :value="isOpenClassroomDialog"
+      :title="title"
+      :classroom="classroomProp"
+      :mode="mode"
+      @on-close="isOpenClassroomDialog = false"
+      @reload="$emit('reload')"
+    )
+
 </template>
 
 <script lang="ts">
@@ -100,6 +120,7 @@ import { defineComponent, ref } from '@vue/composition-api'
 import WatchInformation from '@/components/WatchInformation/index.vue'
 import TeacherDialog from '@/components/TeacherDialog/index.vue'
 import StudentDialog from '@/components/StudentDialog/index.vue'
+import ClassroomDialog from '@/components/ClassroomDialog/index.vue'
 
 const ManagementComponent = defineComponent({
   props: {
@@ -120,15 +141,18 @@ const ManagementComponent = defineComponent({
   components: {
     WatchInformation,
     TeacherDialog,
-    StudentDialog
+    StudentDialog,
+    ClassroomDialog
   },
   setup(props, { emit }) {
     const isOpenWatchDialog = ref(false)
     const teacherProp = ref({})
     const studentProp = ref({})
+    const classroomProp = ref({})
     const dataWatch = ref(0)
     const isOpenTeacherDialog = ref(false)
     const isOpenStudentDialog = ref(false)
+    const isOpenClassroomDialog = ref(false)
     const mode = ref('')
 
     const openWatchDialog = (data: any) => {
@@ -184,6 +208,32 @@ const ManagementComponent = defineComponent({
       isOpenStudentDialog.value = true
     }
 
+    const openClassroomDialog = (mdo: string, data?: any) => {
+      mode.value = mdo
+      if (data) {
+        classroomProp.value = {
+          id: data.id,
+          name: data.name,
+          classTimes: data.classTimes,
+          startDate: data.startDate,
+          teacher: data.teacher,
+          room: data.room,
+          students: data.students
+        }
+      } else {
+        classroomProp.value = {
+          id: null,
+          name: '',
+          classTimes: null,
+          startDate: null,
+          teacher: null,
+          room: null,
+          students: []
+        }
+      }
+      isOpenClassroomDialog.value = true
+    }
+
     return {
       openWatchDialog,
       isOpenWatchDialog,
@@ -194,7 +244,10 @@ const ManagementComponent = defineComponent({
       dataWatch,
       openStudentDialog,
       isOpenStudentDialog,
-      studentProp
+      studentProp,
+      openClassroomDialog,
+      classroomProp,
+      isOpenClassroomDialog
     }
   }
 })

@@ -3,6 +3,7 @@
     management-component(
       :title="'lớp học'"
       :data="classrooms"
+      @reload="reload()"
     )
 </template>
 
@@ -54,12 +55,17 @@ const ClassroomManagement = defineComponent({
       }
     }
 
+    const reload = async () => {
+      await getData()
+    }
+
     onMounted(async () => {
       await getData()
     })
 
     return {
-      classrooms
+      classrooms,
+      reload
     }
   }
 })

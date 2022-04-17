@@ -32,3 +32,8 @@ def create_classroom(classroom: schemas.ClassRoomCreate):
     raise HTTPException(
         403, 'student or class time not exists'
     )
+
+
+@router.put('/{id}')
+def get_classroom_by_id(id: int, classroom: schemas.ClassRoomUpdate):
+    return models.Classroom.update_one(id, classroom.dict())
