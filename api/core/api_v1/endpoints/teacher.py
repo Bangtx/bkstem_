@@ -1,12 +1,11 @@
 import models.teacher as models
+from models.classroom import Classroom
 from models.account import Account
 import schemas.teacher as schemas
 from schemas.account import AccountCreate
 from fastapi import APIRouter, HTTPException
-from typing import List
-import jwt
 import hashlib
-import json
+from utils.db import transaction
 
 router = APIRouter()
 
@@ -41,3 +40,15 @@ def update_teacher(id: int, teacher: schemas.TeacherUpdate):
         models.Teacher.active, models.Teacher.id == id
     ).get().account
     return Account.update_one(account_id, teacher)
+
+
+@router.delete('/{id}')
+@transaction
+def delete_teacher(id: int):
+    classrooms = Classroom.check_class_by_teacher(id)
+    if classrooms:
+        raise HTTPException(
+            400,
+            'Giáo viên đang dạy lớp'
+        )
+    return models.Teacher.soft_delete(id)

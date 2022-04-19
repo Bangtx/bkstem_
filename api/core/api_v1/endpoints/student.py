@@ -7,6 +7,7 @@ from typing import List
 import jwt
 import hashlib
 import json
+from utils.db import transaction
 
 router = APIRouter()
 
@@ -41,3 +42,9 @@ def update_teacher(id: int, student: schemas.StudentUpdate):
         models.Student.active, models.Student.id == id
     ).get().account
     return Account.update_one(account_id, teacher)
+
+
+@router.delete('/{id}')
+@transaction
+def delete_student(id: int):
+    return models.Student.soft_delete(id)

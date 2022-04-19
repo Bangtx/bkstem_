@@ -6,6 +6,7 @@ from typing import List
 import jwt
 import hashlib
 import json
+from utils.db import transaction
 
 router = APIRouter()
 
@@ -37,3 +38,9 @@ def create_classroom(classroom: schemas.ClassRoomCreate):
 @router.put('/{id}')
 def get_classroom_by_id(id: int, classroom: schemas.ClassRoomUpdate):
     return models.Classroom.update_one(id, classroom.dict())
+
+
+@router.delete('/{id}')
+@transaction
+def delete_classroom(id: int):
+    return models.Classroom.soft_delete(id)

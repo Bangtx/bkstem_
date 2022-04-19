@@ -118,3 +118,13 @@ class Classroom(BaseModel):
             ClassTime.select().where(ClassTime.active, ClassTime.id << class_time_ids)
         )
         return students and class_times
+
+    @classmethod
+    def check_class_by_teacher(cls, id):
+        query = (
+            Classroom.select().where(
+                Classroom.active,
+                Classroom.teacher == id
+            ).dicts()
+        )
+        return list(query)

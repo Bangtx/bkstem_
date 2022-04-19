@@ -75,7 +75,10 @@
                         class='hover:bg-green-500 md:mt-0'
                       )
                         span Thêm học sinh
-                      button.bg-red-500.text-white.px-4.py-2.rounded.mt-6(class='hover:bg-red-400 md:mt-0')
+                      button.bg-red-500.text-white.px-4.py-2.rounded.mt-6(
+                        class='hover:bg-red-400 md:mt-0'
+                        @click="openDeleteDialog(item)"
+                      )
                         span Xóa
 
     watch-information(
@@ -113,6 +116,14 @@
       @reload="$emit('reload')"
     )
 
+    delete-dialog(
+      :value="isOpenDeleteDialog"
+      :type="title"
+      :data="deleteProp"
+      @on-close="isOpenDeleteDialog = false"
+      @reload="$emit('reload')"
+    )
+
 </template>
 
 <script lang="ts">
@@ -121,6 +132,7 @@ import WatchInformation from '@/components/WatchInformation/index.vue'
 import TeacherDialog from '@/components/TeacherDialog/index.vue'
 import StudentDialog from '@/components/StudentDialog/index.vue'
 import ClassroomDialog from '@/components/ClassroomDialog/index.vue'
+import DeleteDialog from '@/components/DeleteDialog/index.vue'
 
 const ManagementComponent = defineComponent({
   props: {
@@ -142,9 +154,10 @@ const ManagementComponent = defineComponent({
     WatchInformation,
     TeacherDialog,
     StudentDialog,
-    ClassroomDialog
+    ClassroomDialog,
+    DeleteDialog
   },
-  setup(props, { emit }) {
+  setup() {
     const isOpenWatchDialog = ref(false)
     const teacherProp = ref({})
     const studentProp = ref({})
@@ -153,6 +166,8 @@ const ManagementComponent = defineComponent({
     const isOpenTeacherDialog = ref(false)
     const isOpenStudentDialog = ref(false)
     const isOpenClassroomDialog = ref(false)
+    const isOpenDeleteDialog = ref(false)
+    const deleteProp = ref<any>({})
     const mode = ref('')
 
     const openWatchDialog = (data: any) => {
@@ -234,6 +249,11 @@ const ManagementComponent = defineComponent({
       isOpenClassroomDialog.value = true
     }
 
+    const openDeleteDialog = (data: any) => {
+      deleteProp.value = data
+      isOpenDeleteDialog.value = true
+    }
+
     return {
       openWatchDialog,
       isOpenWatchDialog,
@@ -247,7 +267,10 @@ const ManagementComponent = defineComponent({
       studentProp,
       openClassroomDialog,
       classroomProp,
-      isOpenClassroomDialog
+      isOpenClassroomDialog,
+      openDeleteDialog,
+      isOpenDeleteDialog,
+      deleteProp
     }
   }
 })
