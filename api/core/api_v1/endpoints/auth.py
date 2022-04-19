@@ -19,7 +19,7 @@ def test(data=Depends(Auth())):
 
 
 @router.post('/login')
-def login(account: schemas.AccountBase):
+def login(account: schemas.AccountLogin):
     query = models.Account.select(
         models.Account.id.alias('account_id'),
         models.Account.name,
@@ -29,7 +29,7 @@ def login(account: schemas.AccountBase):
         models.Account.phone,
         models.Account.password.alias('key_member')
     ).where(
-        models.Account.mail == account.mail,
+        models.Account.phone == account.phone,
         models.Account.password == hashlib.md5(account.password.encode()).hexdigest(),
         models.Account.active
     ).dicts().get()

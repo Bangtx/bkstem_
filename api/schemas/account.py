@@ -2,6 +2,11 @@ from .schema import Schema
 from datetime import date
 
 
+class AccountLogin(Schema):
+    password: str
+    phone: str
+
+
 class AccountBase(Schema):
     name: str
     gender: str = None

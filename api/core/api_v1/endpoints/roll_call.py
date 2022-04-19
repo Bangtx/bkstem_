@@ -17,7 +17,6 @@ def get_roll_call(class_room: int):
             models.RollCall.date.asc()
         ).dicts()
     )
-    print(dates)
     dates = list(set(list(map(lambda x: x['date'], dates))))
     data = []
     for date in dates:
