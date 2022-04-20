@@ -175,15 +175,11 @@ CREATE TABLE score
   CONSTRAINT pkey_score PRIMARY KEY (id)
 );
 
-
-DROP TABLE IF EXISTS homework CASCADE;
-CREATE TABLE homework
+DROP TABLE IF EXISTS schedule CASCADE;
+CREATE TABLE schedule
 (
   id bigserial NOT NULL,
-  date date,
-  deadline date,
   classroom_id bigint,
-  teacher_id bigint,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   created_by bigint,
   modified_at timestamp with time zone,
@@ -191,7 +187,25 @@ CREATE TABLE homework
   deleted_at timestamp with time zone,
   deleted_by bigint,
   active boolean DEFAULT TRUE,
-  CONSTRAINT pkey_homework PRIMARY KEY (id)
+  CONSTRAINT pkey_schedule PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS home_work CASCADE;
+CREATE TABLE home_work
+(
+  id bigserial NOT NULL,
+  date date,
+  deadline date,
+  classroom_id bigint,
+  question_id bigint,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  created_by bigint,
+  modified_at timestamp with time zone,
+  modified_by bigint,
+  deleted_at timestamp with time zone,
+  deleted_by bigint,
+  active boolean DEFAULT TRUE,
+  CONSTRAINT pkey_home_work PRIMARY KEY (id)
 );
 
 
@@ -199,9 +213,9 @@ DROP TABLE IF EXISTS question CASCADE;
 CREATE TABLE question
 (
   id bigserial NOT NULL,
-  homework_id bigint,
   answers json,
   result text,
+  type smallint, -- 0(multichoice) or 1
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   created_by bigint,
   modified_at timestamp with time zone,

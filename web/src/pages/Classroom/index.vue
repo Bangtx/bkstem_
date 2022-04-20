@@ -25,6 +25,9 @@
         notification-student(
           v-if="feature==='noti'" :classroom="classroom"
         )
+        home-work(
+          v-if="feature==='home_work'"
+        )
 
 </template>
 
@@ -39,6 +42,7 @@ import Schedule from './Schedule.vue'
 import Score from './Score.vue'
 import Learn from './Learn.vue'
 import NotificationStudent from './NotificationStudent.vue'
+import HomeWork from './HomeWork.vue'
 
 interface Teacher {
   id: number
@@ -75,7 +79,8 @@ const Classroom = defineComponent({
     Schedule,
     Score,
     Learn,
-    NotificationStudent
+    NotificationStudent,
+    HomeWork
   },
   setup(props, { root }) {
     const { $toast, $route } = root

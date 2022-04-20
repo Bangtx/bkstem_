@@ -9,7 +9,10 @@ from .endpoints import (
     roll_call,
     absent_type,
     score,
-    notification
+    notification,
+    home_work,
+    question,
+    question_student
 )
 
 
@@ -24,3 +27,6 @@ api_router.include_router(roll_call.router, prefix='/roll_call', tags=['roll_cal
 api_router.include_router(absent_type.router, prefix='/absent_type', tags=['absent_type'])
 api_router.include_router(score.router, prefix='/score', tags=['score'])
 api_router.include_router(notification.router, prefix='/notification', tags=['notification'])
+api_router.include_router(home_work.router, prefix='/home_work', tags=['home_work'])
+api_router.include_router(question.router, prefix='/question', tags=['question'])
+api_router.include_router(question_student.router, prefix='/question_student', tags=['question_student'])

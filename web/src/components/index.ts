@@ -5,3 +5,4 @@ export { default as ScheduleButtonComponent } from './ScheduleButtonComponent/in
 export { default as NotificationDialog } from './NotificationDialog/index.vue'
 export { default as ManagementComponent } from './ManagementComponent/index.vue'
 export { default as AddOrEditDialog } from './AddOrEditDialog/index.vue'
+export { default as QuestionDialog } from './QuestionDialog/index.vue'
