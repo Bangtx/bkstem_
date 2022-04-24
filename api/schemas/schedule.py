@@ -5,9 +5,10 @@ class ScheduleBase(Schema):
     id: int
 
 
-class ScheduleCreate(ScheduleBase):
+class ScheduleCreate(Schema):
     classroom: int
+    title: str
 
 
-class ScheduleUpdate(ScheduleBase):
-    classroom: int
+class ScheduleUpdate(ScheduleCreate):
+    pass

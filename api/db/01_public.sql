@@ -180,6 +180,7 @@ CREATE TABLE schedule
 (
   id bigserial NOT NULL,
   classroom_id bigint,
+  title text,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   created_by bigint,
   modified_at timestamp with time zone,

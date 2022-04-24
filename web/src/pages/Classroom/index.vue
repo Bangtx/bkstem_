@@ -8,7 +8,11 @@
       )
       .w-full.border-l
         class-home(
-          v-if="feature==='index'" :classroom="classroom" :students="students" :teacher="teacher"
+          v-if="feature==='index'"
+          :classroom="classroom"
+          :students="students"
+          :teacher="teacher"
+          :units="units"
         )
         roll-call(
           v-if="feature==='rollcall'" :classroom="classroom" :students="students" :teacher="teacher"
@@ -89,16 +93,29 @@ const Classroom = defineComponent({
     const classroom = ref<ClassroomType | any>({})
     const students = ref<Array<Student>>([])
     const teacher = ref<Teacher | any>({})
+    const units = ref<any[]>([])
 
     const onSelectFeature = (data: string) => {
       feature.value = data
     }
+
+    const getSchedule = async () => {
+      try {
+        const { data } = await api.get(`${endpoints.SCHEDULE}?classroom=${classroomID}`)
+        units.value = toCamelCase(data)
+      } catch (e) {
+        $toast.error('Get data failed')
+      }
+    }
+
     const getData = async () => {
       try {
         const { data } = await api.get(`${endpoints.CLASSROOM}${classroomID}`)
         classroom.value = toCamelCase(data)
         students.value = classroom.value.students
         teacher.value = classroom.value.teacher
+
+        await getSchedule()
       } catch (e) {
         $toast.error('Get data failed')
       }
@@ -112,7 +129,8 @@ const Classroom = defineComponent({
       students,
       classroom,
       teacher,
-      feature
+      feature,
+      units
     }
   }
 })

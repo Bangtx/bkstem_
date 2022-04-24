@@ -34,6 +34,7 @@
 
     question-dialog(
       :value="isOpenAddQuestionDialog"
+      @on-close="isOpenAddQuestionDialog = false"
     )
 </template>
 

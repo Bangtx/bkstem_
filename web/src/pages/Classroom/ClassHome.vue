@@ -15,6 +15,8 @@
       h1.py-2
         | Giáo viên chủ nhiệm:
         span {{ teacher.name }}
+      v-list-item(v-for="(unit, index) in units" :key="index")
+        span {{ index + 1 }}: {{ unit.title }}
       h1.py-2.flex.gap-2.items-center
         div Danh sách sinh viên
       // Danh sách sinh viên
@@ -54,6 +56,10 @@ const ClassHome = defineComponent({
     },
     teacher: {
       type: Object,
+      required: true
+    },
+    units: {
+      type: Array,
       required: true
     }
   },
