@@ -18,6 +18,12 @@
             v-model="typeQuestion"
             max-width="300"
           )
+          v-select(
+            :label="'unit'"
+            :items="units.map(e => e.title)"
+            v-model="unit"
+            max-width="300"
+          )
           span.pt-4 Đáp án
           div(v-if="typeQuestion==='trắc nghiệm'")
             v-row
@@ -94,10 +100,19 @@ const QuestionDialog = defineComponent({
     value: {
       type: Boolean,
       required: true
+    },
+    units: {
+      type: Array,
+      required: true
+    },
+    classroom: {
+      type: Object,
+      required: true
     }
   },
   setup(props, { root }) {
     const { $toast } = root
+    const unit = ref('')
     const ans = ref({ a: '', b: '', c: '', d: '', correct: '' })
     const question = ref('')
     const typeQuestions = ['trắc nghiệm', 'tự luận']
@@ -109,8 +124,41 @@ const QuestionDialog = defineComponent({
     }
 
     const onSave = async () => {
+      const bodyQuestion = {
+        answers:
+          typeQuestion.value === typeQuestions[0]
+            ? {
+                question: question.value,
+                a: ans.value.b,
+                b: ans.value.b,
+                c: ans.value.c,
+                d: ans.value.d
+              }
+            : { question: question.value },
+        result: ans.value.correct,
+        type: typeQuestion.value === typeQuestions[0] ? 0 : 1
+      }
       try {
-        console.log(111)
+        if (
+          ans.value.correct !== '' &&
+          ans.value.a !== '' &&
+          ans.value.b !== '' &&
+          ans.value.c !== '' &&
+          ans.value.d !== '' &&
+          question.value !== ''
+        ) {
+          const questionPost = (await api.post(`${endpoints.QUESTION}`, bodyQuestion)).data
+          const schedule: any = props.units.find((e: any) => e.title === unit.value)
+          const bodyHomeWork = {
+            classroom: props.classroom.id,
+            question: questionPost.id,
+            schedule: schedule.id
+          }
+          await api.post(endpoints.HOME_WORK, bodyHomeWork)
+          $toast.success('Save data successful')
+        } else {
+          $toast.error('Save data failed')
+        }
       } catch {
         $toast.error('Save data failed')
       }
@@ -123,7 +171,8 @@ const QuestionDialog = defineComponent({
       typeQuestion,
       clickCheckBox,
       ansLongResponse,
-      onSave
+      onSave,
+      unit
     }
   }
 })

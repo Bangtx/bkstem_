@@ -2,6 +2,7 @@ from .base import BaseModel
 from playhouse.postgres_ext import JSONField, IntegerField
 from .classroom import Classroom
 from .question import Question
+from .schedule import Schedule
 from peewee import CharField, DateField, ForeignKeyField, fn
 
 
@@ -10,6 +11,7 @@ class HomeWork(BaseModel):
     deadline = DateField()
     classroom = ForeignKeyField(Classroom, column_name='classroom_id')
     question = ForeignKeyField(Question, column_name='question_id')
+    schedule = ForeignKeyField(Schedule, column_name='schedule_id')
 
     class Meta:
         db_table = 'home_work'
@@ -29,11 +31,17 @@ class HomeWork(BaseModel):
                     'id', Question.id,
                     'answers', Question.answers,
                     'type', Question.type
-                ).alias('question')
+                ).alias('question'),
+                fn.json_buile_object(
+                    'id', Schedule.id,
+                    'title', Schedule.title
+                )
             ).join(
                 Classroom, on=Classroom.id == cls.classroom
             ).join(
                 Question, on=Question.id == cls.question
+            ).join(
+                Schedule, on=Schedule.id == cls.schedule
             ).where(
                 cls.active,
                 Classroom.active,

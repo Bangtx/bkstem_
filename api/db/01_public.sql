@@ -198,6 +198,7 @@ CREATE TABLE home_work
   date date,
   deadline date,
   classroom_id bigint,
+  schedule_id bigint,
   question_id bigint,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   created_by bigint,

@@ -115,7 +115,6 @@ const ClassroomDialog = defineComponent({
         teacher: props.classroom.teacher.id,
         studentIds: props.classroom.students.map((e: any) => e.id)
       }
-      console.log(body)
       try {
         if (props.mode === 'add') {
           await api.post(`${endpoints.CLASSROOM}`, toSnakeCase(body))

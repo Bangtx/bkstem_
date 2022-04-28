@@ -11,6 +11,6 @@ def get_questions():
     return models.Question.get_questions()
 
 
-@router.post('/')
+@router.post('/', response_model=schemas.Question)
 def create_question(question: schemas.QuestionCreate):
     return models.Question.create(**question.dict())

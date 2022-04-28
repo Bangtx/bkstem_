@@ -30,7 +30,7 @@
           v-if="feature==='noti'" :classroom="classroom"
         )
         home-work(
-          v-if="feature==='home_work'"
+          v-if="feature==='home_work'" :classroom="classroom" :units="units"
         )
 
 </template>

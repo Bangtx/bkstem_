@@ -34,6 +34,8 @@
 
     question-dialog(
       :value="isOpenAddQuestionDialog"
+      :units="units"
+      :classroom="classroom"
       @on-close="isOpenAddQuestionDialog = false"
     )
 </template>
@@ -43,6 +45,16 @@ import { defineComponent, ref } from '@vue/composition-api'
 import { QuestionDialog } from 'components'
 
 const HomeWork = defineComponent({
+  props: {
+    units: {
+      type: Array,
+      required: true
+    },
+    classroom: {
+      type: Object,
+      required: true
+    }
+  },
   components: {
     QuestionDialog
   },
