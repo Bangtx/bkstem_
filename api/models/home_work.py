@@ -3,7 +3,7 @@ from playhouse.postgres_ext import JSONField, IntegerField
 from .classroom import Classroom
 from .question import Question
 from .schedule import Schedule
-from peewee import CharField, DateField, ForeignKeyField, fn
+from peewee import CharField, DateField, ForeignKeyField, fn, JOIN
 
 
 class HomeWork(BaseModel):
@@ -32,10 +32,10 @@ class HomeWork(BaseModel):
                     'answers', Question.answers,
                     'type', Question.type
                 ).alias('question'),
-                fn.json_buile_object(
+                fn.json_build_object(
                     'id', Schedule.id,
                     'title', Schedule.title
-                )
+                ).alias('unit')
             ).join(
                 Classroom, on=Classroom.id == cls.classroom
             ).join(
@@ -50,3 +50,49 @@ class HomeWork(BaseModel):
         )
 
         return list(query)
+
+    @classmethod
+    def get_questions_by_unit(cls, unit):
+        question = (
+            Question.select(
+                Question.id, Question.answers, Question.type
+            ).where(Question.active).alias('questions').group_by(Question.id)
+        )
+        home_works = list(
+            cls.select(
+                cls.id,
+                fn.array_agg(
+                    fn.json_build_object(
+                        'id', question.c.id,
+                        'answers', question.c.answers,
+                        'type', question.c.type
+                    )
+                ).alias('questions')
+            ).join(
+                question, JOIN.LEFT_OUTER, on=question.c.id == cls.question
+            ).where(
+                cls.schedule == unit, cls.active
+            ).group_by(
+                cls.id
+            ).dicts()
+        )
+        data = []
+        for home_work in home_works:
+            data.append(home_work['questions'])
+
+        return data
+
+    @classmethod
+    def get_questions_group_by_unit(cls, classroom_id):
+        units = list(
+            Schedule.select(
+                Schedule.id, Schedule.title
+            ).where(
+                Schedule.classroom == classroom_id
+            ).dicts()
+        )
+
+        for unit in units:
+            unit['home_work'] = HomeWork.get_questions_by_unit(unit['id'])
+
+        return units
