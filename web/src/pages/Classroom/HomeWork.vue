@@ -25,10 +25,37 @@
               path(stroke-linecap='round' stroke-linejoin='round' d='M12 6v6m0 0v6m0-6h6m-6 0H6')
             span.text-base Thêm câu hỏi
         .mt-2(class='md:px-4')
-          div
-            | 1. aksjdklajsldkjals olaiksjdklajsdlkjaslkd lksdlkjasljdajssd kjdlkjalsjdla ................ skjadkjsaldkljlkklj
-          div
-            | 2. aksjdklajsldkjals olaiksjdklajsdlkjaslkd lksdlkjasljdajssd kjdlkjalsjdla ................ skjadkjsaldkljlkklj
+          v-expansion-panels(
+            flat
+            multiple
+            accordion
+            style="overflow: hidden"
+          )
+            v-expansion-panel(v-for="(item, index) in homeWorks" :key="index")
+              v-expansion-panel-header.px-0.py-1(expand-icon="")
+                v-row.ma-0.p-0
+                  v-col(cols="1")
+                    v-icon(v-if="") mdi-chevron-down
+                  v-col.title(cols="10")
+                    span.pl-4.bold--text {{ item.title }}
+                  v-col(cols="1")
+                    v-icon mdi-dots-vertical
+              v-expansion-panel-content(style="background-color: #deedfc; border-radius: 4px; padding: 0")
+                v-list-item.ma-0.title(
+                  v-for="question in item.homeWork"
+                  :key="question.id"
+                )
+                  v-col.p-0(cols="12")
+                    v-row.p-0
+                      span {{ question.questions }}
+                      //span {{ question.questions.answers.question }}
+                    v-row.p-0(v-if="question.questions.type===0")
+                      v-radio-group(v-model="check[question.questions.id]" row='')
+                        v-radio(:label="question.questions.answers.a" :value="'A'")
+                        v-radio(:label="question.questions.answers.b" :value="'B'")
+                        v-radio(:label="question.questions.answers.c" :value="'C'")
+                        v-radio(:label="question.questions.answers.d" :value="'D'")
+
         button.mt-4.flex.items-center.justify-between.px-4.py-2.font-medium.leading-5.text-white.transition-colors.duration-150.bg-orange-400.border.border-transparent.rounded-lg(class='hover:bg-orange-300 focus:outline-none')
           span.text-base Giao bài
 
@@ -41,8 +68,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent, ref, onMounted } from '@vue/composition-api'
 import { QuestionDialog } from 'components'
+import { api } from 'plugins'
+import { endpoints, toCamelCase } from 'utils'
 
 const HomeWork = defineComponent({
   props: {
@@ -58,17 +87,56 @@ const HomeWork = defineComponent({
   components: {
     QuestionDialog
   },
-  setup() {
+  setup(props, { root }) {
+    const { $toast } = root
     const isOpenAddQuestionDialog = ref(false)
     const openAddQuestionDialog = () => {
       isOpenAddQuestionDialog.value = true
     }
+    const homeWorks = ref<any[]>([])
+    const check = ref<any[]>([])
+
+    const getData = async () => {
+      try {
+        const { data } = await api.get(
+          `${endpoints.HOME_WORK}group_by_units?classroom=${props.classroom.id}`
+        )
+        homeWorks.value = toCamelCase(data)
+        // console.log(homeWorks.value)
+        const x = []
+          .concat(
+            ...homeWorks.value.map((homeWork: any) => {
+              return homeWork.homeWork.map((e: any) => {
+                return e.id
+              })
+            })
+          )
+          .map((id: number) => {
+            check.value[id] = null
+            return null
+          })
+      } catch (e) {
+        $toast.error('Get data failed')
+      }
+    }
+
+    onMounted(async () => {
+      await getData()
+    })
+
     return {
       isOpenAddQuestionDialog,
-      openAddQuestionDialog
+      openAddQuestionDialog,
+      homeWorks,
+      check
     }
   }
 })
 
 export default HomeWork
 </script>
+
+<style lang="sass">
+.title
+  text-align: left !important
+</style>

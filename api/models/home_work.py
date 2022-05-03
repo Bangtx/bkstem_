@@ -53,34 +53,30 @@ class HomeWork(BaseModel):
 
     @classmethod
     def get_questions_by_unit(cls, unit):
-        question = (
-            Question.select(
-                Question.id, Question.answers, Question.type
-            ).where(Question.active).alias('questions').group_by(Question.id)
-        )
+        # question = (
+        #     Question.select(
+        #         Question.id, Question.answers, Question.type
+        #     ).where(Question.active).alias('questions').group_by(Question.id)
+        # )
         home_works = list(
             cls.select(
                 cls.id,
-                fn.array_agg(
-                    fn.json_build_object(
-                        'id', question.c.id,
-                        'answers', question.c.answers,
-                        'type', question.c.type
-                    )
+                fn.json_build_object(
+                    'id', Question.id, 'answers', Question.answers, 'type', Question.type
                 ).alias('questions')
             ).join(
-                question, JOIN.LEFT_OUTER, on=question.c.id == cls.question
+                Question, JOIN.LEFT_OUTER, on=Question.id == cls.question
             ).where(
                 cls.schedule == unit, cls.active
             ).group_by(
-                cls.id
+                cls.id, Question.id
             ).dicts()
         )
         data = []
         for home_work in home_works:
             data.append(home_work['questions'])
 
-        return data
+        return home_works
 
     @classmethod
     def get_questions_group_by_unit(cls, classroom_id):
