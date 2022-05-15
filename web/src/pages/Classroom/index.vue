@@ -13,6 +13,7 @@
           :students="students"
           :teacher="teacher"
           :units="units"
+          @re-load="getData()"
         )
         roll-call(
           v-if="feature==='rollcall'" :classroom="classroom" :students="students" :teacher="teacher"
@@ -32,6 +33,9 @@
         home-work(
           v-if="feature==='home_work'" :classroom="classroom" :units="units"
         )
+        home-work-student(
+          v-if="feature==='home_work_student'" :classroom="classroom" :units="units"
+        )
 
 </template>
 
@@ -47,6 +51,7 @@ import Score from './Score.vue'
 import Learn from './Learn.vue'
 import NotificationStudent from './NotificationStudent.vue'
 import HomeWork from './HomeWork.vue'
+import HomeWorkStudent from './HomeWorkStudent.vue'
 
 interface Teacher {
   id: number
@@ -84,7 +89,8 @@ const Classroom = defineComponent({
     Score,
     Learn,
     NotificationStudent,
-    HomeWork
+    HomeWork,
+    HomeWorkStudent
   },
   setup(props, { root }) {
     const { $toast, $route } = root
@@ -130,7 +136,8 @@ const Classroom = defineComponent({
       classroom,
       teacher,
       feature,
-      units
+      units,
+      getData
     }
   }
 })

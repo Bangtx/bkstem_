@@ -1,4 +1,4 @@
-<template lang="pug" xmlns="">
+<template lang="pug">
   div
     #main.main-content.flex-1.py-20(class='md:pb-5')
       .px-4.text-gray-700(class='md:px-8')
@@ -11,19 +11,10 @@
           svg.h-6.w-6(xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2')
             path(stroke-linecap='round' stroke-linejoin='round' d='M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z')
           div Giao bài tập
-        .flex.gap-2.items-center.text-lg.font-semibold.text-gray-600.mt-2
-          div Bài tập đã giao
         .flex.gap-2.items-center.text-lg.font-semibold.text-gray-600.mt-4
           div Bài tập mới
         .flex.justify-between.items-center
           .text-lg Danh sách câu hỏi
-          button.flex.items-center.justify-between.px-4.py-2.font-medium.leading-5.text-white.transition-colors.duration-150.bg-orange-400.border.border-transparent.rounded-lg(
-            @click="openAddQuestionDialog()"
-            class='hover:bg-orange-300 focus:outline-none'
-          )
-            svg.h-6.w-6(xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2')
-              path(stroke-linecap='round' stroke-linejoin='round' d='M12 6v6m0 0v6m0-6h6m-6 0H6')
-            span.text-base Thêm câu hỏi
         .mt-2(class='md:px-4')
           v-expansion-panels(
             flat
@@ -51,34 +42,29 @@
                       h2 {{ index }}:
                       span {{ question.questions.answers.question }}
                     v-row.p-0(v-if="question.questions.type===0")
-                      v-radio-group(v-model="question.result" row='')
+                      v-radio-group(v-model="check[question.questions.id]" row='')
                         v-radio(:label="question.questions.answers.a" :value="'A'")
                         v-radio(:label="question.questions.answers.b" :value="'B'")
                         v-radio(:label="question.questions.answers.c" :value="'C'")
                         v-radio(:label="question.questions.answers.d" :value="'D'")
                     v-row.p-0(v-if="question.questions.type===1")
-                      v-text-field(v-model="question.result")
+                      v-text-field(v-model="check[question.questions.id]")
 
-        button.mt-4.flex.items-center.justify-between.px-4.py-2.font-medium.leading-5.text-white.transition-colors.duration-150.bg-orange-400.border.border-transparent.rounded-lg(class='hover:bg-orange-300 focus:outline-none')
-          span.text-base Giao bài
+        button.mt-4.flex.items-center.justify-between.px-4.py-2.font-medium.leading-5.text-white.transition-colors.duration-150.bg-orange-400.border.border-transparent.rounded-lg(
+          class="hover:bg-orange-300 focus:outline-none"
+          @click="onSubmit()"
+        )
+          span.text-base Nộp
 
-    question-dialog(
-      :value="isOpenAddQuestionDialog"
-      :units="units"
-      :classroom="classroom"
-      @on-close="isOpenAddQuestionDialog = false"
-      @re-load="getData"
-    )
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from '@vue/composition-api'
-import { QuestionDialog } from 'components'
+import { defineComponent, onMounted, ref } from '@vue/composition-api'
 import { api } from 'plugins'
-import { endpoints, toCamelCase } from 'utils'
+import { endpoints, toCamelCase, toSnakeCase } from 'utils'
 import jwtDecode from 'jwt-decode'
 
-const HomeWork = defineComponent({
+const HomeWorkStudent = defineComponent({
   props: {
     units: {
       type: Array,
@@ -89,28 +75,18 @@ const HomeWork = defineComponent({
       required: true
     }
   },
-  components: {
-    QuestionDialog
-  },
   setup(props, { root }) {
     const { $toast } = root
-    const isOpenAddQuestionDialog = ref(false)
-    const openAddQuestionDialog = () => {
-      isOpenAddQuestionDialog.value = true
-    }
     const homeWorks = ref<any[]>([])
-    const check = ref<any[]>([])
-    const member: any = toCamelCase(jwtDecode(String(localStorage.getItem('token'))))
+    const check = ref<any>({})
+    const student: any = toCamelCase(jwtDecode(String(localStorage.getItem('token'))))
 
     const getData = async () => {
-      const url =
-        member.typeMember === 'teacher'
-          ? `${endpoints.HOME_WORK}group_by_units?classroom=${props.classroom.id}&result=true`
-          : `${endpoints.HOME_WORK}group_by_units?classroom=${props.classroom.id}`
       try {
-        const { data } = await api.get(url)
+        const { data } = await api.get(
+          `${endpoints.HOME_WORK}group_by_units?classroom=${props.classroom.id}`
+        )
         homeWorks.value = toCamelCase(data)
-        // console.log(homeWorks.value)
         const x = []
           .concat(
             ...homeWorks.value.map((homeWork: any) => {
@@ -120,7 +96,7 @@ const HomeWork = defineComponent({
             })
           )
           .map((id: number) => {
-            check.value[id] = null
+            check.value[id.toString()] = null
             return null
           })
       } catch (e) {
@@ -128,24 +104,41 @@ const HomeWork = defineComponent({
       }
     }
 
+    const saveResultAPI = async (body: any) => {
+      try {
+        await api.post(`${endpoints.HOME_WORK_STUDENT}multiple_result`, body)
+      } catch (e) {
+        $toast.error('Save data failed')
+      }
+    }
+
+    const onSubmit = () => {
+      const body: any[] = []
+      Object.keys(check.value).forEach((key: string) => {
+        if (check.value[key] !== null && check.value[key] !== '') {
+          body.push({
+            result: check.value[key],
+            question: Number(key),
+            student: student.id
+          })
+        }
+      })
+      console.log(body)
+      saveResultAPI(toSnakeCase(body))
+    }
+
     onMounted(async () => {
       await getData()
     })
-
     return {
-      isOpenAddQuestionDialog,
-      openAddQuestionDialog,
       homeWorks,
       check,
-      getData
+      onSubmit
     }
   }
 })
 
-export default HomeWork
+export default HomeWorkStudent
 </script>
 
-<style lang="sass">
-.title
-  text-align: left !important
-</style>
+<style lang="sass"></style>

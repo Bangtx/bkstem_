@@ -17,6 +17,11 @@
         span {{ teacher.name }}
       v-list-item(v-for="(unit, index) in units" :key="index")
         span {{ index + 1 }}: {{ unit.title }}
+      button.mt-4.flex.items-center.justify-between.px-4.py-2.font-medium.leading-5.text-white.transition-colors.duration-150.bg-orange-400.border.border-transparent.rounded-lg(
+        class='hover:bg-orange-300 focus:outline-none'
+        @click="openUnitDialog()"
+      )
+        span.text-base Thêm Unit
       h1.py-2.flex.gap-2.items-center
         div Danh sách sinh viên
       // Danh sách sinh viên
@@ -39,10 +44,18 @@
                 td.px-4.py-3.text-sm.border {{ student.dateOfBirth }}
                 td.px-4.py-3.text-sm.border {{ student.gender }}
                 td.px-4.py-3.text-sm.border
+
+    unit-dialog(
+      :value="isOpenUnitDialog"
+      :classroom="classroom"
+      @re-load="reload()"
+      @on-close="isOpenUnitDialog = false"
+    )
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, ref } from '@vue/composition-api'
+import { UnitDialog } from 'components'
 
 const ClassHome = defineComponent({
   props: {
@@ -63,8 +76,25 @@ const ClassHome = defineComponent({
       required: true
     }
   },
-  setup() {
-    return {}
+  components: {
+    UnitDialog
+  },
+  setup(props, { emit }) {
+    const isOpenUnitDialog = ref(false)
+
+    const openUnitDialog = () => {
+      isOpenUnitDialog.value = true
+    }
+
+    const reload = () => {
+      emit('re-load')
+    }
+
+    return {
+      openUnitDialog,
+      isOpenUnitDialog,
+      reload
+    }
   }
 })
 

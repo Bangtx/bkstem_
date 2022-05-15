@@ -110,7 +110,7 @@ const QuestionDialog = defineComponent({
       required: true
     }
   },
-  setup(props, { root }) {
+  setup(props, { root, emit }) {
     const { $toast } = root
     const unit = ref('')
     const ans = ref({ a: '', b: '', c: '', d: '', correct: '' })
@@ -135,18 +135,27 @@ const QuestionDialog = defineComponent({
                 d: ans.value.d
               }
             : { question: question.value },
-        result: ans.value.correct,
+        result: typeQuestion.value === typeQuestions[0] ? ans.value.correct : ansLongResponse.value,
         type: typeQuestion.value === typeQuestions[0] ? 0 : 1
       }
+      if (bodyQuestion.result === '') {
+        $toast.error('Chưa chọn đán án đúng')
+        return
+      }
       try {
-        if (
-          ans.value.correct !== '' &&
-          ans.value.a !== '' &&
-          ans.value.b !== '' &&
-          ans.value.c !== '' &&
-          ans.value.d !== '' &&
-          question.value !== ''
-        ) {
+        let check = false
+        if (typeQuestion.value === typeQuestions[0]) {
+          check =
+            ans.value.correct !== '' &&
+            ans.value.a !== '' &&
+            ans.value.b !== '' &&
+            ans.value.c !== '' &&
+            ans.value.d !== '' &&
+            question.value !== ''
+        } else {
+          check = ansLongResponse.value !== ''
+        }
+        if (check) {
           const questionPost = (await api.post(`${endpoints.QUESTION}`, bodyQuestion)).data
           const schedule: any = props.units.find((e: any) => e.title === unit.value)
           const bodyHomeWork = {
@@ -156,6 +165,7 @@ const QuestionDialog = defineComponent({
           }
           await api.post(endpoints.HOME_WORK, bodyHomeWork)
           $toast.success('Save data successful')
+          emit('re-load')
         } else {
           $toast.error('Save data failed')
         }

@@ -29,5 +29,6 @@ api_router.include_router(absent_type.router, prefix='/absent_type', tags=['abse
 api_router.include_router(score.router, prefix='/score', tags=['score'])
 api_router.include_router(notification.router, prefix='/notification', tags=['notification'])
 api_router.include_router(home_work.router, prefix='/home_work', tags=['home_work'])
+api_router.include_router(question_student.router, prefix='/home_work_student', tags=['home_work_student'])
 api_router.include_router(question.router, prefix='/question', tags=['question'])
 api_router.include_router(schedule.router, prefix='/schedule', tags=['schedule'])

@@ -1,3 +1,4 @@
+from schemas.question import Question
 from .base import BaseModel
 from playhouse.postgres_ext import JSONField, IntegerField
 from .classroom import Classroom
@@ -52,7 +53,7 @@ class HomeWork(BaseModel):
         return list(query)
 
     @classmethod
-    def get_questions_by_unit(cls, unit):
+    def get_questions_by_unit(cls, unit, result):
         # question = (
         #     Question.select(
         #         Question.id, Question.answers, Question.type
@@ -63,7 +64,8 @@ class HomeWork(BaseModel):
                 cls.id,
                 fn.json_build_object(
                     'id', Question.id, 'answers', Question.answers, 'type', Question.type
-                ).alias('questions')
+                ).alias('questions'),
+                Question.result
             ).join(
                 Question, JOIN.LEFT_OUTER, on=Question.id == cls.question
             ).where(
@@ -74,12 +76,15 @@ class HomeWork(BaseModel):
         )
         data = []
         for home_work in home_works:
+            if not result:
+                home_work.pop('result', None)
+
             data.append(home_work['questions'])
 
         return home_works
 
     @classmethod
-    def get_questions_group_by_unit(cls, classroom_id):
+    def get_questions_group_by_unit(cls, classroom_id, result):
         units = list(
             Schedule.select(
                 Schedule.id, Schedule.title
@@ -89,6 +94,6 @@ class HomeWork(BaseModel):
         )
 
         for unit in units:
-            unit['home_work'] = HomeWork.get_questions_by_unit(unit['id'])
+            unit['home_work'] = HomeWork.get_questions_by_unit(unit['id'], result)
 
         return units
