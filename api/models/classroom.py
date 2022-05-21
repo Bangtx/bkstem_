@@ -26,7 +26,7 @@ class Classroom(BaseModel):
         db_table = 'classroom'
 
     @classmethod
-    def get_classrooms(cls, teacher_id, student_id):
+    def get_classrooms(cls, teacher_id=None, student_id=None):
         teacher = (
             Teacher.select(
                 Teacher.id,
@@ -62,12 +62,13 @@ class Classroom(BaseModel):
             classrooms = list(classrooms.where(cls.teacher == teacher_id).dicts())
         elif student_id:
             classrooms = list(classrooms.dicts())
-            classrooms = list(filter(lambda x: student_id in x['students'], classrooms))
+            classrooms = list(filter(lambda x: student_id in x['students'] if x['students'] else False, classrooms))\
+                if classrooms else []
         else:
             classrooms = list(classrooms.dicts())
 
         for classroom in classrooms:
-            classroom['students'] = Student.get_students_by_ids(classroom['students'])
+            classroom['students'] = Student.get_students_by_ids(classroom['students']) if classroom['students'] else []
             classroom['class_times'] = ClassTime.get_class_times_by_ids(classroom['class_times'])
         return classrooms
 
@@ -105,8 +106,12 @@ class Classroom(BaseModel):
             ).dicts()
         )
         classroom = query.get()
-        classroom['students'] = Student.get_students_by_ids(classroom['students'])
-        classroom['class_times'] = ClassTime.get_class_times_by_ids(classroom['class_times'])
+        classroom['students'] = Student.get_students_by_ids(
+            classroom['students']
+        ) if classroom['students'] else []
+        classroom['class_times'] = ClassTime.get_class_times_by_ids(
+            classroom['class_times']
+        ) if classroom['class_times'] else []
         return classroom
 
     @classmethod

@@ -112,9 +112,14 @@ const ClassroomDialog = defineComponent({
         room: props.classroom.room,
         classTimeIds: selectedClassTimesObject,
         startDate: props.classroom.startDate,
-        teacher: props.classroom.teacher.id,
+        teacher: teachers.value.find((e: any) => `[${e.id}] ${e.name}` === selectedTeacher.value)
+          ?.id,
         studentIds: props.classroom.students.map((e: any) => e.id)
       }
+      // console.log(selectedTeacher.value, students.value)
+      console.log(
+        teachers.value.find((e: any) => `[${e.id}] ${e.name}` === selectedTeacher.value)?.id
+      )
       try {
         if (props.mode === 'add') {
           await api.post(`${endpoints.CLASSROOM}`, toSnakeCase(body))
@@ -167,19 +172,23 @@ const ClassroomDialog = defineComponent({
       () => props.value,
       () => {
         if (props.value) {
-          const teacher: any = teachers.value.find((e: any) => e.id === props.classroom.teacher.id)
-          selectedTeacher.value = `[${teacher.id}] ${teacher.name}`
-
-          console.log(classTimes.value, props.classroom)
-          selectedClassTimes.value = classTimes.value
-            .filter((classTime: any) => {
-              return props.classroom.classTimes.map((e: any) => e.id).indexOf(classTime.id) > -1
-            })
-            .map(
-              (classTime: any) =>
-                `[${classTime.dateOfWeek.name}] ${classTime.startTime} -> ${classTime.stopTime}`
+          if (props.mode === 'edit') {
+            const teacher: any = teachers.value.find(
+              (e: any) => e.id === props.classroom.teacher.id
             )
-          console.log(selectedClassTimes.value, 'selectedClassTimes')
+            selectedTeacher.value = `[${teacher.id}] ${teacher.name}`
+
+            console.log(classTimes.value, props.classroom)
+            selectedClassTimes.value = classTimes.value
+              .filter((classTime: any) => {
+                return props.classroom.classTimes.map((e: any) => e.id).indexOf(classTime.id) > -1
+              })
+              .map(
+                (classTime: any) =>
+                  `[${classTime.dateOfWeek.name}] ${classTime.startTime} -> ${classTime.stopTime}`
+              )
+            console.log(selectedClassTimes.value, 'selectedClassTimes')
+          }
         }
       }
     )

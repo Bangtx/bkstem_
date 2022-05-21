@@ -25,14 +25,15 @@ def get_classroom_by_id(id: int):
 @router.post('/')
 def create_classroom(classroom: schemas.ClassRoomCreate):
     classroom_data = classroom.dict()
-    is_exists = models.Classroom.check_teacher_class_times_exits(
-        classroom.student_ids, classroom.class_time_ids
-    )
-    if is_exists:
-        return models.Classroom.create(**classroom_data)
-    raise HTTPException(
-        403, 'student or class time not exists'
-    )
+    return models.Classroom.create(**classroom_data)
+    # is_exists = models.Classroom.check_teacher_class_times_exits(
+    #     classroom.student_ids, classroom.class_time_ids
+    # )
+    # if is_exists:
+    #     return models.Classroom.create(**classroom_data)
+    # raise HTTPException(
+    #     403, 'student or class time not exists'
+    # )
 
 
 @router.put('/{id}')

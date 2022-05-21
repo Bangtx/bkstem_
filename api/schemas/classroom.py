@@ -6,9 +6,9 @@ from datetime import date
 
 class ClassRoomBase(Schema):
     name: str
-    room: str
-    student_ids: List[int]
-    class_time_ids: List[int]
+    room: str = None
+    student_ids: List[int] = []
+    class_time_ids: List[int] = []
     start_date: date = None
     total_days: int = None
 

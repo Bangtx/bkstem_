@@ -85,7 +85,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, ref } from '@vue/composition-api'
 import { toCamelCase } from 'utils'
 import jwtDecode from 'jwt-decode'
 
@@ -98,7 +98,9 @@ const MenuComponent = defineComponent({
     }
   },
   setup() {
-    const member: any = toCamelCase(jwtDecode(String(localStorage.getItem('token'))))
+    const member = ref<any>()
+    if (!localStorage.getItem('token')) member.value = { typeMember: 'techer' }
+    else member.value = toCamelCase(jwtDecode(String(localStorage.getItem('token'))))
     return {
       member
     }

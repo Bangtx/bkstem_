@@ -17,6 +17,14 @@
           :items="['Nam', 'Nữ']"
           v-model="student.gender"
         )
+
+        v-select.p-0(
+          multiple
+          :label="'lớp'"
+          :items="classrooms.map(e => e.name)"
+          v-model="classroomsSelected"
+        )
+
         v-dialog.title-color(
           ref="dialog"
           persistent
@@ -75,6 +83,10 @@ const StudentDialog = defineComponent({
     student: {
       type: Object,
       required: true
+    },
+    classrooms: {
+      type: Array,
+      required: true
     }
   },
   setup(props, { root, emit }) {
@@ -82,22 +94,37 @@ const StudentDialog = defineComponent({
     const modal = ref(false)
     const password = ref('')
     const date = moment(new Date()).format('YYYY-MM-DD')
+    const className = ref('')
+    const classroomsSelected = ref<string[]>([])
 
     const onSave = async () => {
+      const classIds = classroomsSelected.value
+        .map((name: string) => {
+          return props.classrooms.find((classroom: any) => classroom.name === name)
+        })
+        .map((classroom: any) => classroom.id)
       try {
         if (props.mode === 'add') {
           const body = {
-            id: props.student.id,
             name: props.student.name,
             gender: props.student.gender,
             mail: props.student.mail,
             phone: props.student.phone,
             dateOfBirth: props.student.dateOfBirth,
-            password: password.value
+            password: password.value,
+            classrooms: classIds
           }
           await api.post(`${endpoints.STUDENT}`, toSnakeCase(body))
         } else {
-          await api.put(`${endpoints.STUDENT}${props.student.id}`, toSnakeCase(props.student))
+          const body = {
+            name: props.student.name,
+            gender: props.student.gender,
+            mail: props.student.mail,
+            phone: props.student.phone,
+            dateOfBirth: props.student.dateOfBirth,
+            classrooms: classIds
+          }
+          await api.put(`${endpoints.STUDENT}${props.student.id}`, toSnakeCase(body))
         }
         emit('reload')
         emit('on-close')
@@ -111,7 +138,9 @@ const StudentDialog = defineComponent({
       modal,
       date,
       onSave,
-      password
+      password,
+      className,
+      classroomsSelected
     }
   }
 })

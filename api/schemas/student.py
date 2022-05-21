@@ -1,6 +1,7 @@
 from .account import AccountBase
 from datetime import date
 from .schema import Schema
+from typing import List
 
 
 class StudentBase(AccountBase):
@@ -8,7 +9,7 @@ class StudentBase(AccountBase):
 
 
 class StudentCreate(StudentBase):
-    account_id: int
+    classrooms: List[int] = []
 
 
 class Student(StudentBase):
@@ -20,5 +21,6 @@ class StudentUpdate(Schema):
     name: str
     gender: str = None
     date_of_birth: date = None
-    mail: str
+    mail: str = None
     phone: str
+    classrooms: List[int] = []

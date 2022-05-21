@@ -31,6 +31,11 @@ class Student(BaseModel):
                 Account, on=cls.account_id == Account.id
             ).where(cls.active, Account.active).dicts()
         )
+
+        from .classroom import Classroom
+        for student in students:
+            student['classrooms'] = Classroom.get_classrooms(student_id=student['id'])
+
         return list(students)
 
     @classmethod

@@ -23,6 +23,12 @@
             @click="openStudentDialog('add')"
           )
             span + Thêm {{ title }}
+          button.bg-green-600.text-white.px-4.py-2.rounded.mt-6(
+            v-if="title === 'lớp học'"
+            class='hover:bg-green-500 md:mt-0'
+            @click="openClassroomDialog('add')"
+          )
+            span + Thêm {{ title }}
         .w-full.overflow-hidden.rounded-lg.shadow-xs.mt-4(class='lg:px-10')
           .w-full.overflow-auto.rounded-lg(style='max-height: 600px;')
             table.w-full.whitespace-nowrap.rounded-lg.border
@@ -73,6 +79,7 @@
                       button.bg-green-600.text-white.px-4.py-2.rounded.mt-6(
                         v-if="title === 'lớp học'"
                         class='hover:bg-green-500 md:mt-0'
+                        @click="openListStudent(item)"
                       )
                         span Thêm học sinh
                       button.bg-red-500.text-white.px-4.py-2.rounded.mt-6(
@@ -103,6 +110,7 @@
       :title="title"
       :student="studentProp"
       :mode="mode"
+      :classrooms="classrooms"
       @on-close="isOpenStudentDialog = false"
       @reload="$emit('reload')"
     )
@@ -124,6 +132,14 @@
       @reload="$emit('reload')"
     )
 
+    choose-property(
+      :value="isOpenChooseProperty"
+      :title="'Student'"
+      :classroom="currentClassroom"
+      @on-close="isOpenChooseProperty = false"
+      @reload="$emit('reload')"
+    )
+
 </template>
 
 <script lang="ts">
@@ -133,6 +149,7 @@ import TeacherDialog from '@/components/TeacherDialog/index.vue'
 import StudentDialog from '@/components/StudentDialog/index.vue'
 import ClassroomDialog from '@/components/ClassroomDialog/index.vue'
 import DeleteDialog from '@/components/DeleteDialog/index.vue'
+import ChooseProperty from '@/components/ChooseProperty/index.vue'
 
 const ManagementComponent = defineComponent({
   props: {
@@ -155,7 +172,8 @@ const ManagementComponent = defineComponent({
     TeacherDialog,
     StudentDialog,
     ClassroomDialog,
-    DeleteDialog
+    DeleteDialog,
+    ChooseProperty
   },
   setup() {
     const isOpenWatchDialog = ref(false)
@@ -169,6 +187,8 @@ const ManagementComponent = defineComponent({
     const isOpenDeleteDialog = ref(false)
     const deleteProp = ref<any>({})
     const mode = ref('')
+    const isOpenChooseProperty = ref(false)
+    const currentClassroom = ref<any>({})
 
     const openWatchDialog = (data: any) => {
       dataWatch.value = data
@@ -254,6 +274,11 @@ const ManagementComponent = defineComponent({
       isOpenDeleteDialog.value = true
     }
 
+    const openListStudent = (classroom: any) => {
+      currentClassroom.value = classroom
+      isOpenChooseProperty.value = true
+    }
+
     return {
       openWatchDialog,
       isOpenWatchDialog,
@@ -270,7 +295,10 @@ const ManagementComponent = defineComponent({
       isOpenClassroomDialog,
       openDeleteDialog,
       isOpenDeleteDialog,
-      deleteProp
+      deleteProp,
+      openListStudent,
+      isOpenChooseProperty,
+      currentClassroom
     }
   }
 })
