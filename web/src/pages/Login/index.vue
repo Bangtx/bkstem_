@@ -46,6 +46,7 @@ const Login = defineComponent({
           const { data } = await axios.post(`${endpoints.AUTH}login`, toSnakeCase(userData.value))
           if (data.status === 404) {
             $toast.error('Tài khoản mật khẩu không chính xác')
+            return
           }
           localStorage.setItem('token', data.token)
           $router.push({

@@ -228,7 +228,8 @@ const ManagementComponent = defineComponent({
           gender: data.gender,
           phone: data.account.phone,
           mail: data.account.mail,
-          dateOfBirth: data.dateOfBirth
+          dateOfBirth: data.dateOfBirth,
+          classrooms: data.classrooms
         }
       } else {
         studentProp.value = {
@@ -237,7 +238,8 @@ const ManagementComponent = defineComponent({
           gender: '',
           phone: '',
           mail: '',
-          dateOfBirth: ''
+          dateOfBirth: '',
+          classrooms: []
         }
       }
       isOpenStudentDialog.value = true

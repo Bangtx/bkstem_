@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent, ref, watch } from '@vue/composition-api'
 import moment from 'moment'
 import { api } from 'plugins'
 import { endpoints, toSnakeCase } from 'utils'
@@ -133,6 +133,15 @@ const StudentDialog = defineComponent({
         $toast.error('Save data failed')
       }
     }
+
+    watch(
+      () => props.value,
+      () => {
+        if (props.value) {
+          classroomsSelected.value = props.student.classrooms.map((e: any) => e.name)
+        }
+      }
+    )
 
     return {
       modal,
