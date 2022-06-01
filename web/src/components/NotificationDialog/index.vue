@@ -16,6 +16,11 @@
 
       .p-4(v-if="mode==='add'")
         h1 {{ isAll ? 'Gửi cho tất cả' : student.name }}
+        v-select(
+          :label="'Kiểu'"
+          :items="selectItemsVN"
+          v-model="selectedItem"
+        )
         v-container.padding(fluid)
           v-text-field(
             autocomplete="Mess"
@@ -77,6 +82,9 @@ const NotificationDialog = defineComponent({
     const { $toast } = root
     const msg = ref('')
     const teacher: any = jwtDecode(String(localStorage.getItem('token')))
+    const selectItemsVN = ['Thông báo', 'Tiến độ']
+    const selectItems = ['info', 'progress']
+    const selectedItem = ref('Tiến độ')
 
     const postNotiAPI = async () => {
       const body = {
@@ -84,7 +92,8 @@ const NotificationDialog = defineComponent({
         student: props.student.id,
         teacher: teacher.id,
         notification: msg.value,
-        date: moment(new Date()).format('YYYY-MM-DD')
+        date: moment(new Date()).format('YYYY-MM-DD'),
+        type: selectItems[selectItemsVN.indexOf(selectedItem.value)]
       }
 
       try {
@@ -136,7 +145,9 @@ const NotificationDialog = defineComponent({
 
     return {
       msg,
-      postNoti
+      postNoti,
+      selectItemsVN,
+      selectedItem
     }
   }
 })

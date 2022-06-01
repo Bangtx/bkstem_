@@ -21,7 +21,7 @@ class Account(BaseModel):
     def is_duplicate(cls, mail, phone):
         query = list(
             cls.select().where(
-                cls.active, cls.mail == mail or cls.phone == phone
+                cls.active, cls.phone == phone
             )
         )
         if query:

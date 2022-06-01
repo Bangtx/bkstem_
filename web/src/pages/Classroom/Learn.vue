@@ -12,10 +12,10 @@
           .items-center.mt-4.gap-36(class="md:flex")
             h1.py-2
               | Tên lớp:
-              span Toán cao cấp
+              span {{ classroom.name }}
             h1.py-2
               | Sĩ số:
-              span 32
+              span {{ students.length }}
           div
             .w-full.overflow-auto.mt-8(style="max-height: 500px;")
               table.w-full.whitespace-nowrap

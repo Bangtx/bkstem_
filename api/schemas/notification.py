@@ -8,6 +8,7 @@ class NotificationBase(Schema):
     teacher: int
     notification: str
     date: date
+    type: str
 
 
 class Notification(NotificationBase):

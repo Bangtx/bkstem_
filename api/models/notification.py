@@ -11,6 +11,7 @@ class Notification(BaseModel):
     teacher = ForeignKeyField(Teacher, column_name='teacher_id')
     notification = CharField()
     date = DateField()
+    type = CharField()
 
     class Meta:
         db_table = 'notification'
@@ -21,6 +22,7 @@ class Notification(BaseModel):
             cls.id,
             cls.date,
             cls.notification,
+            cls.type,
             fn.json_build_object(
                 'id', Classroom.id,
                 'name', Classroom.name

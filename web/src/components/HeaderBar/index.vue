@@ -20,8 +20,8 @@
       v-menu(offset-y='')
         template(v-slot:activator='{ on, attrs }')
           button.flex.items-center.gap-2(v-bind='attrs' v-on='on')
-            img.object-cover.w-6.h-6.rounded-full(src="https://images.unsplash.com/photo-1502378735452-bc7d86632805?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=aa3a807e1bbdfd4364d1f449eaa96d82" alt="" aria-hidden="true")
-            h2.text-gray-800.font-medium.hidden(class="md:block") Hi, Nam
+            img.object-cover.w-6.h-6.rounded-full(src="https://media.istockphoto.com/vectors/user-icon-flat-isolated-on-white-background-user-symbol-vector-vector-id1300845620?k=20&m=1300845620&s=612x612&w=0&h=f4XTZDAv7NPuZbG0habSpU0sNgECM0X7nbKzTUta3n8=" alt="" aria-hidden="true")
+            h2.text-gray-800.font-medium.hidden(class="md:block") {{ member.name }}
         v-list
           v-list-item.logout(@click="logout()") Đắng xuất
 
@@ -29,7 +29,8 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
-import { urlPath } from 'utils'
+import { toCamelCase, urlPath } from 'utils'
+import jwtDecode from 'jwt-decode'
 
 const HeaderBar = defineComponent({
   props: {
@@ -41,6 +42,8 @@ const HeaderBar = defineComponent({
   },
   setup(props, { root }) {
     const { $router } = root
+    const member: any = toCamelCase(jwtDecode(String(localStorage.getItem('token'))))
+    console.log(member)
     const goToHomePage = () => {
       $router.push({ name: urlPath.START.name })
     }
@@ -52,7 +55,8 @@ const HeaderBar = defineComponent({
 
     return {
       goToHomePage,
-      logout
+      logout,
+      member
     }
   }
 })

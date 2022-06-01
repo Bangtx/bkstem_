@@ -146,6 +146,7 @@ CREATE TABLE notification
   student_id bigint,
   teacher_id bigint,
   notification text,
+  type text,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   created_by bigint,
   modified_at timestamp with time zone,

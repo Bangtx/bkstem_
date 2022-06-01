@@ -24,6 +24,7 @@ def get_students(id: int):
 
 
 @router.post('/', response_model=AccountCreate)
+@transaction
 def create_student(student: schemas.StudentCreate):
     if Account.is_duplicate(student.mail, student.phone):
         raise HTTPException(
@@ -34,15 +35,16 @@ def create_student(student: schemas.StudentCreate):
     account = Account.create(**student_data)
     student_create = models.Student.create(account_id=account.id)
     if student.classrooms:
-        print('ssss')
         for classroom_id in student.classrooms:
             classroom = Classroom.get_one(classroom_id)
-            print(classroom.student_ids + student.classrooms)
-            # Classroom.update_one(classroom_id, {'student': classroom.student_ids + student.classrooms})
+            students_exists = list(map(lambda x: x['id'], classroom['students']))
+            print(students_exists + student.classrooms, student_create.id)
+            Classroom.update_one(classroom_id, {'student_ids': students_exists + [student_create.id]})
     return account
 
 
 @router.put('/{id}')
+@transaction
 def update_student(id: int, student: schemas.StudentUpdate):
     student = student.dict()
     account_id = models.Student.select().where(
