@@ -1,0 +1,1362 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 11.15 (Debian 11.15-1.pgdg90+1)
+-- Dumped by pg_dump version 11.15 (Debian 11.15-1.pgdg90+1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: absent_type; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.absent_type (
+    id bigint NOT NULL,
+    type text,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by bigint,
+    modified_at timestamp with time zone,
+    modified_by bigint,
+    deleted_at timestamp with time zone,
+    deleted_by bigint,
+    active boolean DEFAULT true
+);
+
+
+ALTER TABLE public.absent_type OWNER TO postgres;
+
+--
+-- Name: absent_type_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.absent_type_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.absent_type_id_seq OWNER TO postgres;
+
+--
+-- Name: absent_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.absent_type_id_seq OWNED BY public.absent_type.id;
+
+
+--
+-- Name: account; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.account (
+    id bigint NOT NULL,
+    name text,
+    gender text,
+    date_of_birth date,
+    password text,
+    mail text,
+    phone text,
+    search_str text,
+    order_num bigint,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by bigint,
+    modified_at timestamp with time zone,
+    modified_by bigint,
+    deleted_at timestamp with time zone,
+    deleted_by bigint,
+    active boolean DEFAULT true
+);
+
+
+ALTER TABLE public.account OWNER TO postgres;
+
+--
+-- Name: account_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.account_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.account_id_seq OWNER TO postgres;
+
+--
+-- Name: account_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.account_id_seq OWNED BY public.account.id;
+
+
+--
+-- Name: class_time; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.class_time (
+    id bigint NOT NULL,
+    date_of_week_id integer,
+    start_time time without time zone,
+    stop_time time without time zone,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by bigint,
+    modified_at timestamp with time zone,
+    modified_by bigint,
+    deleted_at timestamp with time zone,
+    deleted_by bigint,
+    active boolean DEFAULT true
+);
+
+
+ALTER TABLE public.class_time OWNER TO postgres;
+
+--
+-- Name: class_time_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.class_time_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.class_time_id_seq OWNER TO postgres;
+
+--
+-- Name: class_time_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.class_time_id_seq OWNED BY public.class_time.id;
+
+
+--
+-- Name: classroom; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.classroom (
+    id bigint NOT NULL,
+    name text,
+    room text,
+    teacher_id bigint,
+    student_ids bigint[],
+    class_time_ids bigint[],
+    start_date date,
+    total_days integer,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by bigint,
+    modified_at timestamp with time zone,
+    modified_by bigint,
+    deleted_at timestamp with time zone,
+    deleted_by bigint,
+    active boolean DEFAULT true
+);
+
+
+ALTER TABLE public.classroom OWNER TO postgres;
+
+--
+-- Name: classroom_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.classroom_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.classroom_id_seq OWNER TO postgres;
+
+--
+-- Name: classroom_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.classroom_id_seq OWNED BY public.classroom.id;
+
+
+--
+-- Name: date_of_week; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.date_of_week (
+    id bigint NOT NULL,
+    name text,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by bigint,
+    modified_at timestamp with time zone,
+    modified_by bigint,
+    deleted_at timestamp with time zone,
+    deleted_by bigint,
+    active boolean DEFAULT true
+);
+
+
+ALTER TABLE public.date_of_week OWNER TO postgres;
+
+--
+-- Name: date_of_week_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.date_of_week_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.date_of_week_id_seq OWNER TO postgres;
+
+--
+-- Name: date_of_week_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.date_of_week_id_seq OWNED BY public.date_of_week.id;
+
+
+--
+-- Name: home_work; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.home_work (
+    id bigint NOT NULL,
+    date date,
+    deadline date,
+    classroom_id bigint,
+    schedule_id bigint,
+    question_id bigint,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by bigint,
+    modified_at timestamp with time zone,
+    modified_by bigint,
+    deleted_at timestamp with time zone,
+    deleted_by bigint,
+    active boolean DEFAULT true
+);
+
+
+ALTER TABLE public.home_work OWNER TO postgres;
+
+--
+-- Name: home_work_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.home_work_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.home_work_id_seq OWNER TO postgres;
+
+--
+-- Name: home_work_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.home_work_id_seq OWNED BY public.home_work.id;
+
+
+--
+-- Name: notification; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.notification (
+    id bigint NOT NULL,
+    date date,
+    classroom_id bigint,
+    student_id bigint,
+    teacher_id bigint,
+    notification text,
+    type text,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by bigint,
+    modified_at timestamp with time zone,
+    modified_by bigint,
+    deleted_at timestamp with time zone,
+    deleted_by bigint,
+    active boolean DEFAULT true
+);
+
+
+ALTER TABLE public.notification OWNER TO postgres;
+
+--
+-- Name: notification_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.notification_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.notification_id_seq OWNER TO postgres;
+
+--
+-- Name: notification_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.notification_id_seq OWNED BY public.notification.id;
+
+
+--
+-- Name: question; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.question (
+    id bigint NOT NULL,
+    answers json,
+    result text,
+    image text,
+    type smallint,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by bigint,
+    modified_at timestamp with time zone,
+    modified_by bigint,
+    deleted_at timestamp with time zone,
+    deleted_by bigint,
+    active boolean DEFAULT true
+);
+
+
+ALTER TABLE public.question OWNER TO postgres;
+
+--
+-- Name: question_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.question_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.question_id_seq OWNER TO postgres;
+
+--
+-- Name: question_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.question_id_seq OWNED BY public.question.id;
+
+
+--
+-- Name: question_student; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.question_student (
+    id bigint NOT NULL,
+    question_id bigint,
+    student_id bigint,
+    result text,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by bigint,
+    modified_at timestamp with time zone,
+    modified_by bigint,
+    deleted_at timestamp with time zone,
+    deleted_by bigint,
+    active boolean DEFAULT true
+);
+
+
+ALTER TABLE public.question_student OWNER TO postgres;
+
+--
+-- Name: question_student_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.question_student_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.question_student_id_seq OWNER TO postgres;
+
+--
+-- Name: question_student_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.question_student_id_seq OWNED BY public.question_student.id;
+
+
+--
+-- Name: roll_call; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.roll_call (
+    id bigint NOT NULL,
+    date date,
+    classroom_id bigint,
+    student_id bigint,
+    teacher_id bigint,
+    absent_type_id integer,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by bigint,
+    modified_at timestamp with time zone,
+    modified_by bigint,
+    deleted_at timestamp with time zone,
+    deleted_by bigint,
+    active boolean DEFAULT true
+);
+
+
+ALTER TABLE public.roll_call OWNER TO postgres;
+
+--
+-- Name: roll_call_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.roll_call_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.roll_call_id_seq OWNER TO postgres;
+
+--
+-- Name: roll_call_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.roll_call_id_seq OWNED BY public.roll_call.id;
+
+
+--
+-- Name: schedule; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.schedule (
+    id bigint NOT NULL,
+    classroom_id bigint,
+    title text,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by bigint,
+    modified_at timestamp with time zone,
+    modified_by bigint,
+    deleted_at timestamp with time zone,
+    deleted_by bigint,
+    active boolean DEFAULT true
+);
+
+
+ALTER TABLE public.schedule OWNER TO postgres;
+
+--
+-- Name: schedule_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.schedule_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.schedule_id_seq OWNER TO postgres;
+
+--
+-- Name: schedule_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.schedule_id_seq OWNED BY public.schedule.id;
+
+
+--
+-- Name: score; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.score (
+    id bigint NOT NULL,
+    date date,
+    classroom_id bigint,
+    student_id bigint,
+    teacher_id bigint,
+    score double precision[],
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by bigint,
+    modified_at timestamp with time zone,
+    modified_by bigint,
+    deleted_at timestamp with time zone,
+    deleted_by bigint,
+    active boolean DEFAULT true
+);
+
+
+ALTER TABLE public.score OWNER TO postgres;
+
+--
+-- Name: score_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.score_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.score_id_seq OWNER TO postgres;
+
+--
+-- Name: score_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.score_id_seq OWNED BY public.score.id;
+
+
+--
+-- Name: student; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.student (
+    id bigint NOT NULL,
+    account_id integer,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by bigint,
+    modified_at timestamp with time zone,
+    modified_by bigint,
+    deleted_at timestamp with time zone,
+    deleted_by bigint,
+    active boolean DEFAULT true
+);
+
+
+ALTER TABLE public.student OWNER TO postgres;
+
+--
+-- Name: student_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.student_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.student_id_seq OWNER TO postgres;
+
+--
+-- Name: student_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.student_id_seq OWNED BY public.student.id;
+
+
+--
+-- Name: teacher; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.teacher (
+    id bigint NOT NULL,
+    account_id integer,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by bigint,
+    modified_at timestamp with time zone,
+    modified_by bigint,
+    deleted_at timestamp with time zone,
+    deleted_by bigint,
+    active boolean DEFAULT true
+);
+
+
+ALTER TABLE public.teacher OWNER TO postgres;
+
+--
+-- Name: teacher_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.teacher_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.teacher_id_seq OWNER TO postgres;
+
+--
+-- Name: teacher_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.teacher_id_seq OWNED BY public.teacher.id;
+
+
+--
+-- Name: absent_type id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.absent_type ALTER COLUMN id SET DEFAULT nextval('public.absent_type_id_seq'::regclass);
+
+
+--
+-- Name: account id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.account ALTER COLUMN id SET DEFAULT nextval('public.account_id_seq'::regclass);
+
+
+--
+-- Name: class_time id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_time ALTER COLUMN id SET DEFAULT nextval('public.class_time_id_seq'::regclass);
+
+
+--
+-- Name: classroom id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.classroom ALTER COLUMN id SET DEFAULT nextval('public.classroom_id_seq'::regclass);
+
+
+--
+-- Name: date_of_week id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.date_of_week ALTER COLUMN id SET DEFAULT nextval('public.date_of_week_id_seq'::regclass);
+
+
+--
+-- Name: home_work id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.home_work ALTER COLUMN id SET DEFAULT nextval('public.home_work_id_seq'::regclass);
+
+
+--
+-- Name: notification id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.notification ALTER COLUMN id SET DEFAULT nextval('public.notification_id_seq'::regclass);
+
+
+--
+-- Name: question id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.question ALTER COLUMN id SET DEFAULT nextval('public.question_id_seq'::regclass);
+
+
+--
+-- Name: question_student id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.question_student ALTER COLUMN id SET DEFAULT nextval('public.question_student_id_seq'::regclass);
+
+
+--
+-- Name: roll_call id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.roll_call ALTER COLUMN id SET DEFAULT nextval('public.roll_call_id_seq'::regclass);
+
+
+--
+-- Name: schedule id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.schedule ALTER COLUMN id SET DEFAULT nextval('public.schedule_id_seq'::regclass);
+
+
+--
+-- Name: score id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.score ALTER COLUMN id SET DEFAULT nextval('public.score_id_seq'::regclass);
+
+
+--
+-- Name: student id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.student ALTER COLUMN id SET DEFAULT nextval('public.student_id_seq'::regclass);
+
+
+--
+-- Name: teacher id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.teacher ALTER COLUMN id SET DEFAULT nextval('public.teacher_id_seq'::regclass);
+
+
+--
+-- Data for Name: absent_type; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.absent_type (id, type, created_at, created_by, modified_at, modified_by, deleted_at, deleted_by, active) FROM stdin;
+1	Đúng giờ	2022-05-15 12:27:16.476739+00	\N	\N	\N	\N	\N	t
+2	Nghỉ có phép	2022-05-15 12:27:16.476739+00	\N	\N	\N	\N	\N	t
+3	Nghỉ không phép	2022-05-15 12:27:16.476739+00	\N	\N	\N	\N	\N	t
+4	Muộn có phép	2022-05-15 12:27:16.476739+00	\N	\N	\N	\N	\N	t
+5	Muộn không phép	2022-05-15 12:27:16.476739+00	\N	\N	\N	\N	\N	t
+\.
+
+
+--
+-- Data for Name: account; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.account (id, name, gender, date_of_birth, password, mail, phone, search_str, order_num, created_at, created_by, modified_at, modified_by, deleted_at, deleted_by, active) FROM stdin;
+1	admin	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	admin@gmail.com	\N	\N	\N	2022-05-15 12:27:16.450572+00	\N	\N	\N	\N	\N	t
+7	Phạm Tuấn Kiệt	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0372151072	\N	\N	2022-05-15 12:27:21.443054+00	\N	\N	\N	\N	\N	t
+8	Phạm Thanh Thảo	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0372151072	\N	\N	2022-05-15 12:27:21.446202+00	\N	\N	\N	\N	\N	t
+9	Trần Ngọc Bích	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0971578035	\N	\N	2022-05-15 12:27:21.449356+00	\N	\N	\N	\N	\N	t
+11	Tạ Duy Đăng	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0973171176	\N	\N	2022-05-15 12:27:21.455478+00	\N	\N	\N	\N	\N	t
+12	Phạm Thùy An	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0986113611	\N	\N	2022-05-15 12:27:21.458593+00	\N	\N	\N	\N	\N	t
+14	Nguyễn Văn Tiến	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0357124625	\N	\N	2022-05-15 12:27:21.464991+00	\N	\N	\N	\N	\N	t
+15	Nguyễn Đặng Thùy Linh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0967183231	\N	\N	2022-05-15 12:27:21.468659+00	\N	\N	\N	\N	\N	t
+16	Trịnh Thu Trang	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0963051569	\N	\N	2022-05-15 12:27:21.472928+00	\N	\N	\N	\N	\N	t
+18	Bùi Công Doanh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0886746999	\N	\N	2022-05-15 12:27:21.481012+00	\N	\N	\N	\N	\N	t
+19	Nguyễn Thị Minh Ánh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0976369929	\N	\N	2022-05-15 12:27:21.484482+00	\N	\N	\N	\N	\N	t
+20	Nguyễn Ngọc Quỳnh Hương	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0985701723	\N	\N	2022-05-15 12:27:21.487988+00	\N	\N	\N	\N	\N	t
+21	Nguyễn Duy Công	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0989345488	\N	\N	2022-05-15 12:27:21.491494+00	\N	\N	\N	\N	\N	t
+22	Nguyễn Thị Phương Lan	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0388338233	\N	\N	2022-05-15 12:27:21.49482+00	\N	\N	\N	\N	\N	t
+23	Phạm Ngọc Quỳnh Chi	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0975530775	\N	\N	2022-05-15 12:27:21.498132+00	\N	\N	\N	\N	\N	t
+24	Trần Thị Vân Nhung	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0966513579	\N	\N	2022-05-15 12:27:21.501658+00	\N	\N	\N	\N	\N	t
+25	Vũ Tiến Mạnh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0986057744	\N	\N	2022-05-15 12:27:21.505034+00	\N	\N	\N	\N	\N	t
+26	Nguyến Trang Linh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0912905002	\N	\N	2022-05-15 12:27:21.508822+00	\N	\N	\N	\N	\N	t
+27	Trần Hải Linh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0983155995	\N	\N	2022-05-15 12:27:21.513259+00	\N	\N	\N	\N	\N	t
+28	Nguyễn Ngọc Hiệp	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0967566328	\N	\N	2022-05-15 12:27:21.516975+00	\N	\N	\N	\N	\N	t
+29	Nguyễn Hồng Sơn	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0388338233	\N	\N	2022-05-15 12:27:21.520706+00	\N	\N	\N	\N	\N	t
+30	Nguyễn Huyền Trang	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0976269565	\N	\N	2022-05-15 12:27:21.525073+00	\N	\N	\N	\N	\N	t
+31	Nguyễn Mạnh Dũng	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0977451159	\N	\N	2022-05-15 12:27:21.528539+00	\N	\N	\N	\N	\N	t
+32	Nguyễn Trần Anh Thư	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0396064798	\N	\N	2022-05-15 12:27:21.531772+00	\N	\N	\N	\N	\N	t
+33	Dương Minh Đức	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0976370350	\N	\N	2022-05-15 12:27:21.535926+00	\N	\N	\N	\N	\N	t
+34	Nguyễn Tiến Đạt	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0965605316	\N	\N	2022-05-15 12:27:21.540229+00	\N	\N	\N	\N	\N	t
+35	Nguyễn Thái Hòa	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0967566328	\N	\N	2022-05-15 12:27:21.544516+00	\N	\N	\N	\N	\N	t
+36	Nguyễn Đức Anh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0976369929	\N	\N	2022-05-15 12:27:21.548417+00	\N	\N	\N	\N	\N	t
+37	Lê Kiều Oanh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0982300494	\N	\N	2022-05-15 12:27:21.552856+00	\N	\N	\N	\N	\N	t
+38	Đặng Hồng Quân	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0973071766	\N	\N	2022-05-15 12:27:21.556768+00	\N	\N	\N	\N	\N	t
+39	Lê Trần Bảo Ngọc	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0973420105	\N	\N	2022-05-15 12:27:21.561437+00	\N	\N	\N	\N	\N	t
+40	Nguyễn Hải Anh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0332074288	\N	\N	2022-05-15 12:27:21.565796+00	\N	\N	\N	\N	\N	t
+41	Nguyễn Nhật Đăng	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0906056256	\N	\N	2022-05-15 12:27:21.569409+00	\N	\N	\N	\N	\N	t
+42	Nguyễn Hương Trà	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0986899831	\N	\N	2022-05-15 12:27:21.573018+00	\N	\N	\N	\N	\N	t
+43	Lưu Nguyễn Trà My	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0374616547	\N	\N	2022-05-15 12:27:21.576495+00	\N	\N	\N	\N	\N	t
+44	Lưu Nguyễn Ngọc Bích	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0374616547	\N	\N	2022-05-15 12:27:21.580006+00	\N	\N	\N	\N	\N	t
+45	Nguyễn Thị Thùy Linh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0916567798	\N	\N	2022-05-15 12:27:21.583948+00	\N	\N	\N	\N	\N	t
+46	Đường Khánh Linh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0906596796	\N	\N	2022-05-15 12:27:21.58746+00	\N	\N	\N	\N	\N	t
+47	Nguyễn Thị Hồng Minh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0972578183	\N	\N	2022-05-15 12:27:21.59085+00	\N	\N	\N	\N	\N	t
+48	Trần Ngọc Hân	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0972700080	\N	\N	2022-05-15 12:27:21.594612+00	\N	\N	\N	\N	\N	t
+49	Trần Hoàng Phúc An	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0904711064	\N	\N	2022-05-15 12:27:21.598819+00	\N	\N	\N	\N	\N	t
+50	Nguyễn Quang Huy	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0977423040	\N	\N	2022-05-15 12:27:21.602588+00	\N	\N	\N	\N	\N	t
+51	Nguyễn Thục Anh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0986176526	\N	\N	2022-05-15 12:27:21.606668+00	\N	\N	\N	\N	\N	t
+52	Nguyễn Minh Anh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0979821516	\N	\N	2022-05-15 12:27:21.610695+00	\N	\N	\N	\N	\N	t
+53	Phạm Nhật Minh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0978386468	\N	\N	2022-05-15 12:27:21.614795+00	\N	\N	\N	\N	\N	t
+54	Đường Nhật Duy	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0973898717	\N	\N	2022-05-15 12:27:21.619269+00	\N	\N	\N	\N	\N	t
+55	Nguyễn Hoàng Duy Bảo	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0974718808	\N	\N	2022-05-15 12:27:21.622767+00	\N	\N	\N	\N	\N	t
+56	Trần Ngọc Vũ	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0987641209	\N	\N	2022-05-15 12:27:21.62646+00	\N	\N	\N	\N	\N	t
+57	Nguyễn Minh Quang	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0386401886	\N	\N	2022-05-15 12:27:21.630235+00	\N	\N	\N	\N	\N	t
+58	Nguyễn Hữu Lâm	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0908348222	\N	\N	2022-05-15 12:27:21.633705+00	\N	\N	\N	\N	\N	t
+59	Vũ Minh Anh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0983861088	\N	\N	2022-05-15 12:27:21.637133+00	\N	\N	\N	\N	\N	t
+60	Nguyễn Yến Nhi	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0975628003	\N	\N	2022-05-15 12:27:21.640908+00	\N	\N	\N	\N	\N	t
+61	Nguyễn Phùng Quang Hảo	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0976369316	\N	\N	2022-05-15 12:27:21.645242+00	\N	\N	\N	\N	\N	t
+62	Nguyễn Mạnh Khoa	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0972475288	\N	\N	2022-05-15 12:27:21.648547+00	\N	\N	\N	\N	\N	t
+63	Dương Thanh Tùng	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0345876832	\N	\N	2022-05-15 12:27:21.651963+00	\N	\N	\N	\N	\N	t
+3	Nguyễn Thảo Linh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0962858222	\N	\N	2022-05-15 12:27:21.429517+00	\N	2022-05-21 12:21:04.534296+00	\N	\N	\N	t
+4	Dương Khả Ngân	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0961151072	\N	\N	2022-05-15 12:27:21.432879+00	\N	2022-05-21 12:33:19.301386+00	\N	\N	\N	t
+10	Trần Nguyên Hải	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0986176526	\N	\N	2022-05-15 12:27:21.452389+00	\N	2022-05-21 12:33:24.251301+00	\N	\N	\N	t
+13	Ngô Nhật Minh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0985392291	\N	\N	2022-05-15 12:27:21.461908+00	\N	2022-05-21 12:33:33.720344+00	\N	\N	\N	t
+17	Bùi Thị Bích Liên	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0886746999	\N	\N	2022-05-15 12:27:21.476732+00	\N	2022-05-21 12:33:41.095754+00	\N	\N	\N	t
+6	Đào Dương Trâm Anh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0914994268	\N	\N	2022-05-15 12:27:21.439688+00	\N	2022-05-21 15:00:22.821961+00	\N	\N	\N	t
+64	Phạm Minh Thảo	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0978386468	\N	\N	2022-05-15 12:27:21.655551+00	\N	\N	\N	\N	\N	t
+65	Vương Yến Nhi	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0972644829	\N	\N	2022-05-15 12:27:21.659174+00	\N	\N	\N	\N	\N	t
+66	Nguyễn Linh Trang	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0977544997	\N	\N	2022-05-15 12:27:21.662701+00	\N	\N	\N	\N	\N	t
+67	Phạm Ngọc Diệp	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0984484332	\N	\N	2022-05-15 12:27:21.666036+00	\N	\N	\N	\N	\N	t
+68	Tô Phước Khang	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0967333586	\N	\N	2022-05-15 12:27:21.669522+00	\N	\N	\N	\N	\N	t
+69	Phạm Huyền Trang	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0385250688	\N	\N	2022-05-15 12:27:21.672983+00	\N	\N	\N	\N	\N	t
+70	Nguyễn Khánh Lâm	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0914262624	\N	\N	2022-05-15 12:27:21.676204+00	\N	\N	\N	\N	\N	t
+71	Nguyễn Minh Đăng	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0968010575	\N	\N	2022-05-15 12:27:21.679611+00	\N	\N	\N	\N	\N	t
+72	Chu Trường Phát	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0976045768	\N	\N	2022-05-15 12:27:21.68324+00	\N	\N	\N	\N	\N	t
+73	Đào Thúy Quyên	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0946044088	\N	\N	2022-05-15 12:27:21.686682+00	\N	\N	\N	\N	\N	t
+74	Đào Thùy Linh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0946044088	\N	\N	2022-05-15 12:27:21.690727+00	\N	\N	\N	\N	\N	t
+75	Dương Việt Anh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0984602427	\N	\N	2022-05-15 12:27:21.694922+00	\N	\N	\N	\N	\N	t
+76	Tạ Ngọc Châm	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0973171176	\N	\N	2022-05-15 12:27:21.698625+00	\N	\N	\N	\N	\N	t
+77	Nguyễn Hồng Phúc	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0972578183	\N	\N	2022-05-15 12:27:21.7025+00	\N	\N	\N	\N	\N	t
+78	Nguyễn Song Thư	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0983493679	\N	\N	2022-05-15 12:27:21.70699+00	\N	\N	\N	\N	\N	t
+79	Phạm Nguyễn Khánh Ngân	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0972627163	\N	\N	2022-05-15 12:27:21.711182+00	\N	\N	\N	\N	\N	t
+80	Nguyễn Bảo Ngọc	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0986921999	\N	\N	2022-05-15 12:27:21.714643+00	\N	\N	\N	\N	\N	t
+81	Nguyễn Ngọc Gia Huy	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0972535651	\N	\N	2022-05-15 12:27:21.719187+00	\N	\N	\N	\N	\N	t
+82	Phạm Hà My	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0987205866	\N	\N	2022-05-15 12:27:21.722994+00	\N	\N	\N	\N	\N	t
+83	Nguyễn Ngọc Trường Sơn	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0972481561	\N	\N	2022-05-15 12:27:21.726807+00	\N	\N	\N	\N	\N	t
+84	Trần Trung Hiếu	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0971578035	\N	\N	2022-05-15 12:27:21.731061+00	\N	\N	\N	\N	\N	t
+85	Trịnh Anh Dũng	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0975240889	\N	\N	2022-05-15 12:27:21.734943+00	\N	\N	\N	\N	\N	t
+86	Nguyễn Thế Vinh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0978097222	\N	\N	2022-05-15 12:27:21.738537+00	\N	\N	\N	\N	\N	t
+87	Dương Gia Bảo	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0385280467	\N	\N	2022-05-15 12:27:21.742+00	\N	\N	\N	\N	\N	t
+88	Nguyễn Thanh Tuyền	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0977423400	\N	\N	2022-05-15 12:27:21.745848+00	\N	\N	\N	\N	\N	t
+89	Trần Mai Phương	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0988563847	\N	\N	2022-05-15 12:27:21.750081+00	\N	\N	\N	\N	\N	t
+90	Nguyễn Bùi Nhã Uyên	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0989178368	\N	\N	2022-05-15 12:27:21.753829+00	\N	\N	\N	\N	\N	t
+91	Nguyễn Phú Thành	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0977397238	\N	\N	2022-05-15 12:27:21.757739+00	\N	\N	\N	\N	\N	t
+92	Nguyễn Ngọc Mai	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0389987393	\N	\N	2022-05-15 12:27:21.761854+00	\N	\N	\N	\N	\N	t
+93	Thân Ngọc Minh Khôi	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0915032660	\N	\N	2022-05-15 12:27:21.765797+00	\N	\N	\N	\N	\N	t
+94	Nguyễn Tuấn Minh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0985924248	\N	\N	2022-05-15 12:27:21.769117+00	\N	\N	\N	\N	\N	t
+95	Trịnh Thị Phương Uyên	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0987894999	\N	\N	2022-05-15 12:27:21.77285+00	\N	\N	\N	\N	\N	t
+96	Tô Phước An	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0967333586	\N	\N	2022-05-15 12:27:21.777173+00	\N	\N	\N	\N	\N	t
+97	Tô Quang Thanh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0967333586	\N	\N	2022-05-15 12:27:21.780789+00	\N	\N	\N	\N	\N	t
+98	Trần Hải Ly	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0983155995	\N	\N	2022-05-15 12:27:21.784709+00	\N	\N	\N	\N	\N	t
+99	Nguyễn Đại Phúc	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0967183231	\N	\N	2022-05-15 12:27:21.788491+00	\N	\N	\N	\N	\N	t
+100	Thân Ngọc Minh Châu	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0915032660	\N	\N	2022-05-15 12:27:21.791975+00	\N	\N	\N	\N	\N	t
+101	Nguyễn Tiến Lộc	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0374633297	\N	\N	2022-05-15 12:27:21.795591+00	\N	\N	\N	\N	\N	t
+102	Nguyễn Minh Ngọc	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0982671059	\N	\N	2022-05-15 12:27:21.799265+00	\N	\N	\N	\N	\N	t
+103	Hoàng Thanh Kim Huệ	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0963826316	\N	\N	2022-05-15 12:27:21.802897+00	\N	\N	\N	\N	\N	t
+104	Nguyễn Thái Hà Vy	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0936381252	\N	\N	2022-05-15 12:27:21.806176+00	\N	\N	\N	\N	\N	t
+105	Lê Xuân Doanh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0982300494	\N	\N	2022-05-15 12:27:21.809625+00	\N	\N	\N	\N	\N	t
+106	Vũ Minh Phương	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0979720265	\N	\N	2022-05-15 12:27:21.813038+00	\N	\N	\N	\N	\N	t
+107	Phạm Thùy Dương	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0986113611	\N	\N	2022-05-15 12:27:21.816426+00	\N	\N	\N	\N	\N	t
+108	Nguyễn Giang Long	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0976269565	\N	\N	2022-05-15 12:27:21.819829+00	\N	\N	\N	\N	\N	t
+109	Nguyễn Thị Yến Nhi	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0979083610	\N	\N	2022-05-15 12:27:21.823187+00	\N	\N	\N	\N	\N	t
+110	Lê Tiến Đạt	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0979027399	\N	\N	2022-05-15 12:27:21.826709+00	\N	\N	\N	\N	\N	t
+111	Nguyễn Anh Minh	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0982411184	\N	\N	2022-05-15 12:27:21.830954+00	\N	\N	\N	\N	\N	t
+112	Nguyễn Viết Tùng	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0977275258	\N	\N	2022-05-15 12:27:21.834778+00	\N	\N	\N	\N	\N	t
+113	Nguyễn Tiến Dũng	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0965923555	\N	\N	2022-05-15 12:27:21.838848+00	\N	\N	\N	\N	\N	t
+2	Nghiêm Thảo Chi	Nữ	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0962598894	\N	\N	2022-05-15 12:27:21.423759+00	\N	2022-05-21 12:34:01.077031+00	\N	\N	\N	t
+5	Nguyễn Phương Thảo	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0965261470	\N	\N	2022-05-15 12:27:21.436415+00	\N	2022-05-21 13:12:46.425895+00	\N	\N	\N	t
+114	Nguyễn Mai Lan	\N	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0987286868	\N	\N	2022-05-15 12:27:21.84212+00	\N	\N	\N	\N	\N	t
+118	Đoàn Thị Mỹ Dung	Nữ	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0932202936	\N	\N	2022-05-15 12:27:21.856664+00	\N	\N	\N	\N	\N	t
+119	Rhonna Mae Clare Inot Maasin	Nữ	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0325578127	\N	\N	2022-05-15 12:27:21.859882+00	\N	\N	\N	\N	\N	t
+117	Nguyễn Trần Bảo Ngọc	Nữ	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0975942067	\N	\N	2022-05-15 12:27:21.853276+00	\N	\N	\N	\N	\N	t
+116	Nguyễn Thị Minh Tâm	Nũ	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0986303740	\N	\N	2022-05-15 12:27:21.84965+00	\N	\N	\N	\N	\N	t
+120	Nguyễn Công Sơn		2022-05-17	5f4dcc3b5aa765d61d8327deb882cf99		0348235637	\N	\N	2022-05-20 17:42:26.500038+00	\N	\N	\N	\N	\N	t
+115	Phạm Việt Hưng	Nam	\N	5f4dcc3b5aa765d61d8327deb882cf99	\N	0967528503	\N	\N	2022-05-15 12:27:21.845503+00	\N	\N	\N	\N	\N	t
+134	Trần Xuân Bảng	Nam	1998-05-31	5f4dcc3b5aa765d61d8327deb882cf99		0362721313	\N	\N	2022-05-29 03:49:30.685136+00	\N	\N	\N	\N	\N	t
+\.
+
+
+--
+-- Data for Name: class_time; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.class_time (id, date_of_week_id, start_time, stop_time, created_at, created_by, modified_at, modified_by, deleted_at, deleted_by, active) FROM stdin;
+\.
+
+
+--
+-- Data for Name: classroom; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.classroom (id, name, room, teacher_id, student_ids, class_time_ids, start_date, total_days, created_at, created_by, modified_at, modified_by, deleted_at, deleted_by, active) FROM stdin;
+11	IELTS STANDARD	\N	1	{16,17,18,19,20,21,22,23,24}	{}	\N	\N	2022-05-23 15:44:41.255584+00	\N	2022-05-26 16:39:09.146911+00	\N	\N	\N	t
+4	THINK 2.1	\N	1	{99,100,101,102,103}	{}	\N	\N	2022-05-23 15:44:41.255584+00	\N	2022-05-26 16:39:08.965884+00	\N	\N	\N	t
+3	THINK 1.1	\N	1	{95,96,97,98}	{}	\N	\N	2022-05-23 15:44:41.255584+00	\N	2022-05-26 16:39:09.161951+00	\N	\N	\N	t
+14	IELTS STANDARD 02	\N	1	{25,26,27,28,29,30,31}	{}	\N	\N	2022-05-23 15:44:41.255584+00	\N	2022-05-26 16:39:09.021737+00	\N	\N	\N	t
+2	IELTS STANDARD 03	\N	2	{13,14,15,32,33,113}	{}	\N	\N	2022-05-15 14:08:17.900143+00	\N	2022-05-26 16:39:09.04061+00	\N	\N	\N	t
+9	MASTER JUNIOR	\N	2	{34,35,36,37,38,39}	{}	\N	\N	2022-05-23 15:44:41.255584+00	\N	2022-05-26 16:39:09.202885+00	\N	\N	\N	t
+13	THINK S.1	\N	2	{104,105,106,107,108,109,110,111,112}	{}	\N	\N	2022-05-23 15:44:41.255584+00	\N	2022-05-26 16:39:09.185898+00	\N	\N	\N	t
+5	STARTER 1.4	\N	3	{88,89,90,91,92,93,94}	{}	\N	\N	2022-05-23 15:44:41.255584+00	\N	2022-05-26 16:39:08.882263+00	\N	\N	\N	t
+8	STARTER 1.2	\N	3	{69,70,71,72,73,74,75,76,77,78,79,80}	{}	\N	\N	2022-05-23 15:44:41.255584+00	\N	2022-05-26 16:39:09.0978+00	\N	\N	\N	t
+7	STARTER 1.3	\N	3	{81,82,83,84,85,86,87}	{}	\N	\N	2022-05-23 15:44:41.255584+00	\N	2022-05-26 16:39:09.118773+00	\N	\N	\N	t
+6	MOVER 1.1	\N	3	{40,41,42,43,44,45,46,47,48,49,50,51}	{}	\N	\N	2022-05-23 15:44:41.255584+00	\N	2022-05-26 16:39:08.998908+00	\N	\N	\N	t
+12	STARTER 1.1	\N	3	{61,62,63,64,65,66,67,68}	{}	\N	\N	2022-05-23 15:44:41.255584+00	\N	2022-05-26 16:39:09.064318+00	\N	\N	\N	t
+10	MOVER 1.2	\N	3	{52,53,54,55,56,57,58,59,60}	{}	\N	\N	2022-05-23 15:44:41.255584+00	\N	2022-05-26 16:39:08.949642+00	\N	\N	\N	t
+1	GRAPESEED 1.1	101	3	{6,7,8,10,11,2,3,9,12,5,1,4,128}	{}	\N	\N	2022-05-15 14:03:25.847617+00	\N	2022-05-29 03:49:30.697739+00	\N	\N	\N	t
+\.
+
+
+--
+-- Data for Name: date_of_week; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.date_of_week (id, name, created_at, created_by, modified_at, modified_by, deleted_at, deleted_by, active) FROM stdin;
+1	Thứ 2	2022-05-15 12:27:16.462894+00	\N	\N	\N	\N	\N	t
+2	Thứ 3	2022-05-15 12:27:16.462894+00	\N	\N	\N	\N	\N	t
+3	Thứ 4	2022-05-15 12:27:16.462894+00	\N	\N	\N	\N	\N	t
+4	Thứ 5	2022-05-15 12:27:16.462894+00	\N	\N	\N	\N	\N	t
+5	Thứ 6	2022-05-15 12:27:16.462894+00	\N	\N	\N	\N	\N	t
+6	Thứ 7	2022-05-15 12:27:16.462894+00	\N	\N	\N	\N	\N	t
+7	Chủ nhật	2022-05-15 12:27:16.462894+00	\N	\N	\N	\N	\N	t
+\.
+
+
+--
+-- Data for Name: home_work; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.home_work (id, date, deadline, classroom_id, schedule_id, question_id, created_at, created_by, modified_at, modified_by, deleted_at, deleted_by, active) FROM stdin;
+1	\N	\N	1	1	1	2022-06-04 04:10:29.662209+00	\N	\N	\N	\N	\N	t
+\.
+
+
+--
+-- Data for Name: notification; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.notification (id, date, classroom_id, student_id, teacher_id, notification, type, created_at, created_by, modified_at, modified_by, deleted_at, deleted_by, active) FROM stdin;
+1	2022-06-01	5	88	3	mai nghi	info	2022-06-01 12:03:14.874591+00	\N	\N	\N	\N	\N	t
+2	2022-06-01	1	128	3	mai nghi hojc nhe	progress	2022-06-01 12:04:01.864447+00	\N	\N	\N	\N	\N	t
+\.
+
+
+--
+-- Data for Name: question; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.question (id, answers, result, image, type, created_at, created_by, modified_at, modified_by, deleted_at, deleted_by, active) FROM stdin;
+1	{"question": "what ... that?", "a": "is", "b": "is", "c": "am", "d": "the"}	A	https://jes.edu.vn/wp-content/uploads/2017/10/h%C3%ACnh-%E1%BA%A3nh.jpg	0	2022-06-04 04:10:29.639576+00	\N	\N	\N	\N	\N	t
+\.
+
+
+--
+-- Data for Name: question_student; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.question_student (id, question_id, student_id, result, created_at, created_by, modified_at, modified_by, deleted_at, deleted_by, active) FROM stdin;
+\.
+
+
+--
+-- Data for Name: roll_call; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.roll_call (id, date, classroom_id, student_id, teacher_id, absent_type_id, created_at, created_by, modified_at, modified_by, deleted_at, deleted_by, active) FROM stdin;
+1	2022-05-29	1	6	3	1	2022-05-29 03:53:25.868852+00	\N	\N	\N	\N	\N	t
+2	2022-05-29	1	7	3	1	2022-05-29 03:53:25.868935+00	\N	\N	\N	\N	\N	t
+3	2022-05-29	1	8	3	1	2022-05-29 03:53:25.869006+00	\N	\N	\N	\N	\N	t
+4	2022-05-29	1	10	3	1	2022-05-29 03:53:25.869077+00	\N	\N	\N	\N	\N	t
+5	2022-05-29	1	11	3	1	2022-05-29 03:53:25.869147+00	\N	\N	\N	\N	\N	t
+6	2022-05-29	1	2	3	1	2022-05-29 03:53:25.869218+00	\N	\N	\N	\N	\N	t
+7	2022-05-29	1	3	3	1	2022-05-29 03:53:25.869288+00	\N	\N	\N	\N	\N	t
+8	2022-05-29	1	9	3	1	2022-05-29 03:53:25.869393+00	\N	\N	\N	\N	\N	t
+9	2022-05-29	1	12	3	1	2022-05-29 03:53:25.869473+00	\N	\N	\N	\N	\N	t
+10	2022-05-29	1	5	3	1	2022-05-29 03:53:25.869545+00	\N	\N	\N	\N	\N	t
+11	2022-05-29	1	1	3	1	2022-05-29 03:53:25.869615+00	\N	\N	\N	\N	\N	t
+12	2022-05-29	1	4	3	1	2022-05-29 03:53:25.869685+00	\N	\N	\N	\N	\N	t
+13	2022-05-29	1	128	3	2	2022-05-29 03:53:25.869757+00	\N	\N	\N	\N	\N	t
+\.
+
+
+--
+-- Data for Name: schedule; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.schedule (id, classroom_id, title, created_at, created_by, modified_at, modified_by, deleted_at, deleted_by, active) FROM stdin;
+1	1	phan 1	2022-05-29 03:23:45.834551+00	\N	\N	\N	\N	\N	t
+2	1	phan 2	2022-05-29 03:23:54.6935+00	\N	\N	\N	\N	\N	t
+\.
+
+
+--
+-- Data for Name: score; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.score (id, date, classroom_id, student_id, teacher_id, score, created_at, created_by, modified_at, modified_by, deleted_at, deleted_by, active) FROM stdin;
+1	2022-05-29	1	6	3	{2}	2022-05-29 03:54:01.953611+00	\N	\N	\N	\N	\N	t
+2	2022-05-29	1	7	3	{2}	2022-05-29 03:54:01.963113+00	\N	\N	\N	\N	\N	t
+3	2022-05-29	1	8	3	{3}	2022-05-29 03:54:01.967301+00	\N	\N	\N	\N	\N	t
+4	2022-05-29	1	10	3	{4}	2022-05-29 03:54:01.971609+00	\N	\N	\N	\N	\N	t
+5	2022-05-29	1	11	3	{6}	2022-05-29 03:54:01.976562+00	\N	\N	\N	\N	\N	t
+6	2022-05-29	1	2	3	{4}	2022-05-29 03:54:01.980934+00	\N	\N	\N	\N	\N	t
+7	2022-05-29	1	3	3	{5}	2022-05-29 03:54:01.98522+00	\N	\N	\N	\N	\N	t
+8	2022-05-29	1	9	3	{6}	2022-05-29 03:54:01.989333+00	\N	\N	\N	\N	\N	t
+9	2022-05-29	1	12	3	{8}	2022-05-29 03:54:01.994118+00	\N	\N	\N	\N	\N	t
+10	2022-05-29	1	5	3	{6}	2022-05-29 03:54:01.998704+00	\N	\N	\N	\N	\N	t
+11	2022-05-29	1	1	3	{4}	2022-05-29 03:54:02.003048+00	\N	\N	\N	\N	\N	t
+12	2022-05-29	1	4	3	{3}	2022-05-29 03:54:02.007755+00	\N	\N	\N	\N	\N	t
+13	2022-05-29	1	128	3	{7}	2022-05-29 03:54:02.012527+00	\N	\N	\N	\N	\N	t
+\.
+
+
+--
+-- Data for Name: student; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.student (id, account_id, created_at, created_by, modified_at, modified_by, deleted_at, deleted_by, active) FROM stdin;
+1	2	2022-05-15 12:27:21.427521+00	\N	\N	\N	\N	\N	t
+2	3	2022-05-15 12:27:21.43128+00	\N	\N	\N	\N	\N	t
+3	4	2022-05-15 12:27:21.434725+00	\N	\N	\N	\N	\N	t
+4	5	2022-05-15 12:27:21.438191+00	\N	\N	\N	\N	\N	t
+5	6	2022-05-15 12:27:21.441512+00	\N	\N	\N	\N	\N	t
+6	7	2022-05-15 12:27:21.444561+00	\N	\N	\N	\N	\N	t
+7	8	2022-05-15 12:27:21.447766+00	\N	\N	\N	\N	\N	t
+8	9	2022-05-15 12:27:21.450901+00	\N	\N	\N	\N	\N	t
+9	10	2022-05-15 12:27:21.454028+00	\N	\N	\N	\N	\N	t
+10	11	2022-05-15 12:27:21.457094+00	\N	\N	\N	\N	\N	t
+11	12	2022-05-15 12:27:21.46018+00	\N	\N	\N	\N	\N	t
+12	13	2022-05-15 12:27:21.463468+00	\N	\N	\N	\N	\N	t
+13	14	2022-05-15 12:27:21.466633+00	\N	\N	\N	\N	\N	t
+14	15	2022-05-15 12:27:21.471025+00	\N	\N	\N	\N	\N	t
+15	16	2022-05-15 12:27:21.474683+00	\N	\N	\N	\N	\N	t
+16	17	2022-05-15 12:27:21.479098+00	\N	\N	\N	\N	\N	t
+17	18	2022-05-15 12:27:21.482851+00	\N	\N	\N	\N	\N	t
+18	19	2022-05-15 12:27:21.486266+00	\N	\N	\N	\N	\N	t
+19	20	2022-05-15 12:27:21.489771+00	\N	\N	\N	\N	\N	t
+20	21	2022-05-15 12:27:21.493197+00	\N	\N	\N	\N	\N	t
+21	22	2022-05-15 12:27:21.496493+00	\N	\N	\N	\N	\N	t
+22	23	2022-05-15 12:27:21.499926+00	\N	\N	\N	\N	\N	t
+23	24	2022-05-15 12:27:21.503421+00	\N	\N	\N	\N	\N	t
+24	25	2022-05-15 12:27:21.506712+00	\N	\N	\N	\N	\N	t
+25	26	2022-05-15 12:27:21.511257+00	\N	\N	\N	\N	\N	t
+26	27	2022-05-15 12:27:21.515061+00	\N	\N	\N	\N	\N	t
+27	28	2022-05-15 12:27:21.518732+00	\N	\N	\N	\N	\N	t
+28	29	2022-05-15 12:27:21.523065+00	\N	\N	\N	\N	\N	t
+29	30	2022-05-15 12:27:21.526932+00	\N	\N	\N	\N	\N	t
+30	31	2022-05-15 12:27:21.530198+00	\N	\N	\N	\N	\N	t
+31	32	2022-05-15 12:27:21.533784+00	\N	\N	\N	\N	\N	t
+32	33	2022-05-15 12:27:21.538109+00	\N	\N	\N	\N	\N	t
+33	34	2022-05-15 12:27:21.542364+00	\N	\N	\N	\N	\N	t
+34	35	2022-05-15 12:27:21.546419+00	\N	\N	\N	\N	\N	t
+35	36	2022-05-15 12:27:21.550899+00	\N	\N	\N	\N	\N	t
+36	37	2022-05-15 12:27:21.554675+00	\N	\N	\N	\N	\N	t
+37	38	2022-05-15 12:27:21.559138+00	\N	\N	\N	\N	\N	t
+38	39	2022-05-15 12:27:21.563852+00	\N	\N	\N	\N	\N	t
+39	40	2022-05-15 12:27:21.567617+00	\N	\N	\N	\N	\N	t
+40	41	2022-05-15 12:27:21.57118+00	\N	\N	\N	\N	\N	t
+41	42	2022-05-15 12:27:21.574868+00	\N	\N	\N	\N	\N	t
+42	43	2022-05-15 12:27:21.578263+00	\N	\N	\N	\N	\N	t
+43	44	2022-05-15 12:27:21.582103+00	\N	\N	\N	\N	\N	t
+44	45	2022-05-15 12:27:21.585739+00	\N	\N	\N	\N	\N	t
+45	46	2022-05-15 12:27:21.589176+00	\N	\N	\N	\N	\N	t
+46	47	2022-05-15 12:27:21.592733+00	\N	\N	\N	\N	\N	t
+47	48	2022-05-15 12:27:21.59651+00	\N	\N	\N	\N	\N	t
+48	49	2022-05-15 12:27:21.600832+00	\N	\N	\N	\N	\N	t
+49	50	2022-05-15 12:27:21.604541+00	\N	\N	\N	\N	\N	t
+50	51	2022-05-15 12:27:21.608587+00	\N	\N	\N	\N	\N	t
+51	52	2022-05-15 12:27:21.612702+00	\N	\N	\N	\N	\N	t
+52	53	2022-05-15 12:27:21.617136+00	\N	\N	\N	\N	\N	t
+53	54	2022-05-15 12:27:21.621076+00	\N	\N	\N	\N	\N	t
+54	55	2022-05-15 12:27:21.624587+00	\N	\N	\N	\N	\N	t
+55	56	2022-05-15 12:27:21.628389+00	\N	\N	\N	\N	\N	t
+56	57	2022-05-15 12:27:21.632067+00	\N	\N	\N	\N	\N	t
+57	58	2022-05-15 12:27:21.635437+00	\N	\N	\N	\N	\N	t
+58	59	2022-05-15 12:27:21.638917+00	\N	\N	\N	\N	\N	t
+59	60	2022-05-15 12:27:21.643328+00	\N	\N	\N	\N	\N	t
+60	61	2022-05-15 12:27:21.646948+00	\N	\N	\N	\N	\N	t
+61	62	2022-05-15 12:27:21.650298+00	\N	\N	\N	\N	\N	t
+62	63	2022-05-15 12:27:21.653818+00	\N	\N	\N	\N	\N	t
+63	64	2022-05-15 12:27:21.657577+00	\N	\N	\N	\N	\N	t
+64	65	2022-05-15 12:27:21.660956+00	\N	\N	\N	\N	\N	t
+65	66	2022-05-15 12:27:21.664402+00	\N	\N	\N	\N	\N	t
+66	67	2022-05-15 12:27:21.667691+00	\N	\N	\N	\N	\N	t
+67	68	2022-05-15 12:27:21.671352+00	\N	\N	\N	\N	\N	t
+68	69	2022-05-15 12:27:21.674632+00	\N	\N	\N	\N	\N	t
+69	70	2022-05-15 12:27:21.678038+00	\N	\N	\N	\N	\N	t
+70	71	2022-05-15 12:27:21.681532+00	\N	\N	\N	\N	\N	t
+71	72	2022-05-15 12:27:21.685061+00	\N	\N	\N	\N	\N	t
+72	73	2022-05-15 12:27:21.688512+00	\N	\N	\N	\N	\N	t
+73	74	2022-05-15 12:27:21.692989+00	\N	\N	\N	\N	\N	t
+74	75	2022-05-15 12:27:21.696769+00	\N	\N	\N	\N	\N	t
+75	76	2022-05-15 12:27:21.700571+00	\N	\N	\N	\N	\N	t
+76	77	2022-05-15 12:27:21.704637+00	\N	\N	\N	\N	\N	t
+77	78	2022-05-15 12:27:21.709312+00	\N	\N	\N	\N	\N	t
+78	79	2022-05-15 12:27:21.712942+00	\N	\N	\N	\N	\N	t
+79	80	2022-05-15 12:27:21.716806+00	\N	\N	\N	\N	\N	t
+80	81	2022-05-15 12:27:21.721233+00	\N	\N	\N	\N	\N	t
+81	82	2022-05-15 12:27:21.724912+00	\N	\N	\N	\N	\N	t
+82	83	2022-05-15 12:27:21.728882+00	\N	\N	\N	\N	\N	t
+83	84	2022-05-15 12:27:21.733214+00	\N	\N	\N	\N	\N	t
+84	85	2022-05-15 12:27:21.736773+00	\N	\N	\N	\N	\N	t
+85	86	2022-05-15 12:27:21.740222+00	\N	\N	\N	\N	\N	t
+86	87	2022-05-15 12:27:21.743722+00	\N	\N	\N	\N	\N	t
+87	88	2022-05-15 12:27:21.747927+00	\N	\N	\N	\N	\N	t
+88	89	2022-05-15 12:27:21.752147+00	\N	\N	\N	\N	\N	t
+89	90	2022-05-15 12:27:21.755604+00	\N	\N	\N	\N	\N	t
+90	91	2022-05-15 12:27:21.759742+00	\N	\N	\N	\N	\N	t
+91	92	2022-05-15 12:27:21.763896+00	\N	\N	\N	\N	\N	t
+92	93	2022-05-15 12:27:21.767467+00	\N	\N	\N	\N	\N	t
+93	94	2022-05-15 12:27:21.770792+00	\N	\N	\N	\N	\N	t
+94	95	2022-05-15 12:27:21.775183+00	\N	\N	\N	\N	\N	t
+95	96	2022-05-15 12:27:21.778999+00	\N	\N	\N	\N	\N	t
+96	97	2022-05-15 12:27:21.782711+00	\N	\N	\N	\N	\N	t
+97	98	2022-05-15 12:27:21.786704+00	\N	\N	\N	\N	\N	t
+98	99	2022-05-15 12:27:21.790188+00	\N	\N	\N	\N	\N	t
+99	100	2022-05-15 12:27:21.793841+00	\N	\N	\N	\N	\N	t
+100	101	2022-05-15 12:27:21.79753+00	\N	\N	\N	\N	\N	t
+101	102	2022-05-15 12:27:21.801274+00	\N	\N	\N	\N	\N	t
+102	103	2022-05-15 12:27:21.804548+00	\N	\N	\N	\N	\N	t
+103	104	2022-05-15 12:27:21.807874+00	\N	\N	\N	\N	\N	t
+104	105	2022-05-15 12:27:21.811383+00	\N	\N	\N	\N	\N	t
+105	106	2022-05-15 12:27:21.814727+00	\N	\N	\N	\N	\N	t
+106	107	2022-05-15 12:27:21.818233+00	\N	\N	\N	\N	\N	t
+107	108	2022-05-15 12:27:21.821579+00	\N	\N	\N	\N	\N	t
+108	109	2022-05-15 12:27:21.824952+00	\N	\N	\N	\N	\N	t
+109	110	2022-05-15 12:27:21.828797+00	\N	\N	\N	\N	\N	t
+110	111	2022-05-15 12:27:21.833039+00	\N	\N	\N	\N	\N	t
+111	112	2022-05-15 12:27:21.836813+00	\N	\N	\N	\N	\N	t
+112	113	2022-05-15 12:27:21.840558+00	\N	\N	\N	\N	\N	t
+113	114	2022-05-15 12:27:21.84383+00	\N	\N	\N	\N	\N	t
+114	120	2022-05-20 17:42:26.507973+00	\N	\N	\N	\N	\N	t
+115	121	2022-05-29 03:30:27.211006+00	\N	\N	\N	\N	\N	t
+116	122	2022-05-29 03:32:34.508777+00	\N	\N	\N	\N	\N	t
+117	123	2022-05-29 03:35:14.097596+00	\N	\N	\N	\N	\N	t
+122	128	2022-05-29 03:40:39.560445+00	\N	\N	\N	\N	\N	t
+123	129	2022-05-29 03:42:55.451628+00	\N	\N	\N	2022-05-29 03:44:06.572653+00	\N	f
+128	134	2022-05-29 03:49:30.687392+00	\N	\N	\N	\N	\N	t
+\.
+
+
+--
+-- Data for Name: teacher; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.teacher (id, account_id, created_at, created_by, modified_at, modified_by, deleted_at, deleted_by, active) FROM stdin;
+1	115	2022-05-15 12:27:21.847285+00	\N	\N	\N	\N	\N	t
+2	116	2022-05-15 12:27:21.851527+00	\N	\N	\N	\N	\N	t
+3	117	2022-05-15 12:27:21.855076+00	\N	\N	\N	\N	\N	t
+4	118	2022-05-15 12:27:21.858251+00	\N	\N	\N	\N	\N	t
+5	119	2022-05-15 12:27:21.861637+00	\N	\N	\N	\N	\N	t
+\.
+
+
+--
+-- Name: absent_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.absent_type_id_seq', 5, true);
+
+
+--
+-- Name: account_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.account_id_seq', 134, true);
+
+
+--
+-- Name: class_time_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.class_time_id_seq', 1, false);
+
+
+--
+-- Name: classroom_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.classroom_id_seq', 14, true);
+
+
+--
+-- Name: date_of_week_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.date_of_week_id_seq', 7, true);
+
+
+--
+-- Name: home_work_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.home_work_id_seq', 1, true);
+
+
+--
+-- Name: notification_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.notification_id_seq', 2, true);
+
+
+--
+-- Name: question_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.question_id_seq', 1, true);
+
+
+--
+-- Name: question_student_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.question_student_id_seq', 1, false);
+
+
+--
+-- Name: roll_call_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.roll_call_id_seq', 13, true);
+
+
+--
+-- Name: schedule_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.schedule_id_seq', 2, true);
+
+
+--
+-- Name: score_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.score_id_seq', 13, true);
+
+
+--
+-- Name: student_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.student_id_seq', 128, true);
+
+
+--
+-- Name: teacher_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.teacher_id_seq', 5, true);
+
+
+--
+-- Name: absent_type pkey_absent_type; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.absent_type
+    ADD CONSTRAINT pkey_absent_type PRIMARY KEY (id);
+
+
+--
+-- Name: account pkey_account; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.account
+    ADD CONSTRAINT pkey_account PRIMARY KEY (id);
+
+
+--
+-- Name: class_time pkey_class_time; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_time
+    ADD CONSTRAINT pkey_class_time PRIMARY KEY (id);
+
+
+--
+-- Name: classroom pkey_classroom; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.classroom
+    ADD CONSTRAINT pkey_classroom PRIMARY KEY (id);
+
+
+--
+-- Name: date_of_week pkey_date_of_week; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.date_of_week
+    ADD CONSTRAINT pkey_date_of_week PRIMARY KEY (id);
+
+
+--
+-- Name: home_work pkey_home_work; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.home_work
+    ADD CONSTRAINT pkey_home_work PRIMARY KEY (id);
+
+
+--
+-- Name: notification pkey_notification; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.notification
+    ADD CONSTRAINT pkey_notification PRIMARY KEY (id);
+
+
+--
+-- Name: question pkey_question; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.question
+    ADD CONSTRAINT pkey_question PRIMARY KEY (id);
+
+
+--
+-- Name: question_student pkey_question_student; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.question_student
+    ADD CONSTRAINT pkey_question_student PRIMARY KEY (id);
+
+
+--
+-- Name: roll_call pkey_roll_call; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.roll_call
+    ADD CONSTRAINT pkey_roll_call PRIMARY KEY (id);
+
+
+--
+-- Name: schedule pkey_schedule; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.schedule
+    ADD CONSTRAINT pkey_schedule PRIMARY KEY (id);
+
+
+--
+-- Name: score pkey_score; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.score
+    ADD CONSTRAINT pkey_score PRIMARY KEY (id);
+
+
+--
+-- Name: student pkey_student; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.student
+    ADD CONSTRAINT pkey_student PRIMARY KEY (id);
+
+
+--
+-- Name: teacher pkey_teacher; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.teacher
+    ADD CONSTRAINT pkey_teacher PRIMARY KEY (id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
