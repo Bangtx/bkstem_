@@ -47,7 +47,7 @@ const Home = defineComponent({
   },
   setup(props, { root }) {
     const { $router, $toast } = root
-    const baseUrl = process.env.VUE_APP_WEB_URL
+    const baseUrl = process.env.VUE_APP_WEB_URL_PRO
     const classrooms = ref([])
 
     const member: any = jwtDecode(String(localStorage.getItem('token')))
