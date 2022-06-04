@@ -3,10 +3,7 @@ from models.account import Account
 import schemas.student as schemas
 from schemas.account import AccountCreate
 from fastapi import APIRouter, HTTPException
-from typing import List
-import jwt
 import hashlib
-import json
 from utils.db import transaction
 from models.classroom import Classroom
 

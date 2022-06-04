@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    v-dialog(:value="value" max-width="700" persistent)
+    v-dialog(:value="value" max-width="500" persistent)
       v-card
         v-card-title.text-h5.title-color.lighten-2
           span Bài Tập
@@ -10,7 +10,9 @@
 
         .p-4
           h1 Câu Hỏi
-          v-textarea(outlined v-model="question")
+          v-textarea.question-input(outlined v-model="question")
+          span Ảnh (nếu có)
+          v-text-field(outlined v-model="linkImage")
           span Câu trả lời
           v-select(
             :label="'loại câu hỏi'"
@@ -113,6 +115,7 @@ const QuestionDialog = defineComponent({
   setup(props, { root, emit }) {
     const { $toast } = root
     const unit = ref('')
+    const linkImage = ref('')
     const ans = ref({ a: '', b: '', c: '', d: '', correct: '' })
     const question = ref('')
     const typeQuestions = ['trắc nghiệm', 'tự luận']
@@ -136,7 +139,8 @@ const QuestionDialog = defineComponent({
               }
             : { question: question.value },
         result: typeQuestion.value === typeQuestions[0] ? ans.value.correct : ansLongResponse.value,
-        type: typeQuestion.value === typeQuestions[0] ? 0 : 1
+        type: typeQuestion.value === typeQuestions[0] ? 0 : 1,
+        image: linkImage.value === '' ? null : linkImage.value
       }
       if (bodyQuestion.result === '') {
         $toast.error('Chưa chọn đán án đúng')
@@ -182,7 +186,8 @@ const QuestionDialog = defineComponent({
       clickCheckBox,
       ansLongResponse,
       onSave,
-      unit
+      unit,
+      linkImage
     }
   }
 })
@@ -197,5 +202,9 @@ export default QuestionDialog
   min-height: 30px !important
   min-width: 200px
 .theme--light.v-icon
-    color: #1f68e1 !important
+  color: #1f68e1 !important
+.question-input
+  .v-input__control
+    .v-input__slot
+      width: 300px
 </style>

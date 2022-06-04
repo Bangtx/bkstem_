@@ -218,6 +218,7 @@ CREATE TABLE question
   id bigserial NOT NULL,
   answers json,
   result text,
+  image text,
   type smallint, -- 0(multichoice) or 1
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   created_by bigint,

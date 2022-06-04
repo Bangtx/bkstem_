@@ -47,9 +47,10 @@
                 )
                   v-col.p-0(cols="12")
                     v-row.p-0
-                      //span {{ question.questions. }}
-                      h2 {{ index }}:
-                      span {{ question.questions.answers.question }}
+                      v-col(cols="12")
+                        span {{ index }}: {{ question.questions.answers.question }}
+                      v-img(:src="question.questions.image" max-width="400px" )
+                      //span {{ question }}
                     v-row.p-0(v-if="question.questions.type===0")
                       v-radio-group(v-model="question.result" row='')
                         v-radio(:label="question.questions.answers.a" :value="'A'")
@@ -148,4 +149,6 @@ export default HomeWork
 <style lang="sass">
 .title
   text-align: left !important
+.v-input
+  max-width: 100% !important
 </style>

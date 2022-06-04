@@ -7,6 +7,7 @@ class Question(BaseModel):
     answers = JSONField()
     result = CharField()
     type = IntegerField()
+    image = CharField()
 
     class Meta:
         db_table = 'question'
@@ -17,7 +18,8 @@ class Question(BaseModel):
             cls.select(
                 cls.id,
                 cls.answers,
-                cls.type
+                cls.type,
+                cls.image
             ).where(
                 cls.active
             ).dicts()
