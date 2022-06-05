@@ -29,7 +29,11 @@ def create_student(student: schemas.StudentCreate):
         )
     student.password = hashlib.md5(student.password.encode()).hexdigest()
     student_data = student.dict()
-    account = Account.create(**student_data)
+    param = {}
+    for key, val in student_data.items():
+        if key != 'classrooms' and key != 'status':
+            param[key] = val
+    account = Account.create(**param)
     student_create = models.Student.create(account_id=account.id)
     if student.classrooms:
         for classroom_id in student.classrooms:
@@ -44,14 +48,17 @@ def create_student(student: schemas.StudentCreate):
 @transaction
 def update_student(id: int, student: schemas.StudentUpdate):
     student = student.dict()
-    account_id = models.Student.select().where(
+    student_inserted = models.Student.select().where(
         models.Student.active, models.Student.id == id
-    ).get().account
+    ).get()
+    account_id = student_inserted.account
+
     param = {}
     for key, val in student.items():
-        if key != 'classrooms':
+        if key != 'classrooms' and key != 'status':
             param[key] = val
     student_update = Account.update_one(account_id, param)
+    models.Student.update_one(student_inserted.id, {'status': student['status']})
 
     """chua update khi bo click tren fontend"""
     if student['classrooms']:

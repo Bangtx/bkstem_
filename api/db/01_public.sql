@@ -25,6 +25,7 @@ CREATE TABLE student
 (
   id bigserial NOT NULL,
   account_id int,
+  status int,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   created_by bigint,
   modified_at timestamp with time zone,

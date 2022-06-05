@@ -1,11 +1,11 @@
 from .account import AccountBase
 from datetime import date
 from .schema import Schema
-from typing import List
+from typing import List, Optional
 
 
 class StudentBase(AccountBase):
-    pass
+    status: Optional[int]
 
 
 class StudentCreate(StudentBase):
@@ -24,3 +24,4 @@ class StudentUpdate(Schema):
     mail: str = None
     phone: str
     classrooms: List[int] = []
+    status: Optional[int]

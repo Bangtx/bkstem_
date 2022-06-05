@@ -24,6 +24,13 @@
           :items="classrooms.map(e => e.name)"
           v-model="classroomsSelected"
         )
+        v-select.p-0(
+          :label="'Trạng thái'"
+          :items="status"
+          item-value="key"
+          item-text="name"
+          v-model="student.status"
+        )
 
         v-dialog.title-color(
           ref="dialog"
@@ -97,6 +104,14 @@ const StudentDialog = defineComponent({
     const className = ref('')
     const classroomsSelected = ref<string[]>([])
 
+    const status = [
+      { name: 'Đang học', key: 1 },
+      { name: 'Thôi học', key: 2 },
+      { name: 'Tạm dừng học', key: 3 },
+      { name: 'Hoàn thành', key: 4 },
+      { name: 'Đổi lớp', key: 5 }
+    ]
+
     const onSave = async () => {
       const classIds = classroomsSelected.value
         .map((name: string) => {
@@ -112,7 +127,8 @@ const StudentDialog = defineComponent({
             phone: props.student.phone,
             dateOfBirth: props.student.dateOfBirth,
             password: password.value,
-            classrooms: classIds
+            classrooms: classIds,
+            status: props.student.status
           }
           await api.post(`${endpoints.STUDENT}`, toSnakeCase(body))
         } else {
@@ -122,7 +138,8 @@ const StudentDialog = defineComponent({
             mail: props.student.mail,
             phone: props.student.phone,
             dateOfBirth: props.student.dateOfBirth,
-            classrooms: classIds
+            classrooms: classIds,
+            status: props.student.status
           }
           await api.put(`${endpoints.STUDENT}${props.student.id}`, toSnakeCase(body))
         }
@@ -149,7 +166,8 @@ const StudentDialog = defineComponent({
       onSave,
       password,
       className,
-      classroomsSelected
+      classroomsSelected,
+      status
     }
   }
 })

@@ -229,7 +229,8 @@ const ManagementComponent = defineComponent({
           phone: data.account.phone,
           mail: data.account.mail,
           dateOfBirth: data.dateOfBirth,
-          classrooms: data.classrooms
+          classrooms: data.classrooms,
+          status: data.status
         }
       } else {
         studentProp.value = {
@@ -239,9 +240,11 @@ const ManagementComponent = defineComponent({
           phone: '',
           mail: '',
           dateOfBirth: '',
-          classrooms: []
+          classrooms: [],
+          status: 1
         }
       }
+      console.log(studentProp.value)
       isOpenStudentDialog.value = true
     }
 

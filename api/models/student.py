@@ -10,6 +10,13 @@ from .account import Account
 
 class Student(BaseModel):
     account = ForeignKeyField(Account, column_name='account_id')
+    status = IntegerField()
+
+    LEARN = 1
+    QUIT = 2
+    TEMP_STOP = 3
+    COMPLETE = 4
+    CHANGE = 5
 
     class Meta:
         db_table = 'student'
@@ -21,6 +28,7 @@ class Student(BaseModel):
                 cls.id,
                 Account.name,
                 Account.gender,
+                cls.status,
                 Account.date_of_birth,
                 fn.json_build_object(
                     'id', Account.id,
