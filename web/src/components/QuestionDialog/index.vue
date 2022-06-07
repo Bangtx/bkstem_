@@ -10,78 +10,86 @@
 
         .p-4
           h1 Câu Hỏi
-          v-textarea.question-input(outlined v-model="question")
+          v-textarea.question-input(
+            v-if="questionProps"
+            outlined
+            v-model="questionProps.answers.question"
+          )
           span Ảnh (nếu có)
-          v-text-field(outlined v-model="linkImage")
+          v-text-field(outlined v-model="questionProps.image")
           span Câu trả lời
           v-select(
             :label="'loại câu hỏi'"
             :items="typeQuestions"
-            v-model="typeQuestion"
+            item-text="key"
+            item-value="value"
+            v-model="questionProps.type"
             max-width="300"
           )
           v-select(
             :label="'unit'"
-            :items="units.map(e => e.title)"
-            v-model="unit"
+            :items="unitShows"
+            item-text="key"
+            item-value="value"
+            v-model="questionProps.unit"
             max-width="300"
           )
           span.pt-4 Đáp án
-          div(v-if="typeQuestion==='trắc nghiệm'")
+          div(v-if="questionProps.type===0")
             v-row
               v-col(cols="1")
                 v-icon.ml-2(
-                  v-if="ans.correct === 'A'"
+                  v-if="questionProps.result === 'A'"
                   color="primary" @click="clickCheckBox('A')"
                 ) mdi-check-circle
                 v-icon.ml-2(
-                  v-if="ans.correct !== 'A'" color="#0000003d" @click="clickCheckBox('A')"
+                  v-if="questionProps.result !== 'A'" color="#0000003d" @click="clickCheckBox('A')"
                 ) mdi-checkbox-blank-circle-outline
               v-col(cols="1")
                 span.da A
               v-col(cols="2")
-                v-text-field(outlined, v-model="ans.a")
+                v-text-field(outlined, v-model="questionProps.answers.a")
             v-row
               v-col(cols="1")
                 v-icon.ml-2(
-                  v-if="ans.correct === 'B'"
+                  v-if="questionProps.result === 'B'"
                   color="#0000003d" @click.stop="clickCheckBox('B')"
                 ) mdi-check-circle
                 v-icon.ml-2(
-                  v-if="ans.correct !== 'B'" color="#0000003d" @click="clickCheckBox('B')"
+                  v-if="questionProps.result !== 'B'" color="#0000003d" @click="clickCheckBox('B')"
                 ) mdi-checkbox-blank-circle-outline
               v-col(cols="1")
                 span.da B
               v-col(cols="2")
-                v-text-field(outlined, v-model="ans.b")
+                v-text-field(outlined, v-model="questionProps.answers.b")
             v-row
               v-col(cols="1")
                 v-icon.ml-2(
-                  v-if="ans.correct === 'C'"
+                  v-if="questionProps.result === 'C'"
                   color="#0000003d" @click.stop="clickCheckBox('C')"
                 ) mdi-check-circle
                 v-icon.ml-2(
-                  v-if="ans.correct !== 'C'" color="#0000003d" @click="clickCheckBox('C')"
+                  v-if="questionProps.result !== 'C'" color="#0000003d" @click="clickCheckBox('C')"
                 ) mdi-checkbox-blank-circle-outline
               v-col(cols="1")
                 span.da C
               v-col(cols="2")
-                v-text-field(outlined, v-model="ans.c")
+                v-text-field(outlined, v-model="questionProps.answers.c")
             v-row
               v-col(cols="1")
                 v-icon.ml-2(
-                  v-if="ans.correct === 'D'"
+                  v-if="questionProps.result === 'D'"
                   color="#0000003d" @click.stop="clickCheckBox('D')"
                 ) mdi-check-circle
                 v-icon.ml-2(
-                  v-if="ans.correct !== 'D'" color="#0000003d" @click="clickCheckBox('D')"
+                  v-if="questionProps.result !== 'D'" color="#0000003d" @click="clickCheckBox('D')"
                 ) mdi-checkbox-blank-circle-outline
               v-col(cols="1")
                 span.da D
               v-col(cols="2")
-                v-text-field(outlined, v-model="ans.d")
-          div(v-if="typeQuestion==='tự luận'")
-            v-text-field(outlined, v-model="ansLongResponse")
+                v-text-field(outlined, v-model="questionProps.answers.d")
+          div(v-if="questionProps.type===1")
+            v-text-field(outlined, v-model="questionProps.result")
 
         v-card-actions
           v-btn.relative-btn(
@@ -93,9 +101,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent, ref, toRefs, onMounted } from '@vue/composition-api'
 import { api } from 'plugins'
-import { endpoints } from 'utils'
+import { endpoints, toSnakeCase } from 'utils'
 
 const QuestionDialog = defineComponent({
   props: {
@@ -110,64 +118,88 @@ const QuestionDialog = defineComponent({
     classroom: {
       type: Object,
       required: true
+    },
+    questionProps: {
+      type: Object,
+      required: true
     }
   },
   setup(props, { root, emit }) {
     const { $toast } = root
-    const unit = ref('')
-    const linkImage = ref('')
+    const unitShows = ref<any[]>([])
     const ans = ref({ a: '', b: '', c: '', d: '', correct: '' })
-    const question = ref('')
-    const typeQuestions = ['trắc nghiệm', 'tự luận']
-    const typeQuestion = ref('trắc nghiệm')
-    const ansLongResponse = ref('')
+    const typeQuestions = [
+      { key: 'trắc nghiệm', value: 0 },
+      { key: 'tự luận', value: 1 }
+    ]
+    const { questionProps } = toRefs(props)
 
     const clickCheckBox = (value: string) => {
       ans.value.correct = value
+      questionProps.value.result = value
     }
 
     const onSave = async () => {
-      const bodyQuestion = {
-        answers:
-          typeQuestion.value === typeQuestions[0]
-            ? {
-                question: question.value,
-                a: ans.value.b,
-                b: ans.value.b,
-                c: ans.value.c,
-                d: ans.value.d
-              }
-            : { question: question.value },
-        result: typeQuestion.value === typeQuestions[0] ? ans.value.correct : ansLongResponse.value,
-        type: typeQuestion.value === typeQuestions[0] ? 0 : 1,
-        image: linkImage.value === '' ? null : linkImage.value
-      }
-      if (bodyQuestion.result === '') {
+      console.log(questionProps.value)
+      // const bodyQuestion = {
+      //   answers:
+      //     typeQuestion.value === typeQuestions[0]
+      //       ? {
+      //           question: question.value,
+      //           a: ans.value.b,
+      //           b: ans.value.b,
+      //           c: ans.value.c,
+      //           d: ans.value.d
+      //         }
+      //       : { question: question.value },
+      //   result: typeQuestion.value === typeQuestions[0] ? ans.value.correct : ansLongResponse.value,
+      //   type: typeQuestion.value === typeQuestions[0] ? 0 : 1,
+      //   image: linkImage.value === '' ? null : linkImage.value
+      // }
+      questionProps.value.answers =
+        questionProps.value.type === 0
+          ? {
+              question: questionProps.value.answers.question,
+              a: questionProps.value.answers.a,
+              b: questionProps.value.answers.b,
+              c: questionProps.value.answers.c,
+              d: questionProps.value.answers.d
+            }
+          : { question: questionProps.value.answers.question }
+      if (questionProps.value.result === '') {
         $toast.error('Chưa chọn đán án đúng')
         return
       }
       try {
         let check = false
-        if (typeQuestion.value === typeQuestions[0]) {
+        if (questionProps.value.type === 0) {
           check =
-            ans.value.correct !== '' &&
-            ans.value.a !== '' &&
-            ans.value.b !== '' &&
-            ans.value.c !== '' &&
-            ans.value.d !== '' &&
-            question.value !== ''
+            questionProps.value.answers.correct !== '' &&
+            questionProps.value.answers.a !== '' &&
+            questionProps.value.answers.b !== '' &&
+            questionProps.value.answers.c !== '' &&
+            questionProps.value.answers.d !== '' &&
+            questionProps.value.answers !== ''
         } else {
-          check = ansLongResponse.value !== ''
+          check = questionProps.value.result !== ''
         }
         if (check) {
-          const questionPost = (await api.post(`${endpoints.QUESTION}`, bodyQuestion)).data
-          const schedule: any = props.units.find((e: any) => e.title === unit.value)
-          const bodyHomeWork = {
-            classroom: props.classroom.id,
-            question: questionPost.id,
-            schedule: schedule.id
+          if (questionProps.value.id) {
+            await api.put(
+              `${endpoints.QUESTION}${questionProps.value.id}`,
+              toSnakeCase(questionProps.value)
+            )
+          } else {
+            const questionPost = (
+              await api.post(`${endpoints.QUESTION}`, toSnakeCase(questionProps.value))
+            ).data
+            const bodyHomeWork = {
+              classroom: props.classroom.id,
+              question: questionPost.id,
+              schedule: questionProps.value.unit
+            }
+            await api.post(endpoints.HOME_WORK, bodyHomeWork)
           }
-          await api.post(endpoints.HOME_WORK, bodyHomeWork)
           $toast.success('Save data successful')
           emit('re-load')
         } else {
@@ -178,16 +210,18 @@ const QuestionDialog = defineComponent({
       }
     }
 
+    onMounted(() => {
+      unitShows.value = props.units.map((unit: any) => {
+        return { key: unit.title, value: unit.id }
+      })
+    })
+
     return {
-      question,
       typeQuestions,
       ans,
-      typeQuestion,
       clickCheckBox,
-      ansLongResponse,
       onSave,
-      unit,
-      linkImage
+      unitShows
     }
   }
 })

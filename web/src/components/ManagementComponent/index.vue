@@ -244,7 +244,6 @@ const ManagementComponent = defineComponent({
           status: 1
         }
       }
-      console.log(studentProp.value)
       isOpenStudentDialog.value = true
     }
 

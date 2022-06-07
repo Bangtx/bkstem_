@@ -43,7 +43,6 @@ const HeaderBar = defineComponent({
   setup(props, { root }) {
     const { $router } = root
     const member: any = toCamelCase(jwtDecode(String(localStorage.getItem('token'))))
-    console.log(member)
     const goToHomePage = () => {
       $router.push({ name: urlPath.START.name })
     }

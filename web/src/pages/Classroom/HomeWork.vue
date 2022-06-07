@@ -41,15 +41,22 @@
                   v-col(cols="1")
                     v-icon mdi-dots-vertical
               v-expansion-panel-content(style="background-color: #deedfc; border-radius: 4px; padding: 0")
-                v-list-item.ma-0.title(
+                v-list-item.pa-0.ma-0.title(
                   v-for="(question, index) in item.homeWork"
                   :key="question.id"
                 )
                   v-col.p-0(cols="12")
                     v-row.p-0
-                      v-col(cols="12")
-                        span {{ index }}: {{ question.questions.answers.question }}
-                      v-img(:src="question.questions.image" max-width="400px" )
+                      v-col.p-0(cols="12")
+                        v-row.p-0
+                          v-col.p-0(cols="11")
+                            span {{ index }}: {{ question.questions.answers.question }}
+                          v-col.p-0(cols="1")
+                            v-icon(@click="openBottomSheet(question)") mdi-dots-vertical
+                      v-img(
+                        v-if="question.questions.image !== null && question.questions.image !== ''"
+                        :src="question.questions.image" max-width="360"
+                      )
                       //span {{ question }}
                     v-row.p-0(v-if="question.questions.type===0")
                       v-radio-group(v-model="question.result" row='')
@@ -63,9 +70,35 @@
         button.mt-4.flex.items-center.justify-between.px-4.py-2.font-medium.leading-5.text-white.transition-colors.duration-150.bg-orange-400.border.border-transparent.rounded-lg(class='hover:bg-orange-300 focus:outline-none')
           span.text-base Giao bài
 
+    v-bottom-sheet(
+        v-model="showBottomSheet"
+        persistent
+      )
+        div.ma-0.pa-0
+          v-row.ma-0.py-0.px-1(align='center' justify='center')
+            v-btn.mb-1.rounded-lg(
+              block
+              height="50"
+              elevation="0"
+              color="white"
+              @click="editQuestion()"
+            )
+              span Sửa
+          v-row.ma-0.py-0.px-1(align='center' justify='center')
+            v-btn.mb-1.rounded-lg(
+              block
+              height="50"
+              elevation="0"
+              color="white"
+              @click="showBottomSheet = false"
+            )
+              span Thoát
+
     question-dialog(
+      v-if="isOpenAddQuestionDialog"
       :value="isOpenAddQuestionDialog"
       :units="units"
+      :question-props="questionProps"
       :classroom="classroom"
       @on-close="isOpenAddQuestionDialog = false"
       @re-load="getData"
@@ -96,12 +129,12 @@ const HomeWork = defineComponent({
   setup(props, { root }) {
     const { $toast } = root
     const isOpenAddQuestionDialog = ref(false)
-    const openAddQuestionDialog = () => {
-      isOpenAddQuestionDialog.value = true
-    }
     const homeWorks = ref<any[]>([])
     const check = ref<any[]>([])
     const member: any = toCamelCase(jwtDecode(String(localStorage.getItem('token'))))
+    const showBottomSheet = ref(false)
+    const questionProps = ref<any>({})
+    const currentQuestion = ref<any>()
 
     const getData = async () => {
       const url =
@@ -129,6 +162,53 @@ const HomeWork = defineComponent({
       }
     }
 
+    const openBottomSheet = (ques: any) => {
+      showBottomSheet.value = true
+      currentQuestion.value = ques
+    }
+
+    const openAddQuestionDialog = () => {
+      isOpenAddQuestionDialog.value = true
+      questionProps.value = {
+        id: null,
+        answers: { a: '', b: '', c: '', d: '' },
+        result: '',
+        type: 0,
+        image: null,
+        unit: null
+      }
+    }
+
+    const editQuestion = () => {
+      isOpenAddQuestionDialog.value = true
+      let unit = null
+      homeWorks.value.forEach((homeWork: any) => {
+        const questionIds = homeWork.homeWork.map((e: any) => e.id)
+        if (questionIds.indexOf(currentQuestion.value.id) > -1) {
+          unit = homeWork.id
+        }
+      })
+      questionProps.value = {
+        id: currentQuestion.value.id,
+        answers:
+          currentQuestion.value.questions.type === 0
+            ? {
+                a: currentQuestion.value.questions.answers.a,
+                b: currentQuestion.value.questions.answers.b,
+                c: currentQuestion.value.questions.answers.c,
+                d: currentQuestion.value.questions.answers.d,
+                question: currentQuestion.value.questions.answers.question
+              }
+            : {
+                question: currentQuestion.value.questions.answers.question
+              },
+        result: currentQuestion.value.result,
+        type: currentQuestion.value.questions.type,
+        image: currentQuestion.value.questions.image,
+        unit
+      }
+    }
+
     onMounted(async () => {
       await getData()
     })
@@ -138,7 +218,11 @@ const HomeWork = defineComponent({
       openAddQuestionDialog,
       homeWorks,
       check,
-      getData
+      getData,
+      showBottomSheet,
+      editQuestion,
+      openBottomSheet,
+      questionProps
     }
   }
 })
@@ -151,4 +235,6 @@ export default HomeWork
   text-align: left !important
 .v-input
   max-width: 100% !important
+.v-expansion-panel-content__wrap
+  padding: 3px !important
 </style>
