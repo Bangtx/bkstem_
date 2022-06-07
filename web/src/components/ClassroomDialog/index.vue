@@ -116,10 +116,7 @@ const ClassroomDialog = defineComponent({
           ?.id,
         studentIds: props.classroom.students.map((e: any) => e.id)
       }
-      // console.log(selectedTeacher.value, students.value)
-      console.log(
-        teachers.value.find((e: any) => `[${e.id}] ${e.name}` === selectedTeacher.value)?.id
-      )
+
       try {
         if (props.mode === 'add') {
           await api.post(`${endpoints.CLASSROOM}`, toSnakeCase(body))

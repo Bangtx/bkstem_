@@ -17,9 +17,11 @@
         span {{ teacher.name }}
       v-list-item(v-for="(unit, index) in units" :key="index")
         span {{ index + 1 }}: {{ unit.title }}
+        v-spacer
+        v-icon(@click="openBottomSheet(unit)") mdi-dots-vertical
       button.mt-4.flex.items-center.justify-between.px-4.py-2.font-medium.leading-5.text-white.transition-colors.duration-150.bg-orange-400.border.border-transparent.rounded-lg(
         class='hover:bg-orange-300 focus:outline-none'
-        @click="openUnitDialog()"
+        @click="openUnitDialog('add')"
       )
         span.text-base Thêm Unit
       h1.py-2.flex.gap-2.items-center
@@ -45,9 +47,34 @@
                 td.px-4.py-3.text-sm.border {{ student.gender }}
                 td.px-4.py-3.text-sm.border
 
+    v-bottom-sheet(
+        v-model="showBottomSheet"
+        persistent
+      )
+        div.ma-0.pa-0
+          v-row.ma-0.py-0.px-1(align='center' justify='center')
+            v-btn.mb-1.rounded-lg(
+              block
+              height="50"
+              elevation="0"
+              color="white"
+              @click="openUnitDialog('edit')"
+            )
+              span Sửa
+          v-row.ma-0.py-0.px-1(align='center' justify='center')
+            v-btn.mb-1.rounded-lg(
+              block
+              height="50"
+              elevation="0"
+              color="white"
+              @click="showBottomSheet = false"
+            )
+              span Thoát
+
     unit-dialog(
       :value="isOpenUnitDialog"
       :classroom="classroom"
+      :unit-props="unitProps"
       @re-load="reload()"
       @on-close="isOpenUnitDialog = false"
     )
@@ -81,8 +108,13 @@ const ClassHome = defineComponent({
   },
   setup(props, { emit }) {
     const isOpenUnitDialog = ref(false)
+    const currentUnit = ref<any>({})
+    const showBottomSheet = ref(false)
+    const unitProps = ref<any>({})
 
-    const openUnitDialog = () => {
+    const openUnitDialog = (mode: string) => {
+      if (mode === 'add') unitProps.value = { id: null, name: null }
+      else unitProps.value = currentUnit.value
       isOpenUnitDialog.value = true
     }
 
@@ -90,10 +122,18 @@ const ClassHome = defineComponent({
       emit('re-load')
     }
 
+    const openBottomSheet = (unit: any) => {
+      currentUnit.value = unit
+      showBottomSheet.value = true
+    }
+
     return {
       openUnitDialog,
       isOpenUnitDialog,
-      reload
+      reload,
+      openBottomSheet,
+      showBottomSheet,
+      unitProps
     }
   }
 })

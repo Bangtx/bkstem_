@@ -9,7 +9,7 @@
 
       .p-4
         v-text-field(
-          v-model="unit.title"
+          v-model="unitProps.title"
           :label="'Unit'"
         )
 
@@ -42,19 +42,25 @@ const UnitDialog = defineComponent({
     classroom: {
       type: Object,
       required: true
+    },
+    unitProps: {
+      type: Object,
+      required: true
     }
   },
   setup(props, { emit, root }) {
-    const unit = ref({ title: null })
     const { $toast } = root
 
     const onSave = async () => {
       const body = {
         classroom: props.classroom.id,
-        title: unit.value.title
+        title: props.unitProps.title
       }
+
       try {
-        await api.post(`${endpoints.SCHEDULE}`, toSnakeCase(body))
+        if (props.unitProps.id)
+          await api.put(`${endpoints.SCHEDULE}${props.unitProps.id}`, toSnakeCase(body))
+        else await api.post(`${endpoints.SCHEDULE}`, toSnakeCase(body))
         emit('re-load')
         emit('on-close')
         $toast.success('Save data successful')
@@ -64,7 +70,6 @@ const UnitDialog = defineComponent({
     }
 
     return {
-      unit,
       onSave
     }
   }
