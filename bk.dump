@@ -34,6 +34,21 @@ SET default_tablespace = '';
 
 SET default_with_oids = false;
 
+DROP TABLE IF EXISTS question_student CASCADE;
+DROP TABLE IF EXISTS question CASCADE;
+DROP TABLE IF EXISTS home_work CASCADE;
+DROP TABLE IF EXISTS schedule CASCADE;
+DROP TABLE IF EXISTS score CASCADE;
+DROP TABLE IF EXISTS notification CASCADE;
+DROP TABLE IF EXISTS roll_call CASCADE;
+DROP TABLE IF EXISTS absent_type CASCADE;
+DROP TABLE IF EXISTS date_of_week CASCADE;
+DROP TABLE IF EXISTS class_time CASCADE;
+DROP TABLE IF EXISTS classroom CASCADE;
+DROP TABLE IF EXISTS teacher CASCADE;
+DROP TABLE IF EXISTS student CASCADE;
+DROP TABLE IF EXISTS account CASCADE;
+
 --
 -- Name: absent_type; Type: TABLE; Schema: public; Owner: postgres
 --
