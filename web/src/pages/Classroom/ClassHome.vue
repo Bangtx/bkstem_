@@ -18,8 +18,9 @@
       v-list-item(v-for="(unit, index) in units" :key="index")
         span {{ index + 1 }}: {{ unit.title }}
         v-spacer
-        v-icon(@click="openBottomSheet(unit)") mdi-dots-vertical
+        v-icon(v-if="member.typeMember === 'teacher'" @click="openBottomSheet(unit)") mdi-dots-vertical
       button.mt-4.flex.items-center.justify-between.px-4.py-2.font-medium.leading-5.text-white.transition-colors.duration-150.bg-orange-400.border.border-transparent.rounded-lg(
+        v-if="member.typeMember === 'teacher'"
         class='hover:bg-orange-300 focus:outline-none'
         @click="openUnitDialog('add')"
       )
@@ -83,6 +84,8 @@
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api'
 import { UnitDialog } from 'components'
+import jwtDecode from 'jwt-decode'
+import { toCamelCase } from 'utils'
 
 const ClassHome = defineComponent({
   props: {
@@ -111,6 +114,8 @@ const ClassHome = defineComponent({
     const currentUnit = ref<any>({})
     const showBottomSheet = ref(false)
     const unitProps = ref<any>({})
+    const member: any = toCamelCase(jwtDecode(String(localStorage.getItem('token'))))
+    console.log(member)
 
     const openUnitDialog = (mode: string) => {
       if (mode === 'add') unitProps.value = { id: null, name: null }
@@ -133,7 +138,8 @@ const ClassHome = defineComponent({
       reload,
       openBottomSheet,
       showBottomSheet,
-      unitProps
+      unitProps,
+      member
     }
   }
 })
