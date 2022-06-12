@@ -63,6 +63,7 @@ import { defineComponent, onMounted, ref } from '@vue/composition-api'
 import { api } from 'plugins'
 import { endpoints, toCamelCase, toSnakeCase } from 'utils'
 import jwtDecode from 'jwt-decode'
+import home from '../Home/index.vue'
 
 const HomeWorkStudent = defineComponent({
   props: {
@@ -84,7 +85,7 @@ const HomeWorkStudent = defineComponent({
     const getData = async () => {
       try {
         const { data } = await api.get(
-          `${endpoints.HOME_WORK}group_by_units?classroom=${props.classroom.id}`
+          `${endpoints.HOME_WORK}group_by_units?classroom=${props.classroom.id}&student=${student.id}`
         )
         homeWorks.value = toCamelCase(data)
         const x = []
@@ -102,6 +103,9 @@ const HomeWorkStudent = defineComponent({
       } catch (e) {
         $toast.error('Get data failed')
       }
+      ;[].concat(...homeWorks.value.map((e: any) => e.homeWork)).forEach((e: any) => {
+        check.value[e.id] = e.resultStudent
+      })
     }
 
     const saveResultAPI = async (body: any) => {
@@ -123,7 +127,6 @@ const HomeWorkStudent = defineComponent({
           })
         }
       })
-      console.log(body)
       saveResultAPI(toSnakeCase(body))
     }
 

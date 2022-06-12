@@ -1,3 +1,4 @@
+from schemas import home_work
 from schemas.question import Question
 from .base import BaseModel
 from playhouse.postgres_ext import JSONField, IntegerField
@@ -5,6 +6,7 @@ from .classroom import Classroom
 from .question import Question
 from .schedule import Schedule
 from peewee import CharField, DateField, ForeignKeyField, fn, JOIN
+from models.question_student import QuestionStudent
 
 
 class HomeWork(BaseModel):
@@ -53,7 +55,7 @@ class HomeWork(BaseModel):
         return list(query)
 
     @classmethod
-    def get_questions_by_unit(cls, unit, result):
+    def get_questions_by_unit(cls, unit, result=None, student=None):
         # question = (
         #     Question.select(
         #         Question.id, Question.answers, Question.type
@@ -79,13 +81,20 @@ class HomeWork(BaseModel):
         for home_work in home_works:
             if not result:
                 home_work.pop('result', None)
+            if student:
+                home_work['result_student'] = QuestionStudent.get_or_none(
+                    question=home_work['questions']['id'], student=student
+                )
+                home_work['result_student'] = (
+                    home_work['result_student'].result if home_work['result_student'] else None
+                )
 
             data.append(home_work['questions'])
 
         return home_works
 
     @classmethod
-    def get_questions_group_by_unit(cls, classroom_id, result):
+    def get_questions_group_by_unit(cls, classroom_id, result, student):
         units = list(
             Schedule.select(
                 Schedule.id, Schedule.title
@@ -95,6 +104,6 @@ class HomeWork(BaseModel):
         )
 
         for unit in units:
-            unit['home_work'] = HomeWork.get_questions_by_unit(unit['id'], result)
+            unit['home_work'] = HomeWork.get_questions_by_unit(unit['id'], result, student)
 
         return units

@@ -11,3 +11,4 @@ class QuestionStudent(BaseModel):
 
     class Meta:
         db_table = 'question_student'
+

@@ -12,8 +12,8 @@ def get_home_work():
 
 
 @router.get('/group_by_units')
-def group_by_units(classroom: int, result: bool = False):
-    return models.HomeWork.get_questions_group_by_unit(classroom, result)
+def group_by_units(classroom: int, student: int = None, result: bool = False):
+    return models.HomeWork.get_questions_group_by_unit(classroom, result, student)
 
 
 @router.post('/')
