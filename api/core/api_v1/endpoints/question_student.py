@@ -1,4 +1,4 @@
-from itertools import count
+from _ast import mod
 
 from fastapi import APIRouter
 import schemas.question_student as schemas
@@ -9,9 +9,9 @@ from typing import List
 router = APIRouter()
 
 
-@router.get('/')
-def get_question_students():
-    pass
+@router.get('/check_rate_correct')
+def check_rate_correct(student_id: int, classroom_id: int):
+    return models.QuestionStudent.check_rate_correct(student_id, classroom_id)
 
 
 @router.post('/multiple_result')

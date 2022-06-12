@@ -14,7 +14,7 @@
         .flex.gap-2.items-center.text-lg.font-semibold.text-gray-600.mt-4
           div Bài tập mới
         .flex.justify-between.items-center
-          .text-lg Danh sách câu hỏi
+          .text-lg Danh sách câu hỏi (Số câu hỏi đã làm đúng : {{corrected}})
         .mt-2(class='md:px-4')
           v-expansion-panels(
             flat
@@ -64,6 +64,7 @@ import { api } from 'plugins'
 import { endpoints, toCamelCase, toSnakeCase } from 'utils'
 import jwtDecode from 'jwt-decode'
 import home from '../Home/index.vue'
+import { HOME_WORK_STUDENT } from '../../utils/apiEndpoints'
 
 const HomeWorkStudent = defineComponent({
   props: {
@@ -81,13 +82,21 @@ const HomeWorkStudent = defineComponent({
     const homeWorks = ref<any[]>([])
     const check = ref<any>({})
     const student: any = toCamelCase(jwtDecode(String(localStorage.getItem('token'))))
+    const corrected = ref(0)
 
     const getData = async () => {
       try {
-        const { data } = await api.get(
-          `${endpoints.HOME_WORK}group_by_units?classroom=${props.classroom.id}&student=${student.id}`
-        )
-        homeWorks.value = toCamelCase(data)
+        const data = await Promise.all([
+          api.get(
+            `${endpoints.HOME_WORK}group_by_units?classroom=${props.classroom.id}&student=${student.id}`
+          ),
+          api.get(
+            `${endpoints.HOME_WORK_STUDENT}check_rate_correct?student_id=${student.id}&classroom_id=${props.classroom.id}`
+          )
+        ])
+        const [{ data: homeWorksData }, { data: checkRateData }] = data
+        corrected.value = checkRateData.correct
+        homeWorks.value = toCamelCase(homeWorksData)
         const x = []
           .concat(
             ...homeWorks.value.map((homeWork: any) => {
@@ -111,6 +120,7 @@ const HomeWorkStudent = defineComponent({
     const saveResultAPI = async (body: any) => {
       try {
         await api.post(`${endpoints.HOME_WORK_STUDENT}multiple_result`, body)
+        $toast.success('Save data successful')
       } catch (e) {
         $toast.error('Save data failed')
       }
@@ -136,7 +146,8 @@ const HomeWorkStudent = defineComponent({
     return {
       homeWorks,
       check,
-      onSubmit
+      onSubmit,
+      corrected
     }
   }
 })
