@@ -2,6 +2,7 @@ from .base import BaseModel
 from .question import Question
 from .student import Student
 from peewee import ForeignKeyField, CharField
+from .schedule import Schedule
 
 
 class QuestionStudent(BaseModel):
@@ -22,3 +23,24 @@ class QuestionStudent(BaseModel):
         )
         correct = list(map(lambda x: x.result, correct))
         return {'correct': len(correct)}
+
+    @classmethod
+    def get_correct_group_unit(cls, student_id, classroom_id):
+        from .home_work import HomeWork
+        # get units
+        units = list(
+            Schedule.select(Schedule.id, Schedule.title).where(
+                Schedule.active, Schedule.classroom == classroom_id
+            ).order_by(Schedule.id.asc())
+        )
+        results = []
+        for unit in units:
+            # get questions from HomeWork by unit and classroom
+            questions = HomeWork.get_questions_by_unit(unit.id)
+            question_ids = list(map(lambda x: x['id'], questions))
+            correct = list(
+                cls.select().where(cls.student == student_id, cls.question << question_ids)
+            )
+            correct = list(map(lambda x: x.result, correct))
+            results.append({unit.id: len(correct)})
+        return results

@@ -22,7 +22,7 @@
           v-if="feature==='schedule'"
         )
         score(
-          v-if="feature==='score'" :classroom="classroom" :students="students"
+          v-if="feature==='score'" :classroom="classroom" :students="students" :units="units"
         )
         learn(
           v-if="feature==='learn'" :classroom="classroom" :students="students"

@@ -1,12 +1,27 @@
-from _ast import mod
-
 from fastapi import APIRouter
 import schemas.question_student as schemas
 import models.question_student as models
 from models.question import Question
 from typing import List
+from models.classroom import Classroom
+from models.schedule import Schedule
 
 router = APIRouter()
+
+
+@router.get('/check_rate_corrects')
+def check_rate_corrects(classroom_id: int):
+    # get students
+    students = Classroom.get_one(classroom_id)['students']
+    result = []
+    for student in students:
+        result.append({
+            'id': student['id'],
+            'name': student['name'],
+            'result': models.QuestionStudent.get_correct_group_unit(student['id'], classroom_id)
+        })
+    return result
+    # return models.QuestionStudent.check_rate_correct(student_id, classroom_id)
 
 
 @router.get('/check_rate_correct')

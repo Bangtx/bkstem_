@@ -24,7 +24,7 @@ class Schedule(BaseModel):
                 Classroom, on=cls.classroom == Classroom.id
             ).where(
                 cls.active, Classroom.active, cls.classroom == classroom_id
-            ).dicts()
+            ).order_by(cls.id.asc()).dicts()
         )
 
         return list(query)

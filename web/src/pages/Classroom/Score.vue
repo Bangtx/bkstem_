@@ -77,6 +77,45 @@
                 td.px-2.py-1.border Điểm trung bình: {{ studentDatas.find(e => e.id === member.id).average }}
       v-btn(v-if="addCols" style="margin-left: 77%" @click="onSave()") Lưu
 
+      .rounded-lg.overflow-auto.shadow-xs.mt-4(class='lg:px-10')
+        .w-full.overflow-auto.rounded-lg(
+           v-if="member.typeMember === 'teacher'"
+          style='max-height: 600px; max-width: 1550px;'
+        )
+          table.w-full.whitespace-nowrap.rounded-lg.border
+            thead
+              tr.text-md.font-semibold.text-left.text-gray-900.bg-gray-100.uppercase.border-b.border-gray-600.rounded-t-lg
+                th.px-2.py-1.text-center.border.sticky.w-44.l-0 STT
+                th.px-2.py-1.border.w-44 Họ tên
+                th.px-2.py-1.border.w-44(v-for="unit in units" :key="unit.id")
+                  span {{ unit.title }}
+
+            tbody.bg-white
+              tr.text-gray-700(v-for="(scoreHomeWork, index) in scoreHomeWorks" :key="scoreHomeWork.id")
+                td.px-2.py-1.border.text-center {{ index + 1 }}
+                td.px-2.py-1.border {{ scoreHomeWork.name }}
+                th.px-2.py-1.border.w-44(v-for="(unit, indexUnit) in scoreHomeWork.result")
+                  span {{ unit[units[indexUnit].id] }}
+
+        .w-full.overflow-auto.rounded-lg(
+           v-if="member.typeMember === 'student'"
+          style='max-height: 600px; max-width: 1550px;'
+        )
+          table.w-full.whitespace-nowrap.rounded-lg.border
+            thead
+              tr.text-md.font-semibold.text-left.text-gray-900.bg-gray-100.uppercase.border-b.border-gray-600.rounded-t-lg
+                th.px-2.py-1.text-center.border.sticky.w-44.l-0 STT
+                th.px-2.py-1.border.w-44 Mã học viên
+                th.px-2.py-1.border.w-44 Họ tên
+                th.px-2.py-1.border.w-44(v-for="unit in units" :key="unit.id")
+                  span {{ unit.title }}
+            tbody.bg-white
+              td.px-2.py-1.border.text-center {{ index + 1 }}
+              td.px-2.py-1.border {{ member.id }}
+              td.px-2.py-1.border {{ member.name }}
+              th.px-2.py-1.border.w-44(v-for="(unit, indexUnit) in scoreHomeWorks.find(e => e.id === member.id).result")
+                span {{ unit[units[indexUnit].id] }}
+
 </template>
 
 <script lang="ts">
@@ -121,6 +160,11 @@ const Score = defineComponent({
     students: {
       type: Array,
       required: true
+    },
+    units: {
+      type: Array,
+      required: false,
+      default: () => []
     }
   },
   setup(props, { root }) {
@@ -131,6 +175,7 @@ const Score = defineComponent({
     const member: any = toCamelCase(jwtDecode(String(localStorage.getItem('token'))))
     const dateAddScore = ref(moment(new Date()).format('YYYY-MM-DD'))
     const scoreDatas = ref<ScoreType[]>([])
+    const scoreHomeWorks = ref<any[]>([])
 
     const handleClickAddCol = () => {
       studentDatas.value = props.students.map((studentData: any) => {
@@ -149,8 +194,16 @@ const Score = defineComponent({
 
     const getData = async () => {
       try {
-        const { data } = await api.get(`${endpoints.SCORE}?class_room=${props.classroom.id}`)
-        scoreDatas.value = toCamelCase(data)
+        const data = await Promise.all([
+          api.get(`${endpoints.SCORE}?class_room=${props.classroom.id}`),
+          api.get(
+            `${endpoints.HOME_WORK_STUDENT}check_rate_corrects?classroom_id=${props.classroom.id}`
+          )
+        ])
+        const [{ data: scoreData }, { data: homeworkData }] = data
+        scoreHomeWorks.value = toCamelCase(homeworkData)
+        // const { data } = await api.get(`${endpoints.SCORE}?class_room=${props.classroom.id}`)
+        scoreDatas.value = toCamelCase(scoreData)
       } catch {
         $toast.error('Get data failed')
       }
@@ -216,7 +269,8 @@ const Score = defineComponent({
       onSave,
       dateAddScore,
       scoreDatas,
-      member
+      member,
+      scoreHomeWorks
     }
   }
 })
