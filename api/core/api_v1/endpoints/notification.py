@@ -2,6 +2,7 @@ from fastapi import APIRouter
 import models.notification as models
 import schemas.notification as schemas
 from typing import List
+from utils.db import transaction
 
 router = APIRouter()
 
@@ -12,11 +13,13 @@ def get_notifications(class_room: int = None, student_id: int = None):
 
 
 @router.post('/')
+@transaction
 def create_notification(notification: schemas.NotificationCreate):
     return models.Notification.create(**notification.dict())
 
 
 @router.post('/multiple_notifications')
-def create_notification(notifications: List[schemas.NotificationCreate]):
+@transaction
+def create_notifications(notifications: List[schemas.NotificationCreate]):
     notifications = list(map(lambda x: x.dict(), notifications))
     return list(models.Notification.insert_many(notifications).dicts())

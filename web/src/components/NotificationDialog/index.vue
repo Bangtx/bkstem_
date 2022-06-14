@@ -117,7 +117,8 @@ const NotificationDialog = defineComponent({
           student: e.id,
           teacher: teacher.id,
           notification: msg.value,
-          date: moment(new Date()).format('YYYY-MM-DD')
+          date: moment(new Date()).format('YYYY-MM-DD'),
+          type: selectItems[selectItemsVN.indexOf(selectedItem.value)]
         }
       })
 
