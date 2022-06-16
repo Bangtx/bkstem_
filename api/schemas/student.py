@@ -22,6 +22,6 @@ class StudentUpdate(Schema):
     gender: str = None
     date_of_birth: date = None
     mail: str = None
-    phone: str
+    phone: str = None
     classrooms: List[int] = []
     status: Optional[int]

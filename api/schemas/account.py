@@ -5,7 +5,7 @@ from typing import Optional, List
 
 class AccountLogin(Schema):
     password: str
-    phone: str
+    id: str
 
 
 class AccountBase(Schema):

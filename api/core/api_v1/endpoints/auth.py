@@ -29,7 +29,7 @@ def login(account: schemas.AccountLogin):
         models.Account.phone,
         models.Account.password.alias('key_member')
     ).where(
-        models.Account.phone == account.phone,
+        models.Account.id == int(account.id),
         models.Account.password == hashlib.md5(account.password.encode()).hexdigest(),
         models.Account.active
     ).dicts().get()
