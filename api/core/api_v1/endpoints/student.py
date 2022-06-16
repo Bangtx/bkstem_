@@ -23,10 +23,12 @@ def get_students(id: int):
 @router.post('/', response_model=AccountCreate)
 @transaction
 def create_student(student: schemas.StudentCreate):
-    if Account.is_duplicate(student.mail, student.phone):
-        raise HTTPException(
-            403, 'phone or mail already exists'
-        )
+    if student.phone:
+        if student.phone != '':
+            if Account.is_duplicate(student.mail, student.phone):
+                raise HTTPException(
+                    403, 'phone or mail already exists'
+                )
     student.password = hashlib.md5(student.password.encode()).hexdigest()
     student_data = student.dict()
     param = {}
@@ -39,7 +41,6 @@ def create_student(student: schemas.StudentCreate):
         for classroom_id in student.classrooms:
             classroom = Classroom.get_one(classroom_id)
             students_exists = list(map(lambda x: x['id'], classroom['students']))
-            print(students_exists + student.classrooms, student_create.id)
             Classroom.update_one(classroom_id, {'student_ids': students_exists + [student_create.id]})
     return account
 
@@ -61,17 +62,18 @@ def update_student(id: int, student: schemas.StudentUpdate):
     models.Student.update_one(student_inserted.id, {'status': student['status']})
 
     """chua update khi bo click tren fontend"""
+    classrooms = Classroom.get_classrooms(student_id=id)
+    for classroom in classrooms:
+        student_ids_in_class = list(map(lambda x: x['id'], classroom['students']))
+        student_ids_update = list(filter(lambda x: x != id, student_ids_in_class))
+        Classroom.update_one(classroom['id'], {'student_ids': student_ids_update})
+
     if student['classrooms']:
         for classroom_id in student['classrooms']:
             classroom = Classroom.get_one(classroom_id)
             student_ids_in_class = list(map(lambda x: x['id'], classroom['students']))
             Classroom.update_one(classroom_id, {'student_ids': student_ids_in_class + [id]})
-    else:
-        classrooms = Classroom.get_classrooms(student_id=id)
-        for classroom in classrooms:
-            student_ids_in_class = list(map(lambda x: x['id'], classroom['students']))
-            student_ids_update = list(filter(lambda x: x != id, student_ids_in_class))
-            Classroom.update_one(classroom['id'], {'student_ids': student_ids_update})
+
     return student_update
 
 

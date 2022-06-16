@@ -14,7 +14,7 @@ class AccountBase(Schema):
     date_of_birth: date = None
     password: str
     mail: str = None
-    phone: str
+    phone: str = None
     role: int = None
     search_str: str = None
 

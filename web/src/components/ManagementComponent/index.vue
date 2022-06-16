@@ -235,11 +235,11 @@ const ManagementComponent = defineComponent({
       } else {
         studentProp.value = {
           id: null,
-          name: '',
-          gender: '',
-          phone: '',
-          mail: '',
-          dateOfBirth: '',
+          name: null,
+          gender: null,
+          phone: null,
+          mail: null,
+          dateOfBirth: null,
           classrooms: [],
           status: 1
         }
