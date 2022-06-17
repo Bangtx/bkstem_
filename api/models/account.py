@@ -27,3 +27,16 @@ class Account(BaseModel):
         if query:
             return True
         return False
+
+    @classmethod
+    def get_accounts_by_name(cls, name):
+        query = (
+            cls.select(
+                cls.id,
+                cls.name,
+                cls.phone
+            ).where(
+                cls.active, cls.name == name
+            ).order_by(cls.id).dicts()
+        )
+        return list(query)

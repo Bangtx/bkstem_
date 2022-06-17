@@ -13,13 +13,15 @@ from .endpoints import (
     home_work,
     question,
     question_student,
-    schedule
+    schedule,
+    account
 )
 
 
 api_router = APIRouter()
 # eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwibmFtZSI6ImJhbmcifQ.S2dAxQIiKowun1gwPdOoNy3vnTXDrJvEr-dWVwjSbpc
 api_router.include_router(auth.router, prefix='/auth', tags=['auth'])
+api_router.include_router(account.router, prefix='/account', tags=['account'])
 api_router.include_router(teacher.router, prefix='/teacher', tags=['teacher'])
 api_router.include_router(student.router, prefix='/student', tags=['student'])
 api_router.include_router(classroom.router, prefix='/classroom', tags=['classroom'])
