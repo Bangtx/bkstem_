@@ -33,7 +33,7 @@
                   v-for="(scoreData, index) in scoreDatas" :key="scoreData.date"
                   @click="editDate(scoreData.date, index)"
                 )
-                  span.text-click-able {{ scoreData.date }}
+                  span {{ scoreData.date }}
                 th.px-2.py-1.border.text-click-able(v-if="addCols" @click="editDate(dateAddScore)")
                   span {{ dateAddScore }}
                 //th.px-2.py-1.border Trung bình
@@ -45,10 +45,10 @@
                 td.px-2.py-1.border {{ student.name }}
                 td.px-2.py-1.border(v-for="scoreData in scoreDatas" :key="scoreData.date")
                   //span.text-click-able {{ scoreData.data }}
-                  span.text-click-able L:{{ scoreData.data.find(e => e.student.id === student.id).score.listening || '_' }}
-                  span.text-click-able S:{{ scoreData.data.find(e => e.student.id === student.id).score.specking || '_' }}
-                  span.text-click-able R:{{ scoreData.data.find(e => e.student.id === student.id).score.reading || '_' }}
-                  span.text-click-able W:{{ scoreData.data.find(e => e.student.id === student.id).score.writing || '_' }}
+                  span L:{{ scoreData.data.find(e => e.student.id === student.id).score.listening || '_' }}
+                  span S:{{ scoreData.data.find(e => e.student.id === student.id).score.specking || '_' }}
+                  span R:{{ scoreData.data.find(e => e.student.id === student.id).score.reading || '_' }}
+                  span W:{{ scoreData.data.find(e => e.student.id === student.id).score.writing || '_' }}
                 td.px-2.py-1.text-sm.border.text-center(v-if="addCols")
                   v-text-field.pa-0.ma-0(
                     label="Nghe"
@@ -144,17 +144,6 @@
         :return-value.sync="date"
         v-model="modal"
       )
-        template(v-slot:activator="{ on, attrs }")
-          v-text-field.pa-0.pr-1(
-            :label="'Ngày'"
-            readonly
-            hide-details
-            append-outer-icon="mdi-calendar"
-            v-bind="attrs"
-            v-on="on"
-            :value="date"
-            @click:append-outer="modal = true"
-          )
         v-date-picker(full-width scrollable color="rough_black" header-color="rough_black" v-model="date")
           v-spacer
           v-btn(text color="light_red" @click="modal = false")
@@ -236,14 +225,6 @@ const Score = defineComponent({
       addCols.value = !addCols.value
     }
 
-    const averageInArray = (array: number[]): number => {
-      let total = 0
-      array.forEach((e: number) => {
-        total += e
-      })
-      return total / array.length
-    }
-
     const getData = async () => {
       try {
         const data = await Promise.all([
@@ -259,50 +240,6 @@ const Score = defineComponent({
       } catch {
         $toast.error('Get data failed')
       }
-
-      // console.log(studentDatas.value)
-      //
-      // studentDatas.value = studentDatas.value.map((studentData: any) => {
-      //   return {
-      //     ...studentData,
-      //     score: scoreDatas.value.find((e: any) => e.data.student.id === studentData.id)
-      //   }
-      // })
-      // console.log(studentDatas.value)
-
-      // scoreDatas.value = scoreDatas.value.map((scoreData: any) => {
-      //   return {
-      //     ...scoreData,
-      //     data: scoreData.data.map((e: any) => {
-      //       return {
-      //         ...e,
-      //         specking: e.score.specking,
-      //         reading: e.score.reading,
-      //         writing: e.score.writing,
-      //         listening: e.score.listening
-      //       }
-      //     })
-      //   }
-      // })
-      //
-      // console.log(scoreDatas.value)
-      // total score
-      // studentDatas.value = props.students.map((studentData: any) => {
-      //   const average = ref<number[]>([])
-      //   scoreDatas.value
-      //     .map((scoreData: ScoreType) => {
-      //       return scoreData.data.find((e: ScoreData) => {
-      //         return e.student.id === studentData.id
-      //       })?.score
-      //     })
-      //     .forEach((e: any) => {
-      //       average.value.push(...e)
-      //     })
-      //   return {
-      //     ...studentData,
-      //     average: averageInArray(average.value)
-      //   }
-      // })
     }
 
     const reload = async () => {

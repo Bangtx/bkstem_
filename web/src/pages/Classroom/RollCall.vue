@@ -28,8 +28,8 @@
                 th.px-1.py-1.border Họ tên
                 th.px-1.py-1.border(v-for="rollCall in rollCalls" :key="rollCall.date")
                   span {{ rollCall.date }}
-                th.px-1.py-1.border(v-if="addCols")
-                  span {{ moment(new Date()).format('YYYY-MM-DD') }}
+                th.px-1.py-1.border(v-if="addCols" @click="editDate(dateAddScore)")
+                  span {{ dateAddScore }}
 
             tbody.bg-white
               tr.text-gray-700(v-for="(student, index) in studentData" :key="student.id")
@@ -63,6 +63,20 @@
                 td.px-2.py-1.border {{ roll.rollCall.find(e => e.student.id === member.id).absentType.type }}
 
       v-btn(v-if="addCols" style="margin-left: 77%" @click="onClickSubmit") submit
+
+    v-dialog.title-color(
+        ref="dialog"
+        persistent
+        max-width="400"
+        :return-value.sync="date"
+        v-model="modal"
+      )
+        v-date-picker(full-width scrollable color="rough_black" header-color="rough_black" v-model="date")
+          v-spacer
+          v-btn(text color="light_red" @click="modal = false")
+            span Cancel
+          v-btn(text color="rough_black" @click="$refs.dialog.save(date), savaDate()")
+            span Ok
 
 </template>
 
@@ -125,6 +139,11 @@ const RollCall = defineComponent({
     const addCols = ref<boolean>(false)
     const studentData = ref<any[]>([])
     const alreadyRollCall = ref(false)
+    const modal = ref(false)
+    const date = ref(moment(new Date()).format('YYYY-MM-DD'))
+    const currentIndexDate = ref(0)
+    const dateAddScore = ref(moment(new Date()).format('YYYY-MM-DD'))
+
     studentData.value = props.students.map((student: any) => {
       return { ...student, absentTypeName: 'Đúng giờ' }
     })
@@ -166,7 +185,7 @@ const RollCall = defineComponent({
       const query: RollCallCreate[] = []
       studentData.value.forEach((student: any) => {
         query.push({
-          date: moment(new Date()).format('YYYY-MM-DD'),
+          date: dateAddScore.value,
           classroom: props.classroom.id,
           teacher: props.teacher.id,
           student: student.id,
@@ -177,9 +196,20 @@ const RollCall = defineComponent({
       saveRollCallAPI(toSnakeCase(query))
     }
 
+    const savaDate = () => {
+      dateAddScore.value = date.value
+    }
+
+    const editDate = (dateData: string, indexDate?: number) => {
+      date.value = dateData
+      if (indexDate) currentIndexDate.value = indexDate
+      modal.value = true
+    }
+
     const handleClickRollCall = () => {
-      if (alreadyRollCall.value) $toast.info('Hôm nay đã điểm danh')
-      else addCols.value = !addCols.value
+      // if (alreadyRollCall.value) $toast.info('Hôm nay đã điểm danh')
+      // else addCols.value = !addCols.value
+      addCols.value = !addCols.value
     }
 
     onMounted(async () => {
@@ -196,7 +226,12 @@ const RollCall = defineComponent({
       studentData,
       alreadyRollCall,
       handleClickRollCall,
-      member
+      member,
+      modal,
+      date,
+      savaDate,
+      dateAddScore,
+      editDate
     }
   }
 })
@@ -209,4 +244,8 @@ select
   color: deeppink
   cursor: pointer
   border-color: #0E5A84
+.text-click-able
+  text-decoration: underline
+  color: blue
+  cursor: pointer
 </style>
