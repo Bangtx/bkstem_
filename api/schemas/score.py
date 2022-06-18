@@ -14,5 +14,12 @@ class Score(ScoreBase):
     score: List[float]
 
 
+class Scores(Schema):
+    specking: float = None
+    reading: float = None
+    writing: float = None
+    listening: float = None
+
+
 class ScoreCreate(ScoreBase):
-    score: float
+    score: Scores

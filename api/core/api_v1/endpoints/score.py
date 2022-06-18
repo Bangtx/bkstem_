@@ -1,6 +1,7 @@
 from typing import List
 from fastapi import APIRouter
-from playhouse.db_url import parse
+from utils.db import transaction
+import json
 
 import schemas.score as schemas
 import models.score as models
@@ -14,6 +15,7 @@ def get_scores(class_room: int):
 
 
 @router.post('/')
+@transaction
 def create_scores(params: List[schemas.ScoreCreate]):
     result = []
     for param in params:
@@ -22,7 +24,7 @@ def create_scores(params: List[schemas.ScoreCreate]):
             'classroom': param.classroom,
             'student': param.student,
             'teacher': param.teacher,
-            'score': [param.score]
+            'score': json.loads(json.dumps(param.score.dict()))
         }
 
         score_already_exists = models.Score.get_score_by_date(

@@ -1,6 +1,6 @@
 from .base import BaseModel
 from peewee import ForeignKeyField, fn, DateField
-from playhouse.postgres_ext import ArrayField
+from playhouse.postgres_ext import JSONField
 from .teacher import Teacher
 from .student import Student
 from .classroom import Classroom
@@ -12,7 +12,7 @@ class Score(BaseModel):
     date = DateField()
     student = ForeignKeyField(Student, column_name='student_id')
     teacher = ForeignKeyField(Teacher, column_name='teacher_id')
-    score = ArrayField()
+    score = JSONField()
 
     class Meta:
         db_table = 'score'

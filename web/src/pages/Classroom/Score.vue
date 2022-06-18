@@ -29,11 +29,14 @@
                 th.px-2.py-1.text-center.border.sticky.w-44.l-0 STT
                 th.px-2.py-1.border.w-44 Mã học viên
                 th.px-2.py-1.border.w-44 Họ tên
-                th.px-2.py-1.border.w-44(v-for="scoreData in scoreDatas" :key="scoreData.date")
-                  span {{ scoreData.date }}
-                th.px-2.py-1.border(v-if="addCols")
+                th.px-2.py-1.border.w-44(
+                  v-for="(scoreData, index) in scoreDatas" :key="scoreData.date"
+                  @click="editDate(scoreData.date, index)"
+                )
+                  span.text-click-able {{ scoreData.date }}
+                th.px-2.py-1.border.text-click-able(v-if="addCols" @click="editDate(dateAddScore)")
                   span {{ dateAddScore }}
-                th.px-2.py-1.border Trung bình
+                //th.px-2.py-1.border Trung bình
                 th.px-2.py-1.border Ghi chú
             tbody.bg-white
               tr.text-gray-700(v-for="(student, index) in studentDatas" :key="student.id")
@@ -41,13 +44,31 @@
                 td.px-2.py-1.border {{ student.id }}
                 td.px-2.py-1.border {{ student.name }}
                 td.px-2.py-1.border(v-for="scoreData in scoreDatas" :key="scoreData.date")
-                  span {{ scoreData.data.find(e => e.student.id === student.id).score.join(', ') }}
+                  //span.text-click-able {{ scoreData.data }}
+                  span.text-click-able L:{{ scoreData.data.find(e => e.student.id === student.id).score.listening || '_' }}
+                  span.text-click-able S:{{ scoreData.data.find(e => e.student.id === student.id).score.specking || '_' }}
+                  span.text-click-able R:{{ scoreData.data.find(e => e.student.id === student.id).score.reading || '_' }}
+                  span.text-click-able W:{{ scoreData.data.find(e => e.student.id === student.id).score.writing || '_' }}
                 td.px-2.py-1.text-sm.border.text-center(v-if="addCols")
                   v-text-field.pa-0.ma-0(
-                    type="number" v-model="student.score"
+                    label="Nghe"
+                    type="number" v-model="student.score.listening"
                   )
-                td.px-2.py-1.text-sm.border.text-center
-                  span {{ student.average ? student.average.toFixed(2) : '' }}
+                  v-text-field.pa-0.ma-0(
+                    label="Nói"
+                    type="number" v-model="student.score.specking"
+                  )
+                  v-text-field.pa-0.ma-0(
+                    label="Đọc"
+                    type="number" v-model="student.score.reading"
+                  )
+                  v-text-field.pa-0.ma-0(
+                    label="Viết"
+                    type="number" v-model="student.score.writing"
+                  )
+
+                //td.px-2.py-1.text-sm.border.text-center
+                //  span {{ student.average ? student.average.toFixed(2) : '' }}
                 td.px-2.py-1.text-sm.border
 
         .w-full.overflow-auto.rounded-lg(
@@ -116,6 +137,31 @@
               th.px-2.py-1.border.w-44(v-for="(unit, indexUnit) in scoreHomeWorks.find(e => e.id === member.id).result")
                 span {{ unit[units[indexUnit].id] }}
 
+    v-dialog.title-color(
+        ref="dialog"
+        persistent
+        max-width="400"
+        :return-value.sync="date"
+        v-model="modal"
+      )
+        template(v-slot:activator="{ on, attrs }")
+          v-text-field.pa-0.pr-1(
+            :label="'Ngày'"
+            readonly
+            hide-details
+            append-outer-icon="mdi-calendar"
+            v-bind="attrs"
+            v-on="on"
+            :value="date"
+            @click:append-outer="modal = true"
+          )
+        v-date-picker(full-width scrollable color="rough_black" header-color="rough_black" v-model="date")
+          v-spacer
+          v-btn(text color="light_red" @click="modal = false")
+            span Cancel
+          v-btn(text color="rough_black" @click="$refs.dialog.save(date), savaDate()")
+            span Ok
+
 </template>
 
 <script lang="ts">
@@ -130,7 +176,7 @@ interface StudentData {
   name: string
   dateOfBirth: string
   gender: string
-  score: number | null | string
+  score: any
   average?: number
 }
 
@@ -143,7 +189,7 @@ interface ScoreData {
   classroom: Master
   teacher: Master
   student: Master
-  score: number[]
+  score: any
 }
 
 interface ScoreType {
@@ -176,10 +222,16 @@ const Score = defineComponent({
     const dateAddScore = ref(moment(new Date()).format('YYYY-MM-DD'))
     const scoreDatas = ref<ScoreType[]>([])
     const scoreHomeWorks = ref<any[]>([])
+    const modal = ref(false)
+    const date = ref(moment(new Date()).format('YYYY-MM-DD'))
+    const currentIndexDate = ref(0)
 
     const handleClickAddCol = () => {
       studentDatas.value = props.students.map((studentData: any) => {
-        return { ...studentData, score: null }
+        return {
+          ...studentData,
+          score: { specking: null, reading: null, writing: null, listening: null }
+        }
       })
       addCols.value = !addCols.value
     }
@@ -208,23 +260,49 @@ const Score = defineComponent({
         $toast.error('Get data failed')
       }
 
+      // console.log(studentDatas.value)
+      //
+      // studentDatas.value = studentDatas.value.map((studentData: any) => {
+      //   return {
+      //     ...studentData,
+      //     score: scoreDatas.value.find((e: any) => e.data.student.id === studentData.id)
+      //   }
+      // })
+      // console.log(studentDatas.value)
+
+      // scoreDatas.value = scoreDatas.value.map((scoreData: any) => {
+      //   return {
+      //     ...scoreData,
+      //     data: scoreData.data.map((e: any) => {
+      //       return {
+      //         ...e,
+      //         specking: e.score.specking,
+      //         reading: e.score.reading,
+      //         writing: e.score.writing,
+      //         listening: e.score.listening
+      //       }
+      //     })
+      //   }
+      // })
+      //
+      // console.log(scoreDatas.value)
       // total score
-      studentDatas.value = props.students.map((studentData: any) => {
-        const average = ref<number[]>([])
-        scoreDatas.value
-          .map((scoreData: ScoreType) => {
-            return scoreData.data.find((e: ScoreData) => {
-              return e.student.id === studentData.id
-            })?.score
-          })
-          .forEach((e: any) => {
-            average.value.push(...e)
-          })
-        return {
-          ...studentData,
-          average: averageInArray(average.value)
-        }
-      })
+      // studentDatas.value = props.students.map((studentData: any) => {
+      //   const average = ref<number[]>([])
+      //   scoreDatas.value
+      //     .map((scoreData: ScoreType) => {
+      //       return scoreData.data.find((e: ScoreData) => {
+      //         return e.student.id === studentData.id
+      //       })?.score
+      //     })
+      //     .forEach((e: any) => {
+      //       average.value.push(...e)
+      //     })
+      //   return {
+      //     ...studentData,
+      //     average: averageInArray(average.value)
+      //   }
+      // })
     }
 
     const reload = async () => {
@@ -239,16 +317,21 @@ const Score = defineComponent({
           classroom: props.classroom.id,
           student: studentData.id,
           teacher: member.id,
-          score: studentData.score
+          score: {
+            specking: studentData.score.specking ? Number(studentData.score.specking) : null,
+            reading: studentData.score.reading ? Number(studentData.score.reading) : null,
+            writing: studentData.score.writing ? Number(studentData.score.writing) : null,
+            listening: studentData.score.listening ? Number(studentData.score.listening) : null
+          }
         })
       })
       try {
         await api.post(`${endpoints.SCORE}`, params.value)
-        await reload()
         $toast.success('Save data successful')
       } catch {
         $toast.error('Add data failed')
       }
+      await reload()
     }
 
     const onSave = async () => {
@@ -256,6 +339,17 @@ const Score = defineComponent({
       if (validate) $toast.error('Điểm chỉ được phép từ 0 -> 10')
       else await addScoreAPI()
       addCols.value = false
+    }
+
+    const editDate = (dateData: string, indexDate?: number) => {
+      date.value = dateData
+      if (indexDate) currentIndexDate.value = indexDate
+      modal.value = true
+    }
+
+    const savaDate = () => {
+      if (addCols.value) dateAddScore.value = date.value
+      else scoreDatas.value[currentIndexDate.value].date = date.value
     }
 
     onMounted(async () => {
@@ -270,7 +364,11 @@ const Score = defineComponent({
       dateAddScore,
       scoreDatas,
       member,
-      scoreHomeWorks
+      scoreHomeWorks,
+      editDate,
+      modal,
+      date,
+      savaDate
     }
   }
 })
@@ -284,4 +382,8 @@ export default Score
 .v-text-field__slot input
   margin: 2px !important
   padding: 0 !important
+.text-click-able
+  text-decoration: underline
+  color: blue
+  cursor: pointer
 </style>
