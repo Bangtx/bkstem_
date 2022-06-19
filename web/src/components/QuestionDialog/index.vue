@@ -17,6 +17,25 @@
           )
           span Ảnh (nếu có)
           v-text-field(outlined v-model="questionProps.image")
+          span Audio (nếu có)
+          v-list-item.pa-0
+            v-file-input(
+              v-if="!questionProps.audio || isEditFile"
+              accept="audio/*"
+              v-model="audioData"
+            )
+            v-spacer
+            v-btn(
+              v-if="questionProps.id"
+              @click="isEditFile = true"
+            ) edit file
+
+          vuetify-audio(
+            v-if="questionProps.audio"
+            :file="questionProps.audio"
+            color="success"
+          )
+
           span Câu trả lời
           v-select(
             :label="'loại câu hỏi'"
@@ -101,9 +120,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRefs, onMounted } from '@vue/composition-api'
+import { defineComponent, ref, toRefs, onMounted, watch } from '@vue/composition-api'
+import VuetifyAudio from 'vuetify-audio/src/vuetifyaudio.vue'
 import { api } from 'plugins'
-import { endpoints, toSnakeCase } from 'utils'
+import { endpoints, toSnakeCase, readFile } from 'utils'
 
 const QuestionDialog = defineComponent({
   props: {
@@ -124,6 +144,9 @@ const QuestionDialog = defineComponent({
       required: true
     }
   },
+  components: {
+    VuetifyAudio
+  },
   setup(props, { root, emit }) {
     const { $toast } = root
     const unitShows = ref<any[]>([])
@@ -132,6 +155,8 @@ const QuestionDialog = defineComponent({
       { key: 'trắc nghiệm', value: 0 },
       { key: 'tự luận', value: 1 }
     ]
+    const isEditFile = ref(false)
+    const audioData = ref<any>(null)
     const { questionProps } = toRefs(props)
 
     const clickCheckBox = (value: string) => {
@@ -141,21 +166,6 @@ const QuestionDialog = defineComponent({
 
     const onSave = async () => {
       console.log(questionProps.value)
-      // const bodyQuestion = {
-      //   answers:
-      //     typeQuestion.value === typeQuestions[0]
-      //       ? {
-      //           question: question.value,
-      //           a: ans.value.b,
-      //           b: ans.value.b,
-      //           c: ans.value.c,
-      //           d: ans.value.d
-      //         }
-      //       : { question: question.value },
-      //   result: typeQuestion.value === typeQuestions[0] ? ans.value.correct : ansLongResponse.value,
-      //   type: typeQuestion.value === typeQuestions[0] ? 0 : 1,
-      //   image: linkImage.value === '' ? null : linkImage.value
-      // }
       questionProps.value.answers =
         questionProps.value.type === 0
           ? {
@@ -210,18 +220,48 @@ const QuestionDialog = defineComponent({
       }
     }
 
+    const uploadAudio = async () => {
+      const payload = await readFile(audioData.value)
+      const body = {
+        payload,
+        id: null,
+        name: audioData.value.name,
+        type: audioData.value.type,
+        size: audioData.value.size
+      }
+
+      try {
+        const { data } = await api.post(`${endpoints.AUDIO_FILE}`, toSnakeCase(body))
+        questionProps.value.audio = data.url
+      } catch {
+        $toast.error('Save data failed')
+      }
+    }
+
     onMounted(() => {
       unitShows.value = props.units.map((unit: any) => {
         return { key: unit.title, value: unit.id }
       })
     })
 
+    watch(
+      () => audioData.value,
+      async () => {
+        if (audioData.value) {
+          await uploadAudio()
+          isEditFile.value = false
+        }
+      }
+    )
+
     return {
       typeQuestions,
       ans,
       clickCheckBox,
       onSave,
-      unitShows
+      unitShows,
+      audioData,
+      isEditFile
     }
   }
 })

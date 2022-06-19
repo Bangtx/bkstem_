@@ -19,5 +19,5 @@ def create_question(question: schemas.QuestionCreate):
 
 @router.put('/{id}', response_model=schemas.Question)
 @transaction
-def create_question(id: int, question: schemas.QuestionUpdate):
+def update_question(id: int, question: schemas.QuestionUpdate):
     return models.Question.update_one(id, question.dict())

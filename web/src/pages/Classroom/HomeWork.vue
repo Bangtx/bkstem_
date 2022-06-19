@@ -57,6 +57,11 @@
                         v-if="question.questions.image !== null && question.questions.image !== ''"
                         :src="question.questions.image" max-width="360"
                       )
+                      vuetify-audio(
+                        v-if="question.questions.audio"
+                        :file="question.questions.audio"
+                        color="success"
+                      )
                       //span {{ question }}
                     v-row.p-0(v-if="question.questions.type===0")
                       v-radio-group(v-model="question.result" row='')
@@ -111,6 +116,7 @@ import { QuestionDialog } from 'components'
 import { api } from 'plugins'
 import { endpoints, toCamelCase } from 'utils'
 import jwtDecode from 'jwt-decode'
+import VuetifyAudio from 'vuetify-audio/src/vuetifyaudio.vue'
 
 const HomeWork = defineComponent({
   props: {
@@ -124,7 +130,8 @@ const HomeWork = defineComponent({
     }
   },
   components: {
-    QuestionDialog
+    QuestionDialog,
+    VuetifyAudio
   },
   setup(props, { root }) {
     const { $toast } = root
@@ -175,6 +182,7 @@ const HomeWork = defineComponent({
         result: '',
         type: 0,
         image: null,
+        audio: null,
         unit: null
       }
     }
@@ -189,7 +197,7 @@ const HomeWork = defineComponent({
         }
       })
       questionProps.value = {
-        id: currentQuestion.value.id,
+        id: currentQuestion.value.questions.id,
         answers:
           currentQuestion.value.questions.type === 0
             ? {
@@ -205,6 +213,7 @@ const HomeWork = defineComponent({
         result: currentQuestion.value.result,
         type: currentQuestion.value.questions.type,
         image: currentQuestion.value.questions.image,
+        audio: currentQuestion.value.questions.audio,
         unit
       }
     }

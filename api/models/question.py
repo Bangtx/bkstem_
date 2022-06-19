@@ -8,6 +8,7 @@ class Question(BaseModel):
     result = CharField()
     type = IntegerField()
     image = CharField()
+    audio = CharField()
 
     class Meta:
         db_table = 'question'
@@ -19,7 +20,8 @@ class Question(BaseModel):
                 cls.id,
                 cls.answers,
                 cls.type,
-                cls.image
+                cls.image,
+                cls.audio
             ).where(
                 cls.active
             ).dicts()

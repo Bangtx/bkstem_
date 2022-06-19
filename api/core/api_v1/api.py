@@ -14,7 +14,8 @@ from .endpoints import (
     question,
     question_student,
     schedule,
-    account
+    account,
+    audio_file
 )
 
 
@@ -34,3 +35,4 @@ api_router.include_router(home_work.router, prefix='/home_work', tags=['home_wor
 api_router.include_router(question_student.router, prefix='/home_work_student', tags=['home_work_student'])
 api_router.include_router(question.router, prefix='/question', tags=['question'])
 api_router.include_router(schedule.router, prefix='/schedule', tags=['schedule'])
+api_router.include_router(audio_file.router, prefix='/audio_file', tags=['audio_file'])

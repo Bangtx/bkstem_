@@ -66,7 +66,8 @@ class HomeWork(BaseModel):
                 cls.id,
                 fn.json_build_object(
                     'id', Question.id, 'answers', Question.answers,
-                    'type', Question.type, 'image', Question.image
+                    'type', Question.type, 'image', Question.image,
+                    'audio', Question.audio
                 ).alias('questions'),
                 Question.result
             ).join(

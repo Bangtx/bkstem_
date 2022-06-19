@@ -212,7 +212,6 @@ CREATE TABLE home_work
   CONSTRAINT pkey_home_work PRIMARY KEY (id)
 );
 
-
 DROP TABLE IF EXISTS question CASCADE;
 CREATE TABLE question
 (
@@ -220,6 +219,7 @@ CREATE TABLE question
   answers json,
   result text,
   image text,
+  audio text,
   type smallint, -- 0(multichoice) or 1
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   created_by bigint,
@@ -229,6 +229,21 @@ CREATE TABLE question
   deleted_by bigint,
   active boolean DEFAULT TRUE,
   CONSTRAINT pkey_question PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS audio_file CASCADE;
+CREATE TABLE audio_file
+(
+  id bigserial NOT NULL,
+  url text,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  created_by bigint,
+  modified_at timestamp with time zone,
+  modified_by bigint,
+  deleted_at timestamp with time zone,
+  deleted_by bigint,
+  active boolean DEFAULT TRUE,
+  CONSTRAINT pkey_audio_file PRIMARY KEY (id)
 );
 
 DROP TABLE IF EXISTS question_student CASCADE;

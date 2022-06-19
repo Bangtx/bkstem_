@@ -7,6 +7,7 @@ class QuestionBase(Schema):
     result: str
     type: int
     image: Optional[str]
+    audio: Optional[str]
 
 
 class Question(QuestionBase):
