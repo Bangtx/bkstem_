@@ -1,0 +1,125 @@
+<template lang="pug">
+  div
+    v-dialog(:value="value" max-width="500" persistent)
+      v-card
+        v-card-title.text-h5.title-color.lighten-2
+          span Bài Tập
+          v-spacer
+          v-btn(icon @click="$emit('on-close')")
+            v-icon mdi-close
+        v-card-text
+          v-dialog.title-color(
+            ref="dialog"
+            persistent
+            max-width="400"
+            :return-value.sync="questionFileProps.date"
+            v-model="modal"
+          )
+            template(v-slot:activator="{ on, attrs }")
+              v-text-field.pa-0.pr-1(
+                :label="'Bài tập cho ngày'"
+                readonly
+                hide-details
+                append-outer-icon="mdi-calendar"
+                v-bind="attrs"
+                v-on="on"
+                :value="date"
+                @click:append-outer="modal = true"
+              )
+            v-date-picker(full-width scrollable color="rough_black" header-color="rough_black" v-model="date")
+              v-spacer
+              v-btn(text color="light_red" @click="modal = false")
+                span Cancel
+              v-btn(text color="rough_black" @click="$refs.dialog.save(date)")
+                span Ok
+          v-text-field(label="Tiêu đề" v-model="questionFileProps.title" )
+          v-list-item-content.pa-0
+            v-file-input(
+              accept="pdf/*, doc/*"
+              v-model="file"
+            )
+
+        v-card-actions
+          v-btn.relative-btn(
+            :large="!$vuetify.breakpoint.xsOnly"
+            block
+            @click="onSave()"
+          )
+            span Lưu
+
+</template>
+
+<script lang="ts">
+import { defineComponent, ref, toRefs, watch } from '@vue/composition-api'
+import { endpoints, readFile, toSnakeCase } from 'utils'
+import { api } from 'plugins'
+import moment from 'moment'
+
+const QuestionFileDialog = defineComponent({
+  props: {
+    value: {
+      type: Boolean,
+      required: true
+    },
+    questionFileProps: {
+      type: Object,
+      required: true
+    },
+    classroom: {
+      type: Object,
+      required: true
+    }
+  },
+  setup(props, { root }) {
+    const { $toast } = root
+    const file = ref<any>()
+    const date = ref(moment(new Date()).format('YYYY-MM-DD'))
+    const { questionFileProps } = toRefs(props)
+    const modal = ref(false)
+
+    const uploadFile = async () => {
+      const payload = await readFile(file.value)
+      const body = {
+        date: date.value,
+        classroom_id: props.classroom.id,
+        file_question: {
+          payload,
+          title: questionFileProps.value.title,
+          name: file.value.name,
+          type: file.value.type,
+          size: file.value.size
+        }
+      }
+
+      try {
+        const { data } = await api.post(`${endpoints.HOME_WORK_FILE}`, body)
+        questionFileProps.value.url = data.url
+      } catch {
+        $toast.error('Save data failed')
+      }
+    }
+
+    const onSave = () => {
+      uploadFile()
+    }
+
+    // watch(
+    //   () => file.value,
+    //   () => {
+    //     uploadFile()
+    //   }
+    // )
+
+    return {
+      file,
+      onSave,
+      modal,
+      date
+    }
+  }
+})
+
+export default QuestionFileDialog
+</script>
+
+<style lang="sass"></style>

@@ -212,6 +212,58 @@ CREATE TABLE home_work
   CONSTRAINT pkey_home_work PRIMARY KEY (id)
 );
 
+DROP TABLE IF EXISTS home_work_file CASCADE;
+CREATE TABLE home_work_file
+(
+  id bigserial NOT NULL,
+  date date,
+  deadline date,
+  classroom_id bigint,
+  file_question bigint,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  created_by bigint,
+  modified_at timestamp with time zone,
+  modified_by bigint,
+  deleted_at timestamp with time zone,
+  deleted_by bigint,
+  active boolean DEFAULT TRUE,
+  CONSTRAINT pkey_home_work_file PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS file_result_student CASCADE;
+CREATE TABLE file_result_student
+(
+  id bigserial NOT NULL,
+  home_work_file int,
+  name text,
+  url text,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  created_by bigint,
+  modified_at timestamp with time zone,
+  modified_by bigint,
+  deleted_at timestamp with time zone,
+  deleted_by bigint,
+  active boolean DEFAULT TRUE,
+  CONSTRAINT pkey_file_result_student PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS file_question CASCADE;
+CREATE TABLE file_question
+(
+  id bigserial NOT NULL,
+  title text,
+  name text,
+  url text,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  created_by bigint,
+  modified_at timestamp with time zone,
+  modified_by bigint,
+  deleted_at timestamp with time zone,
+  deleted_by bigint,
+  active boolean DEFAULT TRUE,
+  CONSTRAINT pkey_file_question PRIMARY KEY (id)
+);
+
 DROP TABLE IF EXISTS question CASCADE;
 CREATE TABLE question
 (

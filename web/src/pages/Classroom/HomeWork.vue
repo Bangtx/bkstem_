@@ -13,67 +13,95 @@
           div Giao bài tập
         .flex.gap-2.items-center.text-lg.font-semibold.text-gray-600.mt-2
           div Bài tập đã giao
-        .flex.gap-2.items-center.text-lg.font-semibold.text-gray-600.mt-4
-          div Bài tập mới
+
+          v-select.ml-2(
+            :label="'Kiểu'"
+            :items="typeHomeWorks"
+            item-text="key"
+            item-value="value"
+            v-model="typeHomeWork"
+          )
+
         .flex.justify-between.items-center
           .text-lg Danh sách câu hỏi
           button.flex.items-center.justify-between.px-4.py-2.font-medium.leading-5.text-white.transition-colors.duration-150.bg-orange-400.border.border-transparent.rounded-lg(
+            v-if="typeHomeWork === 1"
             @click="openAddQuestionDialog()"
             class='hover:bg-orange-300 focus:outline-none'
           )
             svg.h-6.w-6(xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2')
               path(stroke-linecap='round' stroke-linejoin='round' d='M12 6v6m0 0v6m0-6h6m-6 0H6')
             span.text-base Thêm câu hỏi
-        .mt-2(class='md:px-4')
-          v-expansion-panels(
-            flat
-            multiple
-            accordion
-            style="overflow: hidden"
-          )
-            v-expansion-panel(v-for="(item, index) in homeWorks" :key="index")
-              v-expansion-panel-header.px-0.py-1(expand-icon="")
-                v-row.ma-0.p-0
-                  v-col(cols="1")
-                    v-icon(v-if="") mdi-chevron-down
-                  v-col.title(cols="10")
-                    span.pl-4.bold--text {{ item.title }}
-                  v-col(cols="1")
-                    v-icon mdi-dots-vertical
-              v-expansion-panel-content(style="background-color: #deedfc; border-radius: 4px; padding: 0")
-                v-list-item.pa-0.ma-0.title(
-                  v-for="(question, index) in item.homeWork"
-                  :key="question.id"
-                )
-                  v-col.p-0(cols="12")
-                    v-row.p-0
-                      v-col.p-0(cols="12")
-                        v-row.p-0
-                          v-col.p-0(cols="11")
-                            span {{ index }}: {{ question.questions.answers.question }}
-                          v-col.p-0(cols="1")
-                            v-icon(@click="openBottomSheet(question)") mdi-dots-vertical
-                      v-img(
-                        v-if="question.questions.image !== null && question.questions.image !== ''"
-                        :src="question.questions.image" max-width="360"
-                      )
-                      vuetify-audio(
-                        v-if="question.questions.audio"
-                        :file="question.questions.audio"
-                        color="success"
-                      )
-                      //span {{ question }}
-                    v-row.p-0(v-if="question.questions.type===0")
-                      v-radio-group(v-model="question.result" row='')
-                        v-radio(:label="question.questions.answers.a" :value="'A'")
-                        v-radio(:label="question.questions.answers.b" :value="'B'")
-                        v-radio(:label="question.questions.answers.c" :value="'C'")
-                        v-radio(:label="question.questions.answers.d" :value="'D'")
-                    v-row.p-0(v-if="question.questions.type===1")
-                      v-text-field(v-model="question.result")
 
-        button.mt-4.flex.items-center.justify-between.px-4.py-2.font-medium.leading-5.text-white.transition-colors.duration-150.bg-orange-400.border.border-transparent.rounded-lg(class='hover:bg-orange-300 focus:outline-none')
-          span.text-base Giao bài
+          button.flex.items-center.justify-between.px-4.py-2.font-medium.leading-5.text-white.transition-colors.duration-150.bg-orange-400.border.border-transparent.rounded-lg(
+            v-if="typeHomeWork === 2"
+            @click="openAddQuestionFileDialog()"
+            class='hover:bg-orange-300 focus:outline-none'
+          )
+            svg.h-6.w-6(xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2')
+              path(stroke-linecap='round' stroke-linejoin='round' d='M12 6v6m0 0v6m0-6h6m-6 0H6')
+            span.text-base Thêm File
+
+        .mt-2(class='md:px-4')
+          div(v-if="typeHomeWork === 1")
+            v-expansion-panels(
+              flat
+              multiple
+              accordion
+              style="overflow: hidden"
+            )
+              v-expansion-panel(v-for="(item, index) in homeWorks" :key="index")
+                v-expansion-panel-header.px-0.py-1(expand-icon="")
+                  v-row.ma-0.p-0
+                    v-col(cols="1")
+                      v-icon(v-if="") mdi-chevron-down
+                    v-col.title(cols="10")
+                      span.pl-4.bold--text {{ item.title }}
+                    v-col(cols="1")
+                      v-icon mdi-dots-vertical
+                v-expansion-panel-content(style="background-color: #deedfc; border-radius: 4px; padding: 0")
+                  v-list-item.pa-0.ma-0.title(
+                    v-for="(question, index) in item.homeWork"
+                    :key="question.id"
+                  )
+                    v-col.p-0(cols="12")
+                      v-row.p-0
+                        v-col.p-0(cols="12")
+                          v-row.p-0
+                            v-col.p-0(cols="11")
+                              span {{ index }}: {{ question.questions.answers.question }}
+                            v-col.p-0(cols="1")
+                              v-icon(@click="openBottomSheet(question)") mdi-dots-vertical
+                        v-img(
+                          v-if="question.questions.image !== null && question.questions.image !== ''"
+                          :src="question.questions.image" max-width="360"
+                        )
+                        vuetify-audio(
+                          v-if="question.questions.audio"
+                          :file="question.questions.audio"
+                          color="success"
+                        )
+                        //span {{ question }}
+                      v-row.p-0(v-if="question.questions.type===0")
+                        v-radio-group(v-model="question.result" row='')
+                          v-radio(:label="question.questions.answers.a" :value="'A'")
+                          v-radio(:label="question.questions.answers.b" :value="'B'")
+                          v-radio(:label="question.questions.answers.c" :value="'C'")
+                          v-radio(:label="question.questions.answers.d" :value="'D'")
+                      v-row.p-0(v-if="question.questions.type===1")
+                        v-text-field(v-model="question.result")
+
+          //button.mt-4.flex.items-center.justify-between.px-4.py-2.font-medium.leading-5.text-white.transition-colors.duration-150.bg-orange-400.border.border-transparent.rounded-lg(class='hover:bg-orange-300 focus:outline-none')
+          //  span.text-base Giao bài
+          div(v-if="typeHomeWork === 2")
+            div(v-for="homeWorkFile in homeWorkFiles" :key="homeWorkFile.id")
+              v-list-item
+                span {{ homeWorkFile.fileQuestions.title }}
+                v-spacer
+                span {{ homeWorkFile.date }}
+                v-spacer
+                v-btn(@click="onDownload(homeWorkFile.fileQuestions.url)") download
+              v-divider
 
     v-bottom-sheet(
         v-model="showBottomSheet"
@@ -108,11 +136,18 @@
       @on-close="isOpenAddQuestionDialog = false"
       @re-load="getData"
     )
+
+    question-file-dialog(
+      :value="isOpenAddQuestionFileDialog"
+      :question-file-props="questionFileProps"
+      :classroom="classroom"
+      @on-close="isOpenAddQuestionFileDialog = false"
+    )
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from '@vue/composition-api'
-import { QuestionDialog } from 'components'
+import { QuestionDialog, QuestionFileDialog } from 'components'
 import { api } from 'plugins'
 import { endpoints, toCamelCase } from 'utils'
 import jwtDecode from 'jwt-decode'
@@ -131,7 +166,8 @@ const HomeWork = defineComponent({
   },
   components: {
     QuestionDialog,
-    VuetifyAudio
+    VuetifyAudio,
+    QuestionFileDialog
   },
   setup(props, { root }) {
     const { $toast } = root
@@ -142,6 +178,14 @@ const HomeWork = defineComponent({
     const showBottomSheet = ref(false)
     const questionProps = ref<any>({})
     const currentQuestion = ref<any>()
+    const isOpenAddQuestionFileDialog = ref(false)
+    const questionFileProps = ref<any>({ name: null, url: null, title: null, date: null })
+    const typeHomeWorks = [
+      { key: 'Bài Tập Thường', value: 1 },
+      { key: 'Bài Tập Theo file', value: 2 }
+    ]
+    const typeHomeWork = ref(1)
+    const homeWorkFiles = ref<any>([])
 
     const getData = async () => {
       const url =
@@ -149,8 +193,14 @@ const HomeWork = defineComponent({
           ? `${endpoints.HOME_WORK}group_by_units?classroom=${props.classroom.id}&result=true`
           : `${endpoints.HOME_WORK}group_by_units?classroom=${props.classroom.id}`
       try {
-        const { data } = await api.get(url)
-        homeWorks.value = toCamelCase(data)
+        const data = await Promise.all([
+          api.get(url),
+          api.get(`${endpoints.HOME_WORK_FILE}?classroom_id=${props.classroom.id}`)
+        ])
+        const [{ data: QTData }, { data: QTFIle }] = data
+
+        homeWorkFiles.value = toCamelCase(QTFIle)
+        homeWorks.value = toCamelCase(QTData)
         // console.log(homeWorks.value)
         const x = []
           .concat(
@@ -172,6 +222,16 @@ const HomeWork = defineComponent({
     const openBottomSheet = (ques: any) => {
       showBottomSheet.value = true
       currentQuestion.value = ques
+    }
+
+    const openAddQuestionFileDialog = () => {
+      questionFileProps.value = {
+        date: null,
+        name: null,
+        url: null,
+        title: null
+      }
+      isOpenAddQuestionFileDialog.value = true
     }
 
     const openAddQuestionDialog = () => {
@@ -218,6 +278,10 @@ const HomeWork = defineComponent({
       }
     }
 
+    const onDownload = (url: string) => {
+      window.open(url)
+    }
+
     onMounted(async () => {
       await getData()
     })
@@ -231,7 +295,14 @@ const HomeWork = defineComponent({
       showBottomSheet,
       editQuestion,
       openBottomSheet,
-      questionProps
+      questionProps,
+      typeHomeWork,
+      typeHomeWorks,
+      openAddQuestionFileDialog,
+      isOpenAddQuestionFileDialog,
+      questionFileProps,
+      homeWorkFiles,
+      onDownload
     }
   }
 })
