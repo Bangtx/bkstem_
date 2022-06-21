@@ -69,6 +69,7 @@
               v-divider
 
         button.mt-4.flex.items-center.justify-between.px-4.py-2.font-medium.leading-5.text-white.transition-colors.duration-150.bg-orange-400.border.border-transparent.rounded-lg(
+          v-if="typeHomeWork === 1"
           class="hover:bg-orange-300 focus:outline-none"
           @click="onSubmit()"
         )
