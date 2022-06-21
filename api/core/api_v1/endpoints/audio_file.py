@@ -5,6 +5,7 @@ import models.audio_file as models
 import schemas.audio_file as schemas
 from datetime import datetime
 from utils.db import transaction
+from config.setting import VUE_APP_API_URL, VUE_APP_API_URL_PRO
 
 router = APIRouter()
 
@@ -36,7 +37,7 @@ def create_audio(audio: schemas.File, request: Request):
         wfile.write(file_content)
         wfile.close()
     client_host = request.client.host
-    url = f'http://{client_host}:1000/audio_file/get_audio?key={key}'
+    url = f'{VUE_APP_API_URL_PRO}/audio_file/get_audio?key={key}'
     # audio_insert = models.AudioFile.create(**{'url': url})
     return {'url': url}
 
