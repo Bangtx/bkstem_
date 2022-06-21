@@ -96,11 +96,13 @@
           div(v-if="typeHomeWork === 2")
             div(v-for="homeWorkFile in homeWorkFiles" :key="homeWorkFile.id")
               v-list-item
-                span {{ homeWorkFile.fileQuestions.title }}
+                span {{ homeWorkFile.title }}
                 v-spacer
                 span {{ homeWorkFile.date }}
                 v-spacer
-                v-btn(@click="onDownload(homeWorkFile.fileQuestions.url)") download
+                span.text-click-able(@click="onDownload(homeWorkFile.fileQuestions.url)") download
+                v-spacer
+                v-icon(@click="openBottomSheet(homeWorkFile)") mdi-dots-vertical
               v-divider
 
     v-bottom-sheet(
@@ -114,7 +116,7 @@
               height="50"
               elevation="0"
               color="white"
-              @click="editQuestion()"
+              @click="typeHomeWork === 1 ? editQuestion() : editQuestionFile()"
             )
               span Sửa
           v-row.ma-0.py-0.px-1(align='center' justify='center')
@@ -142,6 +144,7 @@
       :question-file-props="questionFileProps"
       :classroom="classroom"
       @on-close="isOpenAddQuestionFileDialog = false"
+      @re-load="getData"
     )
 </template>
 
@@ -178,8 +181,17 @@ const HomeWork = defineComponent({
     const showBottomSheet = ref(false)
     const questionProps = ref<any>({})
     const currentQuestion = ref<any>()
+    const currentQuestionFile = ref<any>()
     const isOpenAddQuestionFileDialog = ref(false)
-    const questionFileProps = ref<any>({ name: null, url: null, title: null, date: null })
+    const questionFileProps = ref<any>({
+      id: null,
+      date: null,
+      title: null,
+      fileQuestions: {
+        name: null,
+        url: null
+      }
+    })
     const typeHomeWorks = [
       { key: 'Bài Tập Thường', value: 1 },
       { key: 'Bài Tập Theo file', value: 2 }
@@ -221,15 +233,20 @@ const HomeWork = defineComponent({
 
     const openBottomSheet = (ques: any) => {
       showBottomSheet.value = true
-      currentQuestion.value = ques
+      if (typeHomeWork.value === 1) currentQuestion.value = ques
+      if (typeHomeWork.value === 2) currentQuestionFile.value = ques
     }
 
     const openAddQuestionFileDialog = () => {
       questionFileProps.value = {
+        id: null,
         date: null,
-        name: null,
-        url: null,
-        title: null
+        title: null,
+        fileQuestions: {
+          id: null,
+          name: null,
+          url: null
+        }
       }
       isOpenAddQuestionFileDialog.value = true
     }
@@ -278,6 +295,17 @@ const HomeWork = defineComponent({
       }
     }
 
+    const editQuestionFile = () => {
+      questionFileProps.value = {
+        id: currentQuestionFile.value.id,
+        date: null,
+        title: currentQuestionFile.value.title,
+        fileQuestions: currentQuestionFile.value.fileQuestions
+      }
+
+      isOpenAddQuestionFileDialog.value = true
+    }
+
     const onDownload = (url: string) => {
       window.open(url)
     }
@@ -302,7 +330,9 @@ const HomeWork = defineComponent({
       isOpenAddQuestionFileDialog,
       questionFileProps,
       homeWorkFiles,
-      onDownload
+      onDownload,
+      currentQuestionFile,
+      editQuestionFile
     }
   }
 })
@@ -317,4 +347,8 @@ export default HomeWork
   max-width: 100% !important
 .v-expansion-panel-content__wrap
   padding: 3px !important
+.text-click-able
+  text-decoration: underline
+  color: blue
+  cursor: pointer
 </style>

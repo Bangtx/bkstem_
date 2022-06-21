@@ -16,34 +16,30 @@ def get_home_work_file(classroom_id: int):
 
 @router.post('/')
 def create_home_work_file(param: schemas.HomeWorkFileCreate):
-    # ceate file_question
-    file = param.file_question
-    now = datetime.now()
-    key = f"tmp/{now.year}_{now.month}_{now.day}_{now.hour}_{now.minute}_{now.second}_{file.name}"
-
-    file_content = b64decode(file.payload.split(",").pop())
-    with open(key, 'wb') as wfile:
-        wfile.write(file_content)
-        wfile.close()
-
-    url = f'{VUE_APP_API_URL}/file_question/read_file?key={key}'
-
-    # save db file_question
-    param_file_question = {
-        'title': file.title,
-        'name': f'{now.year}_{now.month}_{now.day}_{now.hour}_{now.minute}_{now.second}_{file.name}',
-        'url': url
-    }
-    file_question = FileQuestion.create(**param_file_question)
-
-    # save home_work_file
     param_home_work_file = {
+        'title': param.title,
         'date': param.date,
         'deadline': param.deadline,
         'classroom': param.classroom_id,
-        'file_question': file_question.id
+        'file_question': param.file_question
     }
     home_work_file = models.HomeWorkFile.create(**param_home_work_file)
     #
     return home_work_file
 
+
+@router.put('/{id}')
+def update_home_work_file(id: int, param: schemas.HomeWorkFileUpdate):
+    # save home_work_file
+    param_home_work_file = {
+        'title': param.title,
+        'date': param.date,
+        'deadline': param.deadline,
+        'classroom': param.classroom_id,
+        'file_question': param.file_question
+    }
+    home_work_file = models.HomeWorkFile.update_one(
+        id, param_home_work_file
+    )
+    #
+    return home_work_file

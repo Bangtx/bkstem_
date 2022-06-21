@@ -5,4 +5,5 @@ from datetime import date
 class FileQuestion(Schema):
     name: str
     url: str
+    id: int
 

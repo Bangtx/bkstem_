@@ -3,7 +3,6 @@ from datetime import date
 
 
 class File(Schema):
-    title: str
     name: str
     payload: str
     type: str
@@ -13,6 +12,7 @@ class File(Schema):
 class HomeWorkFileBase(Schema):
     date: date
     deadline: date = None
+    title: str
 
 
 class HomeWorkFile(HomeWorkFileBase):
@@ -20,7 +20,10 @@ class HomeWorkFile(HomeWorkFileBase):
     deadline: date = None
 
 
-
 class HomeWorkFileCreate(HomeWorkFileBase):
     classroom_id: int
-    file_question: File
+    file_question: int
+
+
+class HomeWorkFileUpdate(HomeWorkFileCreate):
+    pass

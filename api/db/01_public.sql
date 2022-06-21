@@ -217,6 +217,7 @@ CREATE TABLE home_work_file
 (
   id bigserial NOT NULL,
   date date,
+  title text,
   deadline date,
   classroom_id bigint,
   file_question bigint,
@@ -251,7 +252,6 @@ DROP TABLE IF EXISTS file_question CASCADE;
 CREATE TABLE file_question
 (
   id bigserial NOT NULL,
-  title text,
   name text,
   url text,
   created_at timestamp with time zone NOT NULL DEFAULT now(),

@@ -3,7 +3,6 @@ from peewee import CharField
 
 
 class FileQuestion(BaseModel):
-    title = CharField()
     name = CharField()
     url = CharField()
 

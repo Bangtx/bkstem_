@@ -1,10 +1,11 @@
 from models.base import BaseModel
-from peewee import DateField, ForeignKeyField, fn, JOIN
+from peewee import DateField, ForeignKeyField, fn, JOIN, CharField
 from models.classroom import Classroom
 from models.file_question import FileQuestion
 
 
 class HomeWorkFile(BaseModel):
+    title = CharField()
     date = DateField()
     deadline = DateField()
     classroom = ForeignKeyField(Classroom, column_name='classroom_id')
@@ -20,9 +21,9 @@ class HomeWorkFile(BaseModel):
                 cls.id,
                 cls.date,
                 cls.deadline,
+                cls.title,
                 fn.json_build_object(
-                    'id', FileQuestion.id, 'name', FileQuestion.name, 'url', FileQuestion.url,
-                    'title', FileQuestion.title
+                    'id', FileQuestion.id, 'name', FileQuestion.name, 'url', FileQuestion.url
                 ).alias('file_questions')
             ).join(
                 FileQuestion,

@@ -1,5 +1,5 @@
-export const AUTH = `${process.env.VUE_APP_API_URL_PRO}/auth/`
-// export const AUTH = `${process.env.VUE_APP_API_URL}/auth/`
+// export const AUTH = `${process.env.VUE_APP_API_URL_PRO}/auth/`
+export const AUTH = `${process.env.VUE_APP_API_URL}/auth/`
 export const STUDENT = '/student/'
 export const CLASSROOM = '/classroom/'
 export const ABSENTTYPE = '/absent_type/'
@@ -15,3 +15,4 @@ export const QUESTION = '/question/'
 export const ACCOUNT = '/account/'
 export const AUDIO_FILE = '/audio_file/'
 export const HOME_WORK_FILE = '/home_work_file/'
+export const FILE_QUESTION = '/file_question/'

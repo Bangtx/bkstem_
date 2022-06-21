@@ -33,11 +33,23 @@
               v-btn(text color="rough_black" @click="$refs.dialog.save(date)")
                 span Ok
           v-text-field(label="Tiêu đề" v-model="questionFileProps.title" )
-          v-list-item-content.pa-0
+          v-row
             v-file-input(
+              v-if="!questionFileProps.fileQuestions.id || isEditFile"
               accept="pdf/*, doc/*"
               v-model="file"
             )
+          v-row
+            v-col
+              span.text-click-able(
+                v-if="questionFileProps.fileQuestions.id"
+                @click="openFile(questionFileProps.fileQuestions.url)"
+              ) xem file
+            v-col
+              v-btn(
+                v-if="questionFileProps.fileQuestions.id"
+                @click="isEditFile = true"
+              ) edit file
 
         v-card-actions
           v-btn.relative-btn(
@@ -70,51 +82,95 @@ const QuestionFileDialog = defineComponent({
       required: true
     }
   },
-  setup(props, { root }) {
+  setup(props, { root, emit }) {
     const { $toast } = root
     const file = ref<any>()
     const date = ref(moment(new Date()).format('YYYY-MM-DD'))
     const { questionFileProps } = toRefs(props)
     const modal = ref(false)
+    const isEditFile = ref(false)
 
-    const uploadFile = async () => {
-      const payload = await readFile(file.value)
+    const createHomeWorkAPI = async () => {
+      isEditFile.value = false
       const body = {
         date: date.value,
         classroom_id: props.classroom.id,
-        file_question: {
-          payload,
-          title: questionFileProps.value.title,
-          name: file.value.name,
-          type: file.value.type,
-          size: file.value.size
-        }
+        file_question: questionFileProps.value.fileQuestions.id,
+        title: questionFileProps.value.title
       }
 
       try {
         const { data } = await api.post(`${endpoints.HOME_WORK_FILE}`, body)
         questionFileProps.value.url = data.url
+        $toast.success('Save data successful')
+        emit('re-load')
+        emit('on-close')
+      } catch {
+        $toast.error('Save data failed')
+      }
+    }
+
+    const updateHomeWorkAPI = async () => {
+      isEditFile.value = false
+      const body = {
+        date: date.value,
+        classroom_id: props.classroom.id,
+        file_question: questionFileProps.value.fileQuestions.id,
+        title: questionFileProps.value.title
+      }
+      try {
+        const { data } = await api.put(
+          `${endpoints.HOME_WORK_FILE}${questionFileProps.value.id}`,
+          body
+        )
+        questionFileProps.value.url = data.url
+        $toast.success('Save data successful')
+        emit('re-load')
+        emit('on-close')
+      } catch {
+        $toast.error('Save data failed')
+      }
+    }
+
+    const uploadFile = async () => {
+      const payload = await readFile(file.value)
+      const body = {
+        payload,
+        name: file.value.name,
+        type: file.value.type,
+        size: file.value.size
+      }
+      try {
+        const { data } = await api.post(endpoints.FILE_QUESTION, body)
+        questionFileProps.value.fileQuestions = data
       } catch {
         $toast.error('Save data failed')
       }
     }
 
     const onSave = () => {
-      uploadFile()
+      if (questionFileProps.value.id) updateHomeWorkAPI()
+      else createHomeWorkAPI()
     }
 
-    // watch(
-    //   () => file.value,
-    //   () => {
-    //     uploadFile()
-    //   }
-    // )
+    const openFile = (url: string) => {
+      window.open(url)
+    }
+
+    watch(
+      () => file.value,
+      () => {
+        uploadFile()
+      }
+    )
 
     return {
       file,
       onSave,
       modal,
-      date
+      date,
+      openFile,
+      isEditFile
     }
   }
 })
@@ -122,4 +178,9 @@ const QuestionFileDialog = defineComponent({
 export default QuestionFileDialog
 </script>
 
-<style lang="sass"></style>
+<style lang="sass">
+.text-click-able
+  text-decoration: underline
+  color: blue
+  cursor: pointer
+</style>
