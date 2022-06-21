@@ -27,7 +27,7 @@ def create_file(file: File):
         wfile.write(file_content)
         wfile.close()
 
-    url = f'{VUE_APP_API_URL}/file_question/read_file?key={key}'
+    url = f'{VUE_APP_API_URL_PRO}/file_question/read_file?key={key}'
 
     # save db file_question
     param_file_question = {
