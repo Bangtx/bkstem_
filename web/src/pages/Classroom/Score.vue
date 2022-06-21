@@ -78,24 +78,22 @@
           table.w-full.whitespace-nowrap.rounded-lg.border
             thead
               tr.text-md.font-semibold.text-left.text-gray-900.bg-gray-100.uppercase.border-b.border-gray-600.rounded-t-lg
-                th.px-2.py-1.text-center.border.sticky.w-44.l-0 STT
                 th.px-2.py-1.border.w-44 Mã học viên
                 th.px-2.py-1.border.w-44 Họ tên
                 th.px-2.py-1.border.w-44 Ngày
                 th.px-2.py-1.border.w-44 Điểm
             tbody.bg-white
-              tr.text-gray-700(v-for="(scoreData, index) in scoreDatas" :key="scoreData.id")
-                td.px-2.py-1.border.text-center {{ index + 1 }}
+              tr.text-gray-700(v-for="scoreData in scoreDatas")
                 td.px-2.py-1.border {{ member.id }}
                 td.px-2.py-1.border {{ member.name }}
                 td.px-2.py-1.border {{ scoreData.data.find(e => e.student.id === member.id).date }}
-                td.px-2.py-1.border {{ scoreData.data.find(e => e.student.id === member.id).score.join(', ') }}
-              tr.text-gray-700
                 td.px-2.py-1.border
-                td.px-2.py-1.border
-                td.px-2.py-1.border
-                td.px-2.py-1.border
-                td.px-2.py-1.border Điểm trung bình: {{ studentDatas.find(e => e.id === member.id).average }}
+                  span L:{{ scoreData.data.find(e => e.student.id === member.id).score.listening || '_' }}
+                  span S:{{ scoreData.data.find(e => e.student.id === member.id).score.specking || '_' }}
+                  span R:{{ scoreData.data.find(e => e.student.id === member.id).score.reading || '_' }}
+                  span W:{{ scoreData.data.find(e => e.student.id === member.id).score.writing || '_' }}
+                //td.px-2.py-1.border {{ scoreData.data.find(e => e.student.id === member.id).score.join(', ') }}
+
       v-btn(v-if="addCols" style="margin-left: 77%" @click="onSave()") Lưu
 
       .rounded-lg.overflow-auto.shadow-xs.mt-4(class='lg:px-10')
@@ -115,6 +113,7 @@
               tr.text-gray-700(v-for="(scoreHomeWork, index) in scoreHomeWorks" :key="scoreHomeWork.id")
                 td.px-2.py-1.border.text-center {{ index + 1 }}
                 td.px-2.py-1.border {{ scoreHomeWork.name }}
+                  //span {{ scoreHomeWork }}
                 th.px-2.py-1.border.w-44(v-for="(unit, indexUnit) in scoreHomeWork.result")
                   span {{ unit[units[indexUnit].id] }}
 
@@ -125,13 +124,11 @@
           table.w-full.whitespace-nowrap.rounded-lg.border
             thead
               tr.text-md.font-semibold.text-left.text-gray-900.bg-gray-100.uppercase.border-b.border-gray-600.rounded-t-lg
-                th.px-2.py-1.text-center.border.sticky.w-44.l-0 STT
                 th.px-2.py-1.border.w-44 Mã học viên
                 th.px-2.py-1.border.w-44 Họ tên
                 th.px-2.py-1.border.w-44(v-for="unit in units" :key="unit.id")
                   span {{ unit.title }}
             tbody.bg-white
-              td.px-2.py-1.border.text-center {{ index + 1 }}
               td.px-2.py-1.border {{ member.id }}
               td.px-2.py-1.border {{ member.name }}
               th.px-2.py-1.border.w-44(v-for="(unit, indexUnit) in scoreHomeWorks.find(e => e.id === member.id).result")

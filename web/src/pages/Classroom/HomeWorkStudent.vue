@@ -13,42 +13,60 @@
           div Giao bài tập
         .flex.gap-2.items-center.text-lg.font-semibold.text-gray-600.mt-4
           div Bài tập mới
+          v-select.ml-2(
+            :label="'Kiểu'"
+            :items="typeHomeWorks"
+            item-text="key"
+            item-value="value"
+            v-model="typeHomeWork"
+          )
         .flex.justify-between.items-center
           .text-lg Danh sách câu hỏi (Số câu hỏi đã làm đúng : {{corrected}})
         .mt-2(class='md:px-4')
-          v-expansion-panels(
-            flat
-            multiple
-            accordion
-            style="overflow: hidden"
-          )
-            v-expansion-panel(v-for="(item, index) in homeWorks" :key="index")
-              v-expansion-panel-header.px-0.py-1(expand-icon="")
-                v-row.ma-0.p-0
-                  v-col(cols="1")
-                    v-icon(v-if="") mdi-chevron-down
-                  v-col.title(cols="10")
-                    span.pl-4.bold--text {{ item.title }}
-                  v-col(cols="1")
-                    v-icon mdi-dots-vertical
-              v-expansion-panel-content(style="background-color: #deedfc; border-radius: 4px; padding: 0")
-                v-list-item.ma-0.title(
-                  v-for="(question, index) in item.homeWork"
-                  :key="question.id"
-                )
-                  v-col.p-0(cols="12")
-                    v-row.p-0
-                      //span {{ question.questions. }}
-                      h2 {{ index }}:
-                      span {{ question.questions.answers.question }}
-                    v-row.p-0(v-if="question.questions.type===0")
-                      v-radio-group(v-model="check[question.questions.id]" row='')
-                        v-radio(:label="question.questions.answers.a" :value="'A'")
-                        v-radio(:label="question.questions.answers.b" :value="'B'")
-                        v-radio(:label="question.questions.answers.c" :value="'C'")
-                        v-radio(:label="question.questions.answers.d" :value="'D'")
-                    v-row.p-0(v-if="question.questions.type===1")
-                      v-text-field(v-model="check[question.questions.id]")
+          div(v-if="typeHomeWork === 1")
+            v-expansion-panels(
+              flat
+              multiple
+              accordion
+              style="overflow: hidden"
+            )
+              v-expansion-panel(v-for="(item, index) in homeWorks" :key="index")
+                v-expansion-panel-header.px-0.py-1(expand-icon="")
+                  v-row.ma-0.p-0
+                    v-col(cols="1")
+                      v-icon(v-if="") mdi-chevron-down
+                    v-col.title(cols="10")
+                      span.pl-4.bold--text {{ item.title }}
+                    v-col(cols="1")
+                      v-icon mdi-dots-vertical
+                v-expansion-panel-content(style="background-color: #deedfc; border-radius: 4px; padding: 0")
+                  v-list-item.ma-0.title(
+                    v-for="(question, index) in item.homeWork"
+                    :key="question.id"
+                  )
+                    v-col.p-0(cols="12")
+                      v-row.p-0
+                        //span {{ question.questions. }}
+                        h2 {{ index }}:
+                        span {{ question.questions.answers.question }}
+                      v-row.p-0(v-if="question.questions.type===0")
+                        v-radio-group(v-model="check[question.questions.id]" row='')
+                          v-radio(:label="question.questions.answers.a" :value="'A'")
+                          v-radio(:label="question.questions.answers.b" :value="'B'")
+                          v-radio(:label="question.questions.answers.c" :value="'C'")
+                          v-radio(:label="question.questions.answers.d" :value="'D'")
+                      v-row.p-0(v-if="question.questions.type===1")
+                        v-text-field(v-model="check[question.questions.id]")
+
+          div(v-if="typeHomeWork === 2")
+            div(v-for="homeWorkFile in homeWorkFiles" :key="homeWorkFile.id")
+              v-list-item
+                span {{ homeWorkFile.title }}
+                v-spacer
+                span {{ homeWorkFile.date }}
+                v-spacer
+                span.text-click-able(@click="onDownload(homeWorkFile.fileQuestions.url)") download
+              v-divider
 
         button.mt-4.flex.items-center.justify-between.px-4.py-2.font-medium.leading-5.text-white.transition-colors.duration-150.bg-orange-400.border.border-transparent.rounded-lg(
           class="hover:bg-orange-300 focus:outline-none"
@@ -83,6 +101,12 @@ const HomeWorkStudent = defineComponent({
     const check = ref<any>({})
     const student: any = toCamelCase(jwtDecode(String(localStorage.getItem('token'))))
     const corrected = ref(0)
+    const typeHomeWorks = [
+      { key: 'Bài Tập Thường', value: 1 },
+      { key: 'Bài Tập Theo file', value: 2 }
+    ]
+    const typeHomeWork = ref(1)
+    const homeWorkFiles = ref<any>([])
 
     const getData = async () => {
       try {
@@ -92,9 +116,11 @@ const HomeWorkStudent = defineComponent({
           ),
           api.get(
             `${endpoints.HOME_WORK_STUDENT}check_rate_correct?student_id=${student.id}&classroom_id=${props.classroom.id}`
-          )
+          ),
+          api.get(`${endpoints.HOME_WORK_FILE}?classroom_id=${props.classroom.id}`)
         ])
-        const [{ data: homeWorksData }, { data: checkRateData }] = data
+        const [{ data: homeWorksData }, { data: checkRateData }, { data: QTFIle }] = data
+        homeWorkFiles.value = toCamelCase(QTFIle)
         corrected.value = checkRateData.correct
         homeWorks.value = toCamelCase(homeWorksData)
         const x = []
@@ -140,6 +166,10 @@ const HomeWorkStudent = defineComponent({
       saveResultAPI(toSnakeCase(body))
     }
 
+    const onDownload = (url: string) => {
+      window.open(url)
+    }
+
     onMounted(async () => {
       await getData()
     })
@@ -147,7 +177,11 @@ const HomeWorkStudent = defineComponent({
       homeWorks,
       check,
       onSubmit,
-      corrected
+      corrected,
+      typeHomeWorks,
+      typeHomeWork,
+      homeWorkFiles,
+      onDownload
     }
   }
 })
