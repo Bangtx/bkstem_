@@ -119,6 +119,15 @@
               @click="typeHomeWork === 1 ? editQuestion() : editQuestionFile()"
             )
               span Sửa
+            v-btn.mb-1.rounded-lg(
+              v-if="typeHomeWork === 2"
+              block
+              height="50"
+              elevation="0"
+              color="white"
+              @click="openStudentFiles()"
+            )
+              span Ds Bài Làm
           v-row.ma-0.py-0.px-1(align='center' justify='center')
             v-btn.mb-1.rounded-lg(
               block
@@ -146,11 +155,18 @@
       @on-close="isOpenAddQuestionFileDialog = false"
       @re-load="getData"
     )
+
+    file-submit-of-student(
+      :value="isOpenFileSubmitOfStudent"
+      :question-file-id="questionFileOpenId"
+      :classroom="classroom"
+      @on-close="isOpenFileSubmitOfStudent = false"
+    )
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from '@vue/composition-api'
-import { QuestionDialog, QuestionFileDialog } from 'components'
+import { QuestionDialog, QuestionFileDialog, FileSubmitOfStudent } from 'components'
 import { api } from 'plugins'
 import { endpoints, toCamelCase } from 'utils'
 import jwtDecode from 'jwt-decode'
@@ -170,7 +186,8 @@ const HomeWork = defineComponent({
   components: {
     QuestionDialog,
     VuetifyAudio,
-    QuestionFileDialog
+    QuestionFileDialog,
+    FileSubmitOfStudent
   },
   setup(props, { root }) {
     const { $toast } = root
@@ -183,6 +200,8 @@ const HomeWork = defineComponent({
     const currentQuestion = ref<any>()
     const currentQuestionFile = ref<any>()
     const isOpenAddQuestionFileDialog = ref(false)
+    const isOpenFileSubmitOfStudent = ref(false)
+    const questionFileOpenId = ref(0)
     const questionFileProps = ref<any>({
       id: null,
       date: null,
@@ -235,6 +254,11 @@ const HomeWork = defineComponent({
       showBottomSheet.value = true
       if (typeHomeWork.value === 1) currentQuestion.value = ques
       if (typeHomeWork.value === 2) currentQuestionFile.value = ques
+    }
+
+    const openStudentFiles = () => {
+      isOpenFileSubmitOfStudent.value = true
+      questionFileOpenId.value = currentQuestionFile.value.id
     }
 
     const openAddQuestionFileDialog = () => {
@@ -332,7 +356,10 @@ const HomeWork = defineComponent({
       homeWorkFiles,
       onDownload,
       currentQuestionFile,
-      editQuestionFile
+      editQuestionFile,
+      openStudentFiles,
+      isOpenFileSubmitOfStudent,
+      questionFileOpenId
     }
   }
 })

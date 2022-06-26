@@ -1,5 +1,12 @@
 <template lang="pug">
   div
+    //portal(to="header-action")
+    //  v-row.ma-0.pa-0
+    //    v-btn.pa-0(
+    //      icon
+    //      color="#ff873b"
+    //    )
+    //      v-icon mdi-format-align-justify
     .bg-white.border-r.pb-2.fixed.bottom-0.z-10.w-full.content-center(class="md:bg-gray-50 md:relative md:h-screen md:w-60")
       .text-sm.content-center.text-left.justify-between(class="md:mt-12 md:w-60 md:fixed md:left-0 md:top-0 md:content-start")
         .list-reset.flex.justify-between.flex-row.pt-3.px-2.text-center.text-gray-600(class="md:flex-col md:py-3 md:px-2 md:text-left")

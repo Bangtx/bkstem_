@@ -6,8 +6,8 @@ router = APIRouter()
 
 
 @router.get('/')
-def get_file_result_student(classroom_id: int=None, student_id: int=None):
-    return models.FileResultStudent.get_file_result_student(classroom_id, student_id)
+def get_file_result_student(classroom_id: int = None, student_id: int = None, home_work_file=None):
+    return models.FileResultStudent.get_file_result_student(classroom_id, student_id, home_work_file)
 
 
 @router.post('/')

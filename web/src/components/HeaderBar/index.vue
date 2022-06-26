@@ -25,6 +25,8 @@
         v-list
           v-list-item.logout(@click="logout()") Đắng xuất
 
+      portal-target(name="header-action")
+
 </template>
 
 <script lang="ts">
