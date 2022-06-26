@@ -236,6 +236,9 @@ CREATE TABLE file_result_student
 (
   id bigserial NOT NULL,
   home_work_file int,
+  class_room bigint,
+  student bigint,
+  msg text,
   name text,
   url text,
   created_at timestamp with time zone NOT NULL DEFAULT now(),

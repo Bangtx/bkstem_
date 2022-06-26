@@ -60,7 +60,7 @@
 
           div(v-if="typeHomeWork === 2")
             div(v-for="homeWorkFile in homeWorkFiles" :key="homeWorkFile.id")
-              v-list-item
+              v-list-item(@click="openUploadResultDialog(homeWorkFile)")
                 span {{ homeWorkFile.title }}
                 v-spacer
                 span {{ homeWorkFile.date }}
@@ -74,7 +74,13 @@
           @click="onSubmit()"
         )
           span.text-base Nộp
-
+    upload-file-answer-dialog(
+      :value="isShowUploadDialog"
+      :home-work-files="homeWorkFiles"
+      :student-file-props="homeWorkFileProps"
+      @on-close="isShowUploadDialog = false"
+      @reload="getData()"
+    )
 </template>
 
 <script lang="ts">
@@ -82,8 +88,8 @@ import { defineComponent, onMounted, ref } from '@vue/composition-api'
 import { api } from 'plugins'
 import { endpoints, toCamelCase, toSnakeCase } from 'utils'
 import jwtDecode from 'jwt-decode'
-import home from '../Home/index.vue'
-import { HOME_WORK_STUDENT } from '../../utils/apiEndpoints'
+import { UploadFileAnswerDialog } from 'components'
+import { FILE_RESULT_STUDENT } from '../../utils/apiEndpoints'
 
 const HomeWorkStudent = defineComponent({
   props: {
@@ -95,6 +101,9 @@ const HomeWorkStudent = defineComponent({
       type: Object,
       required: true
     }
+  },
+  components: {
+    UploadFileAnswerDialog
   },
   setup(props, { root }) {
     const { $toast } = root
@@ -108,6 +117,17 @@ const HomeWorkStudent = defineComponent({
     ]
     const typeHomeWork = ref(1)
     const homeWorkFiles = ref<any>([])
+    const isShowUploadDialog = ref(false)
+    const homeWorkFileProps = ref<any>({
+      studentFileProps: null,
+      id: null,
+      msg: null,
+      name: null,
+      classRoom: null,
+      student: null,
+      url: null
+    })
+    const fileResultStudent = ref<any>({})
 
     const getData = async () => {
       try {
@@ -118,10 +138,19 @@ const HomeWorkStudent = defineComponent({
           api.get(
             `${endpoints.HOME_WORK_STUDENT}check_rate_correct?student_id=${student.id}&classroom_id=${props.classroom.id}`
           ),
-          api.get(`${endpoints.HOME_WORK_FILE}?classroom_id=${props.classroom.id}`)
+          api.get(`${endpoints.HOME_WORK_FILE}?classroom_id=${props.classroom.id}`),
+          api.get(
+            `${endpoints.FILE_RESULT_STUDENT}?classroom_id=${props.classroom.id}&student_id=${student.id}`
+          )
         ])
-        const [{ data: homeWorksData }, { data: checkRateData }, { data: QTFIle }] = data
+        const [
+          { data: homeWorksData },
+          { data: checkRateData },
+          { data: QTFIle },
+          { data: STFile }
+        ] = data
         homeWorkFiles.value = toCamelCase(QTFIle)
+        fileResultStudent.value = toCamelCase(STFile)
         corrected.value = checkRateData.correct
         homeWorks.value = toCamelCase(homeWorksData)
         const x = []
@@ -153,6 +182,26 @@ const HomeWorkStudent = defineComponent({
       }
     }
 
+    const openUploadResultDialog = (homeWork: any) => {
+      isShowUploadDialog.value = true
+      homeWorkFileProps.value = fileResultStudent.value.find(
+        (e: any) => e.homeWorkFile === homeWork.id
+      )
+
+      if (!homeWorkFileProps.value) {
+        homeWorkFileProps.value = {
+          homeWorkFile: homeWork.id,
+          id: null,
+          msg: null,
+          name: null,
+          classRoom: props.classroom.id,
+          student: student.id,
+          url: null
+        }
+      }
+      console.log(homeWorkFileProps.value)
+    }
+
     const onSubmit = () => {
       const body: any[] = []
       Object.keys(check.value).forEach((key: string) => {
@@ -182,7 +231,11 @@ const HomeWorkStudent = defineComponent({
       typeHomeWorks,
       typeHomeWork,
       homeWorkFiles,
-      onDownload
+      onDownload,
+      openUploadResultDialog,
+      isShowUploadDialog,
+      homeWorkFileProps,
+      getData
     }
   }
 })
