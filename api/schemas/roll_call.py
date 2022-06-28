@@ -16,3 +16,7 @@ class RollCall(RollCallBase):
 
 class RollCallCreate(RollCallBase):
     pass
+
+
+class RollCallUpdate(RollCallBase):
+    pass

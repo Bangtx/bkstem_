@@ -38,3 +38,19 @@ def create_roll_call(roll_call: List[schemas.RollCallCreate]):
     return list(
         models.RollCall.insert_many(roll_call_data).dicts().execute()
     )
+
+
+@router.put('/')
+def update(roll_call: schemas.RollCallUpdate):
+    roll_call_inserted = models.RollCall.get_or_none(
+        classroom=roll_call.classroom,
+        date=roll_call.date,
+        student=roll_call.student,
+        teacher=roll_call.teacher,
+        absent_type=roll_call.absent_type
+    )
+
+    if roll_call_inserted:
+        return models.RollCall.update_one(roll_call_inserted.id, roll_call.dict())
+
+    return models.RollCall.create(**roll_call.dict())

@@ -36,8 +36,11 @@
                 td.px-2.py-1.border.text-center {{ index + 1 }}
                 td.px-2.py-1.border {{ student.id }}
                 td.px-2.py-1.border {{ student.name }}
-                td.px-2.py-1.border(v-for="rollCall in rollCalls" :key="rollCall.id")
-                  span {{ rollCall.rollCall.find(e => e.student.id === student.id).absentType.type }}
+                td.px-2.py-1.border(
+                  v-for="rollCall in rollCalls" :key="rollCall.id"
+                  @dblclick="onEditRollCall(student.id, rollCall.date)"
+                )
+                  span {{ rollCall.rollCall.find(e => e.student.id === student.id) ? rollCall.rollCall.find(e => e.student.id === student.id).absentType.type : null}}
                 td.border(v-if="addCols")
                   select.block.bg-white.rounded.w-full.mt-1.form-select(
                     class="focus:outline-none"
@@ -78,6 +81,14 @@
           v-btn(text color="rough_black" @click="$refs.dialog.save(date), savaDate()")
             span Ok
 
+    edit-roll-call-dialog(
+      :value="isShowEdit"
+      :data="rollCallProps"
+      :absent-types="absentTypes"
+      @on-close="isShowEdit = false"
+      @reload="getData"
+    )
+
 </template>
 
 <script lang="ts">
@@ -85,6 +96,7 @@ import { defineComponent, ref, onMounted } from '@vue/composition-api'
 import { api } from 'plugins'
 import { endpoints, toCamelCase, toSnakeCase } from 'utils'
 import moment from 'moment'
+import { EditRollCallDialog } from 'components'
 import jwtDecode from 'jwt-decode'
 
 interface AbsentType {
@@ -132,6 +144,9 @@ const RollCall = defineComponent({
       required: true
     }
   },
+  components: {
+    EditRollCallDialog
+  },
   setup(props, { root }) {
     const { $toast } = root
     const absentTypes = ref<AbsentType[]>([])
@@ -143,6 +158,14 @@ const RollCall = defineComponent({
     const date = ref(moment(new Date()).format('YYYY-MM-DD'))
     const currentIndexDate = ref(0)
     const dateAddScore = ref(moment(new Date()).format('YYYY-MM-DD'))
+    const isShowEdit = ref(false)
+    const rollCallProps = ref({
+      student: null,
+      teacher: null,
+      date: null,
+      absentType: null,
+      classroom: null
+    })
 
     studentData.value = props.students.map((student: any) => {
       return { ...student, absentTypeName: 'Đúng giờ' }
@@ -164,6 +187,18 @@ const RollCall = defineComponent({
       } catch (e) {
         $toast.error('Get data failed')
       }
+    }
+
+    const onEditRollCall = (studentId: any, rollCallDate: any) => {
+      // console.log(studentId, rollCallDate)
+      rollCallProps.value = {
+        student: studentId,
+        teacher: props.teacher.id,
+        date: rollCallDate,
+        absentType: null,
+        classroom: props.classroom.id
+      }
+      isShowEdit.value = true
     }
 
     const reload = async () => {
@@ -231,7 +266,11 @@ const RollCall = defineComponent({
       date,
       savaDate,
       dateAddScore,
-      editDate
+      editDate,
+      onEditRollCall,
+      isShowEdit,
+      rollCallProps,
+      getData
     }
   }
 })
