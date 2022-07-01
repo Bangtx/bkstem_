@@ -1,9 +1,12 @@
+from builtins import set
+
 from .base import BaseModel
 from peewee import (
     CharField,
     IntegerField,
     ForeignKeyField,
-    fn
+    fn,
+    JOIN
 )
 from .account import Account
 
@@ -73,12 +76,12 @@ class Student(BaseModel):
                 Account.mail,
                 Account.phone
             ).join(
-                Account, on=Account.id == cls.account
+                Account, JOIN.LEFT_OUTER, on=Account.id == cls.account
             ).where(
                 Account.active, cls.active, cls.id == id
             ).dicts()
         )
-        return student.get()
-
-
+        if list(student):
+            return student.get()
+        return None
 

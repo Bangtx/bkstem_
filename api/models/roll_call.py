@@ -67,6 +67,11 @@ class RollCall(BaseModel):
             ).dicts()
         )
         for roll_call in roll_calls:
+            student = Student.get_students_by_id(roll_call['student'])
+            if student is None:
+                roll_calls.remove(roll_call)
+                continue
             roll_call['student'] = Student.get_students_by_id(roll_call['student'])
             roll_call['teacher'] = Teacher.get_teacher_by_id(roll_call['teacher'])
+
         return roll_calls
