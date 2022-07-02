@@ -5,7 +5,7 @@ from playhouse.postgres_ext import JSONField, IntegerField
 from .classroom import Classroom
 from .question import Question
 from .schedule import Schedule
-from peewee import CharField, DateField, ForeignKeyField, fn, JOIN
+from peewee import CharField, DateField, ForeignKeyField, fn, JOIN, BooleanField
 from models.question_student import QuestionStudent
 
 
@@ -15,6 +15,7 @@ class HomeWork(BaseModel):
     classroom = ForeignKeyField(Classroom, column_name='classroom_id')
     question = ForeignKeyField(Question, column_name='question_id')
     schedule = ForeignKeyField(Schedule, column_name='schedule_id')
+    is_exactly = BooleanField()
 
     class Meta:
         db_table = 'home_work'
@@ -108,3 +109,17 @@ class HomeWork(BaseModel):
             unit['home_work'] = HomeWork.get_questions_by_unit(unit['id'], result, student)
 
         return units
+
+    @classmethod
+    def get_unit_must_exactly(cls, classroom_id):
+        data = cls.select(cls.schedule).where(
+            cls.active, cls.classroom == classroom_id, cls.is_exactly
+        ).group_by(cls.schedule).dicts()
+        data = list(set(list(map(lambda x: x['schedule'], data))))
+        return data
+
+    @classmethod
+    def update_unit_require(cls, unit_require):
+        cls.update(is_exactly=unit_require['value']).where(cls.schedule == unit_require['unit']).execute()
+        classroom = cls.get_or_none(schedule=unit_require['unit']).classroom
+        return cls.get_unit_must_exactly(classroom.id)

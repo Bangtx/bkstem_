@@ -8,7 +8,13 @@ class HomeWorkCreate(Schema):
     classroom: int
     question: int
     schedule: int
+    is_exactly: bool = False
 
 
 class HomeWorkUpdate(HomeWorkCreate):
     pass
+
+
+class UnitRequire(Schema):
+    unit: int
+    value: bool

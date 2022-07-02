@@ -44,6 +44,17 @@
 
         .mt-2(class='md:px-4')
           div(v-if="typeHomeWork === 1")
+            div(v-for="unit in units" :key="unit.id")
+              v-list-item
+                v-icon(
+                  v-if="unitRequired.indexOf(unit.id) === -1" @click="requireThisUnit(unit.id, true)"
+                  ) mdi-checkbox-blank-circle-outline
+                v-icon(
+                  v-if="unitRequired.indexOf(unit.id) !== -1" @click="requireThisUnit(unit.id, false)"
+                ) mdi-checkbox-marked-circle
+                span.ml-2 {{ unit.title }}
+              v-divider
+
             v-expansion-panels(
               flat
               multiple
@@ -54,11 +65,11 @@
                 v-expansion-panel-header.px-0.py-1(expand-icon="")
                   v-row.ma-0.p-0
                     v-col(cols="1")
-                      v-icon(v-if="") mdi-chevron-down
+                      v-icon mdi-chevron-down
                     v-col.title(cols="10")
                       span.pl-4.bold--text {{ item.title }}
-                    v-col(cols="1")
-                      v-icon mdi-dots-vertical
+                    //v-col(cols="1")
+                    //  v-icon mdi-dots-vertical
                 v-expansion-panel-content(style="background-color: #deedfc; border-radius: 4px; padding: 0")
                   v-list-item.pa-0.ma-0.title(
                     v-for="(question, index) in item.homeWork"
@@ -202,6 +213,7 @@ const HomeWork = defineComponent({
     const isOpenAddQuestionFileDialog = ref(false)
     const isOpenFileSubmitOfStudent = ref(false)
     const questionFileOpenId = ref(0)
+    const unitRequired = ref([])
     const questionFileProps = ref<any>({
       id: null,
       date: null,
@@ -226,12 +238,14 @@ const HomeWork = defineComponent({
       try {
         const data = await Promise.all([
           api.get(url),
-          api.get(`${endpoints.HOME_WORK_FILE}?classroom_id=${props.classroom.id}`)
+          api.get(`${endpoints.HOME_WORK_FILE}?classroom_id=${props.classroom.id}`),
+          api.get(`${endpoints.HOME_WORK}get_unit_must_exactly?classroom_id=${props.classroom.id}`)
         ])
-        const [{ data: QTData }, { data: QTFIle }] = data
+        const [{ data: QTData }, { data: QTFIle }, { data: UnitR }] = data
 
         homeWorkFiles.value = toCamelCase(QTFIle)
         homeWorks.value = toCamelCase(QTData)
+        unitRequired.value = toCamelCase(UnitR)
         // console.log(homeWorks.value)
         const x = []
           .concat(
@@ -319,6 +333,19 @@ const HomeWork = defineComponent({
       }
     }
 
+    const requireThisUnit = async (unitId: number, value: boolean) => {
+      try {
+        const { data } = await api.post(`${endpoints.HOME_WORK}update_unit_require`, {
+          unit: unitId,
+          value
+        })
+        unitRequired.value = data
+        $toast.success('Save successful')
+      } catch (e) {
+        $toast.error('Save data failed')
+      }
+    }
+
     const editQuestionFile = () => {
       questionFileProps.value = {
         id: currentQuestionFile.value.id,
@@ -359,7 +386,9 @@ const HomeWork = defineComponent({
       editQuestionFile,
       openStudentFiles,
       isOpenFileSubmitOfStudent,
-      questionFileOpenId
+      questionFileOpenId,
+      unitRequired,
+      requireThisUnit
     }
   }
 })
