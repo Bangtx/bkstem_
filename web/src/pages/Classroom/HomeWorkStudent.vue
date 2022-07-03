@@ -46,9 +46,21 @@
                   )
                     v-col.p-0(cols="12")
                       v-row.p-0
-                        //span {{ question.questions. }}
-                        h2 {{ index }}:
-                        span {{ question.questions.answers.question }}
+                        v-col.p-0(cols="12")
+                          v-row.p-0
+                            v-col.p-0(cols="11")
+                              span {{ index }}: {{ question.questions.answers.question }}
+                            v-col.p-0(cols="1")
+                              v-icon(@click="openBottomSheet(question)") mdi-dots-vertical
+                        v-img(
+                          v-if="question.questions.image !== null && question.questions.image !== ''"
+                          :src="question.questions.image" max-width="360"
+                        )
+                        vuetify-audio(
+                          v-if="question.questions.audio"
+                          :file="question.questions.audio"
+                          color="success"
+                        )
                       v-row.p-0(v-if="question.questions.type===0")
                         v-radio-group(v-model="check[question.questions.id]" row='')
                           v-radio(:label="question.questions.answers.a" :value="'A'")
@@ -89,7 +101,7 @@ import { api } from 'plugins'
 import { endpoints, toCamelCase, toSnakeCase } from 'utils'
 import jwtDecode from 'jwt-decode'
 import { UploadFileAnswerDialog } from 'components'
-import { FILE_RESULT_STUDENT } from '../../utils/apiEndpoints'
+import VuetifyAudio from 'vuetify-audio/src/vuetifyaudio.vue'
 
 const HomeWorkStudent = defineComponent({
   props: {
@@ -103,7 +115,8 @@ const HomeWorkStudent = defineComponent({
     }
   },
   components: {
-    UploadFileAnswerDialog
+    UploadFileAnswerDialog,
+    VuetifyAudio
   },
   setup(props, { root }) {
     const { $toast } = root
@@ -169,7 +182,7 @@ const HomeWorkStudent = defineComponent({
         $toast.error('Get data failed')
       }
       ;[].concat(...homeWorks.value.map((e: any) => e.homeWork)).forEach((e: any) => {
-        check.value[e.id] = e.resultStudent
+        check.value[e.questions.id] = e.resultStudent
       })
     }
 
