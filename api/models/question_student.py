@@ -37,10 +37,20 @@ class QuestionStudent(BaseModel):
         for unit in units:
             # get questions from HomeWork by unit and classroom
             questions = HomeWork.get_questions_by_unit(unit.id)
-            question_ids = list(map(lambda x: x['id'], questions))
-            correct = list(
-                cls.select().where(cls.student == student_id, cls.question << question_ids)
+            question_ids = list(map(lambda x: x['questions']['id'], questions))
+            all = list(
+                cls.select().where(cls.student == student_id, cls.question << question_ids).dicts()
             )
-            correct = list(map(lambda x: x.result, correct))
-            results.append({unit.id: len(correct)})
+            # correct = list(map(lambda x: x['result'], all))
+            question_result = Question.select().where(
+                Question.active, Question.id << question_ids
+            ).dicts()
+            correct = 0
+            for i in all:
+                for q in question_result:
+                    if q['id'] == i['question']:
+                        if i['result'] == q['result']:
+                            correct += 1
+
+            results.append({unit.id: f'{correct}/{len(all)}'})
         return results
