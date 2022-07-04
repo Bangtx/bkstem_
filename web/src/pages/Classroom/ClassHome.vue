@@ -34,19 +34,22 @@
             thead
               tr.text-md.font-semibold.text-left.text-gray-900.bg-gray-100.uppercase.border-b.border-gray-600.rounded-t-lg
                 th.px-4.py-3.text-center.border STT
-                th.px-4.py-3.border Mã học viên
-                th.px-4.py-3.border Họ tên
-                th.px-4.py-3.border Ngày sinh
-                th.px-4.py-3.border Giới tính
+                th.px-4.py-3.border Tiêu đề
+                th.px-4.py-3.border File
                 th.px-4.py-3.border Ghi chú
-            tbody.bg-white(v-for="(student, index) in students" :key="student.id")
+            tbody.bg-white(v-for="(slide, index) in slides" :key="slide.id")
               tr.text-gray-700
                 td.px-4.py-3.border.text-center {{ index }}
-                td.px-4.py-3.border {{ student.id }}
-                td.px-4.py-3.border {{ student.name }}
-                td.px-4.py-3.text-sm.border {{ student.dateOfBirth }}
-                td.px-4.py-3.text-sm.border {{ student.gender }}
-                td.px-4.py-3.text-sm.border
+                td.px-4.py-3.border {{ slide.title }}
+                td.px-4.py-3.text-sm.border(@click="openFile(slide.url)") xem
+                td.px-4.py-3.text-sm.border {{ slide.remark }}
+
+      button.mt-4.flex.items-center.justify-between.px-4.py-2.font-medium.leading-5.text-white.transition-colors.duration-150.bg-orange-400.border.border-transparent.rounded-lg(
+        v-if="member.typeMember === 'teacher'"
+        class='hover:bg-orange-300 focus:outline-none'
+        @click="openSlideDialog()"
+      )
+        span.text-base Thêm Bài giảng
 
     v-bottom-sheet(
         v-model="showBottomSheet"
@@ -79,11 +82,18 @@
       @re-load="reload()"
       @on-close="isOpenUnitDialog = false"
     )
+
+    add-content-date(
+      :value="isOpenSlideDialog"
+      :slide="slideProps"
+      @on-close="isOpenSlideDialog = false"
+      @reload="reload"
+    )
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
-import { UnitDialog } from 'components'
+import { defineComponent, ref, watch } from '@vue/composition-api'
+import { UnitDialog, AddContentDate } from 'components'
 import jwtDecode from 'jwt-decode'
 import { toCamelCase } from 'utils'
 
@@ -104,23 +114,40 @@ const ClassHome = defineComponent({
     units: {
       type: Array,
       required: true
+    },
+    slides: {
+      type: Array,
+      required: true
     }
   },
   components: {
-    UnitDialog
+    UnitDialog,
+    AddContentDate
   },
-  setup(props, { emit }) {
+  setup(props, { emit, root }) {
+    const { $toast } = root
     const isOpenUnitDialog = ref(false)
     const currentUnit = ref<any>({})
     const showBottomSheet = ref(false)
     const unitProps = ref<any>({})
     const member: any = toCamelCase(jwtDecode(String(localStorage.getItem('token'))))
-    console.log(member)
+    const isOpenSlideDialog = ref(false)
+
+    const slideProps = ref({
+      title: null,
+      classroom: null,
+      url: null,
+      remark: null
+    })
 
     const openUnitDialog = (mode: string) => {
       if (mode === 'add') unitProps.value = { id: null, name: null }
       else unitProps.value = currentUnit.value
       isOpenUnitDialog.value = true
+    }
+
+    const openSlideDialog = () => {
+      isOpenSlideDialog.value = true
     }
 
     const reload = () => {
@@ -132,6 +159,17 @@ const ClassHome = defineComponent({
       showBottomSheet.value = true
     }
 
+    const openFile = (url: string) => {
+      window.open(url)
+    }
+
+    watch(
+      () => props.classroom,
+      () => {
+        slideProps.value.classroom = props.classroom.id
+      }
+    )
+
     return {
       openUnitDialog,
       isOpenUnitDialog,
@@ -139,7 +177,11 @@ const ClassHome = defineComponent({
       openBottomSheet,
       showBottomSheet,
       unitProps,
-      member
+      member,
+      openSlideDialog,
+      isOpenSlideDialog,
+      slideProps,
+      openFile
     }
   }
 })

@@ -13,6 +13,7 @@
           :students="students"
           :teacher="teacher"
           :units="units"
+          :slides="slides"
           @re-load="getData()"
         )
         roll-call(
@@ -100,6 +101,7 @@ const Classroom = defineComponent({
     const students = ref<Array<Student>>([])
     const teacher = ref<Teacher | any>({})
     const units = ref<any[]>([])
+    const slides = ref<any>([])
 
     const onSelectFeature = (data: string) => {
       feature.value = data
@@ -127,8 +129,18 @@ const Classroom = defineComponent({
       }
     }
 
+    const getSlide = async () => {
+      try {
+        const { data } = await api.get(`${endpoints.SLIDE}?classroom=${classroomID}`)
+        slides.value = toCamelCase(data)
+      } catch (e) {
+        $toast.error('Get data failed')
+      }
+    }
+
     onMounted(async () => {
       await getData()
+      await getSlide()
     })
     return {
       onSelectFeature,
@@ -137,7 +149,8 @@ const Classroom = defineComponent({
       teacher,
       feature,
       units,
-      getData
+      getData,
+      slides
     }
   }
 })

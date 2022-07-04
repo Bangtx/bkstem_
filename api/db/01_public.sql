@@ -202,6 +202,7 @@ CREATE TABLE home_work
   classroom_id bigint,
   schedule_id bigint,
   question_id bigint,
+  is_exactly bool default false,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   created_by bigint,
   modified_at timestamp with time zone,
@@ -316,4 +317,22 @@ CREATE TABLE question_student
   deleted_by bigint,
   active boolean DEFAULT TRUE,
   CONSTRAINT pkey_question_student PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS slide CASCADE;
+CREATE TABLE slide
+(
+  id bigserial NOT NULL,
+  title text,
+  classroom bigint,
+  remark text,
+  url text,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  created_by bigint,
+  modified_at timestamp with time zone,
+  modified_by bigint,
+  deleted_at timestamp with time zone,
+  deleted_by bigint,
+  active boolean DEFAULT TRUE,
+  CONSTRAINT pkey_slide PRIMARY KEY (id)
 );
