@@ -21,6 +21,7 @@ class Classroom(BaseModel):
     class_time_ids = ArrayField()
     start_date = DateField()
     total_days = IntegerField()
+    assistant_teacher = ArrayField()
 
     class Meta:
         db_table = 'classroom'
@@ -49,6 +50,7 @@ class Classroom(BaseModel):
                     'id', teacher.c.id,
                     'name', teacher.c.name
                 ).alias('teacher'),
+                cls.assistant_teacher,
                 cls.student_ids.alias('students'),
                 cls.class_time_ids.alias('class_times')
             ).join(

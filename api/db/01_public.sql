@@ -58,6 +58,7 @@ CREATE TABLE classroom
   name text,
   room text,
   teacher_id bigint,
+  assistant_teacher bigint[],
   student_ids bigint[],
   class_time_ids bigint[],
   start_date date,

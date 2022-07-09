@@ -19,7 +19,9 @@ class ClassRoom(ClassRoomBase):
 
 class ClassRoomCreate(ClassRoomBase):
     teacher: int
+    assistant_teacher: List[int] = []
 
 
 class ClassRoomUpdate(ClassRoomBase):
     teacher: int
+    assistant_teacher: List[int] = []

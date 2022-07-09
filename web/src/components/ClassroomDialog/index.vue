@@ -22,6 +22,14 @@
             :items="selectClassTime"
             v-model="selectedClassTimes"
           )
+          v-select.p-0(
+            multiple
+            :label="'trợ giảng'"
+            :items="teachers"
+            item-text="name"
+            item-value="id"
+            v-model="assistantTeachers"
+          )
 
         v-card-actions
           v-btn.relative-btn(
@@ -95,6 +103,7 @@ const ClassroomDialog = defineComponent({
     const isOpenClassTimeDialog = ref(false)
     const selectedTeacher = ref('')
     const selectedClassTimes = ref<string[]>([])
+    const assistantTeachers = ref<number[]>([])
 
     const onSave = async () => {
       const selectedClassTimesObject = classTimes.value
@@ -114,7 +123,8 @@ const ClassroomDialog = defineComponent({
         startDate: props.classroom.startDate,
         teacher: teachers.value.find((e: any) => `[${e.id}] ${e.name}` === selectedTeacher.value)
           ?.id,
-        studentIds: props.classroom.students.map((e: any) => e.id)
+        studentIds: props.classroom.students.map((e: any) => e.id),
+        assistantTeacher: assistantTeachers.value
       }
 
       try {
@@ -185,6 +195,9 @@ const ClassroomDialog = defineComponent({
                   `[${classTime.dateOfWeek.name}] ${classTime.startTime} -> ${classTime.stopTime}`
               )
             console.log(selectedClassTimes.value, 'selectedClassTimes')
+
+            assistantTeachers.value = props.classroom.assistantTeachers
+            console.log(assistantTeachers.value)
           }
         }
       }
@@ -212,7 +225,8 @@ const ClassroomDialog = defineComponent({
       isOpenClassTimeDialog,
       reload,
       selectedTeacher,
-      selectedClassTimes
+      selectedClassTimes,
+      assistantTeachers
     }
   }
 })

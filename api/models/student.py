@@ -1,5 +1,3 @@
-from builtins import set
-
 from .base import BaseModel
 from peewee import (
     CharField,
@@ -58,7 +56,7 @@ class Student(BaseModel):
                 Account.gender,
                 Account.date_of_birth
             ).join(
-                Account, on=Account.id == cls.account
+                Account, JOIN.LEFT_OUTER, on=Account.id == cls.account
             ).where(
                 Account.active, cls.active, cls.id << ids
             ).dicts()

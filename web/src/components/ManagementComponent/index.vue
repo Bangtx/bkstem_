@@ -257,7 +257,8 @@ const ManagementComponent = defineComponent({
           startDate: data.startDate,
           teacher: data.teacher,
           room: data.room,
-          students: data.students
+          students: data.students,
+          assistantTeachers: data.assistantTeacher
         }
       } else {
         classroomProp.value = {
@@ -267,7 +268,8 @@ const ManagementComponent = defineComponent({
           startDate: null,
           teacher: null,
           room: null,
-          students: []
+          students: [],
+          assistantTeachers: []
         }
       }
       isOpenClassroomDialog.value = true
