@@ -4,7 +4,8 @@ from peewee import (
     IntegerField,
     ForeignKeyField,
     fn,
-    DateField
+    DateField,
+    SQL
 )
 from playhouse.postgres_ext import ArrayField
 from .teacher import Teacher
@@ -64,7 +65,7 @@ class Classroom(BaseModel):
             classrooms = list(classrooms.where(cls.teacher == teacher_id).dicts())
         elif student_id:
             classrooms = list(classrooms.dicts())
-            classrooms = list(filter(lambda x: student_id in x['students'] if x['students'] else False, classrooms))\
+            classrooms = list(filter(lambda x: student_id in x['students'] if x['students'] else False, classrooms)) \
                 if classrooms else []
         else:
             classrooms = list(classrooms.dicts())
@@ -135,3 +136,48 @@ class Classroom(BaseModel):
             ).dicts()
         )
         return list(query)
+
+    @classmethod
+    def get_assistant(cls, teacher_id):
+        teacher = (
+            Teacher.select(
+                Teacher.id,
+                Account.name
+            ).join(
+                Account, on=Account.id == Teacher.account
+            ).where(
+                Account.active, Teacher.active
+            ).alias('teacher')
+        )
+
+        classrooms = (
+            cls.select(
+                cls.id,
+                cls.name,
+                cls.room,
+                cls.start_date,
+                cls.total_days,
+                fn.json_build_object(
+                    'id', teacher.c.id,
+                    'name', teacher.c.name
+                ).alias('teacher'),
+                cls.assistant_teacher,
+                cls.student_ids.alias('students'),
+                cls.class_time_ids.alias('class_times')
+            ).join(
+                teacher, on=teacher.c.id == cls.teacher
+            ).where(
+                cls.active
+            )
+        )
+
+        if teacher_id:
+            classrooms = list(classrooms.where(SQL(f'{teacher_id} = any(assistant_teacher)')).dicts())
+
+        else:
+            classrooms = list(classrooms.dicts())
+
+        for classroom in classrooms:
+            classroom['students'] = Student.get_students_by_ids(classroom['students']) if classroom['students'] else []
+            classroom['class_times'] = ClassTime.get_class_times_by_ids(classroom['class_times'])
+        return classrooms

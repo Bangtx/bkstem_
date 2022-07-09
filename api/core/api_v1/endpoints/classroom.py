@@ -17,6 +17,11 @@ def get_classrooms(teacher_id: int = None, student_id: int = None):
     return models.Classroom.get_classrooms(teacher_id, student_id)
 
 
+@router.get('/assistant')
+def get_assistant(teacher_id: int = None):
+    return models.Classroom.get_assistant(teacher_id)
+
+
 @router.get('/{id}')
 def get_classroom_by_id(id: int):
     return models.Classroom.get_one(id)

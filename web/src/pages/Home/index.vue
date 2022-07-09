@@ -30,6 +30,22 @@
               :total-student="classroom.students.length"
               @on-click="openClassroom(classroom.id)"
             )
+        hr
+        .flex.items-center.gap-2.py-4.mt-4
+          svg.h-7.w-7(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2")
+            path(stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16")
+          .text-3xl Danh sách lớp Trợ Giảng
+        .grid.gap-6.mb-8(class="md:grid-cols-2 xl:grid-cols-4")
+
+          div(
+            v-for="classroom in classroomsAssistant"
+            :key="classroom.id"
+          )
+            class-button(
+              :class-name="classroom.name"
+              :total-student="classroom.students.length"
+              @on-click="openClassroom(classroom.id)"
+            )
 
 </template>
 
@@ -50,6 +66,7 @@ const Home = defineComponent({
     const baseUrl = process.env.VUE_APP_WEB_URL_PRO
     // const baseUrl = process.env.VUE_APP_WEB_URL
     const classrooms = ref([])
+    const classroomsAssistant = ref([])
 
     const member: any = jwtDecode(String(localStorage.getItem('token')))
 
@@ -62,6 +79,16 @@ const Home = defineComponent({
       })
     }
 
+    const getClassroomWithAssistant = async () => {
+      try {
+        const url = `${endpoints.CLASSROOM}assistant?teacher_id=${member.id}`
+        const { data } = await api.get(url)
+        classroomsAssistant.value = toCamelCase(data)
+      } catch (e) {
+        $toast.error('Get data failed')
+      }
+    }
+
     const getData = async () => {
       try {
         const url =
@@ -70,6 +97,8 @@ const Home = defineComponent({
             : `${endpoints.CLASSROOM}?student_id=${member.id}`
         const { data } = await api.get(url)
         classrooms.value = toCamelCase(data)
+
+        if (member.type_member === 'teacher') await getClassroomWithAssistant()
       } catch (e) {
         $toast.error('Get data failed')
       }
@@ -81,7 +110,8 @@ const Home = defineComponent({
     return {
       openClassroom,
       classrooms,
-      baseUrl
+      baseUrl,
+      classroomsAssistant
     }
   }
 })

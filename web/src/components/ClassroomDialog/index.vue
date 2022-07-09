@@ -185,7 +185,7 @@ const ClassroomDialog = defineComponent({
             )
             selectedTeacher.value = `[${teacher.id}] ${teacher.name}`
 
-            console.log(classTimes.value, props.classroom)
+            // console.log(classTimes.value, props.classroom)
             selectedClassTimes.value = classTimes.value
               .filter((classTime: any) => {
                 return props.classroom.classTimes.map((e: any) => e.id).indexOf(classTime.id) > -1
@@ -194,10 +194,10 @@ const ClassroomDialog = defineComponent({
                 (classTime: any) =>
                   `[${classTime.dateOfWeek.name}] ${classTime.startTime} -> ${classTime.stopTime}`
               )
-            console.log(selectedClassTimes.value, 'selectedClassTimes')
+            // console.log(selectedClassTimes.value, 'selectedClassTimes')
 
             assistantTeachers.value = props.classroom.assistantTeachers
-            console.log(assistantTeachers.value)
+            // console.log(assistantTeachers.value)
           }
         }
       }
