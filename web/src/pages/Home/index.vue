@@ -31,13 +31,14 @@
               @on-click="openClassroom(classroom.id)"
             )
         hr
-        .flex.items-center.gap-2.py-4.mt-4
+        .flex.items-center.gap-2.py-4.mt-4(v-if="member.type_member === 'teacher'")
           svg.h-7.w-7(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2")
             path(stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16")
           .text-3xl Danh sách lớp Trợ Giảng
         .grid.gap-6.mb-8(class="md:grid-cols-2 xl:grid-cols-4")
 
           div(
+            v-if="member.type_member === 'teacher'"
             v-for="classroom in classroomsAssistant"
             :key="classroom.id"
           )
@@ -111,7 +112,8 @@ const Home = defineComponent({
       openClassroom,
       classrooms,
       baseUrl,
-      classroomsAssistant
+      classroomsAssistant,
+      member
     }
   }
 })
