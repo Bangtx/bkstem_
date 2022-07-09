@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   web:
-    container_name: ${PROJECT_NAME}_web
+    container_name: bkstem_web
     build:
       context: ./web
       dockerfile: Dockerfile
@@ -15,7 +15,7 @@ services:
       - '1100:1100'
 
   api:
-    container_name: ${PROJECT_NAME}_api
+    container_name: bkstem_api
     build: 
       context: ./api
       dockerfile: Dockerfile.dev
@@ -28,7 +28,7 @@ services:
         - db
 
   db:
-    container_name: ${PROJECT_NAME}_db
+    container_name: bkstem_db
     image: postgres:11
     ports:
       - "1300:5432"
@@ -36,6 +36,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=default
+      - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
       - db:/var/lib/postgresql/data
 
