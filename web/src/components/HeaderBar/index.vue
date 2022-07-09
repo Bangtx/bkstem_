@@ -24,7 +24,6 @@
             h2.text-gray-800.font-medium.hidden(class="md:block") {{ member.name }}
         v-list
           v-list-item.logout(@click="logout()") Đắng xuất
-
       portal-target(name="header-action")
 
 </template>
