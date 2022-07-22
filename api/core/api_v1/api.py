@@ -19,7 +19,8 @@ from .endpoints import (
     file_question,
     home_work_file,
     file_result_student,
-    slide
+    slide,
+    self_learning
 )
 
 
@@ -43,3 +44,5 @@ api_router.include_router(audio_file.router, prefix='/audio_file', tags=['audio_
 api_router.include_router(file_question.router, prefix='/file_question', tags=['file_question'])
 api_router.include_router(home_work_file.router, prefix='/home_work_file', tags=['home_work_file'])
 api_router.include_router(slide.router, prefix='/slide', tags=['slide'])
+api_router.include_router(file_result_student.router, prefix='/file_result_student', tags=['file_result_student'])
+api_router.include_router(self_learning.router, prefix='/self_learning', tags=['self_learning'])

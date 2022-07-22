@@ -37,6 +37,9 @@
         home-work-student(
           v-if="feature==='home_work_student'" :classroom="classroom" :units="units"
         )
+        register-self-learning(
+          v-if="feature==='register_self_learning'" :classroom="classroom" :students="students"
+        )
 
 </template>
 
@@ -53,6 +56,7 @@ import Learn from './Learn.vue'
 import NotificationStudent from './NotificationStudent.vue'
 import HomeWork from './HomeWork.vue'
 import HomeWorkStudent from './HomeWorkStudent.vue'
+import RegisterSelfLearning from './RegisterSelfLearning.vue'
 
 interface Teacher {
   id: number
@@ -91,7 +95,8 @@ const Classroom = defineComponent({
     Learn,
     NotificationStudent,
     HomeWork,
-    HomeWorkStudent
+    HomeWorkStudent,
+    RegisterSelfLearning
   },
   setup(props, { root }) {
     const { $toast, $route } = root

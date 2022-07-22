@@ -337,3 +337,22 @@ CREATE TABLE slide
   active boolean DEFAULT TRUE,
   CONSTRAINT pkey_slide PRIMARY KEY (id)
 );
+
+
+DROP TABLE IF EXISTS self_learning CASCADE;
+CREATE TABLE self_learning
+(
+  id bigserial NOT NULL,
+  date date,
+  student bigint,
+  classroom bigint,
+  absent_type int,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  created_by bigint,
+  modified_at timestamp with time zone,
+  modified_by bigint,
+  deleted_at timestamp with time zone,
+  deleted_by bigint,
+  active boolean DEFAULT TRUE,
+  CONSTRAINT pkey_self_learning PRIMARY KEY (id)
+);

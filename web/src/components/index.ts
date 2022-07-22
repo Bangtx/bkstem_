@@ -13,3 +13,4 @@ export { default as UploadFileAnswerDialog } from './UploadFileAnswerDialog/inde
 export { default as FileSubmitOfStudent } from './FileSubmitOfStudent/index.vue'
 export { default as EditRollCallDialog } from './EditRollCall/index.vue'
 export { default as AddContentDate } from './AddContentDate/index.vue'
+export { default as RegisterSelfLearningDialog } from './RegisterSelfLearningDialog/index.vue'

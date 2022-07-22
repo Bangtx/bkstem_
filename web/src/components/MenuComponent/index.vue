@@ -67,7 +67,8 @@ const MenuComponent = defineComponent({
       { text: 'Điểm danh', event: 'rollcall' },
       { text: 'Điểm số', event: 'score' },
       { text: 'Tình hình học tập', event: 'learn' },
-      { text: 'Giao Bài Tập', event: 'home_work' }
+      { text: 'Giao Bài Tập', event: 'home_work' },
+      { text: 'Tự Học', event: 'register_self_learning' }
     ]
 
     const menuAdmins = [
@@ -81,7 +82,8 @@ const MenuComponent = defineComponent({
       { text: 'Điểm danh', event: 'rollcall' },
       { text: 'Điểm số', event: 'score' },
       { text: 'Thông báo', event: 'noti' },
-      { text: 'Bài tập', event: 'home_work_student' }
+      { text: 'Bài tập', event: 'home_work_student' },
+      { text: 'Đk tự Học', event: 'register_self_learning' }
     ]
 
     if (!localStorage.getItem('token')) member.value = { typeMember: 'teacher' }

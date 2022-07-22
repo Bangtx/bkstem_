@@ -2,7 +2,7 @@
   v-dialog(:value="value" max-width="500" persistent)
     v-card
       v-card-title.text-h5.title-color.lighten-2
-        span Bài Tập
+        span Điểm danh
         v-spacer
         v-btn(icon @click="$emit('on-close')")
           v-icon mdi-close
@@ -42,6 +42,11 @@ const EditRollCallDialog = defineComponent({
     absentTypes: {
       type: Array,
       required: true
+    },
+    isSelfLearning: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   setup(props, { root, emit }) {
@@ -49,9 +54,20 @@ const EditRollCallDialog = defineComponent({
     const items = ref<any>([])
     const itemSelected = ref(0)
 
+    const getBodySelfLearning = () => {
+      return {
+        classroom: props.data.classroom,
+        student: props.data.student,
+        absent_type: props.data.absentType,
+        dates: [props.data.date],
+        id: props.data.id
+      }
+    }
+
     const onSave = async () => {
       try {
-        await api.put(`${endpoints.ROLLCALL}`, toSnakeCase(props.data))
+        if (!props.isSelfLearning) await api.put(`${endpoints.ROLLCALL}`, toSnakeCase(props.data))
+        else await api.put(`${endpoints.SELF_LEARNING}${props.data.id}`, getBodySelfLearning())
         emit('reload')
         emit('on-close')
         $toast.success('Delete data successful')
