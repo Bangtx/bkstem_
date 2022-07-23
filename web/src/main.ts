@@ -8,7 +8,7 @@ import VueVirtualScroller from 'vue-virtual-scroller'
 import 'vue-toastification/dist/index.css'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
-import { vuetify, i18n, api, moment } from 'plugins'
+import { vuetify, api, moment } from 'plugins'
 import App from './App.vue'
 import './registerServiceWorker'
 
@@ -32,6 +32,5 @@ new Vue({
   router,
   store,
   vuetify,
-  i18n,
   render: (h) => h(App)
 }).$mount('#app')
