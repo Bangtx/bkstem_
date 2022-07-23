@@ -33,7 +33,7 @@ def create_self_learning(self_learning: schemas.SelfLearningCreate):
 def update_self_learning(id: int, self_learning: schemas.SelfLearningCreate):
     result = []
     self_learning_dict = self_learning.dict()
-    print(self_learning_dict)
+
     for date in self_learning.dates:
         data_update = self_learning_dict
         data_update.pop('dates', None)

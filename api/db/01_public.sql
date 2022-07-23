@@ -167,7 +167,7 @@ CREATE TABLE score
   classroom_id bigint,
   student_id bigint,
   teacher_id bigint,
-  score json, // { specking: number, reading: number, writing, listening: number }
+  score json, -- { specking: number, reading: number, writing, listening: number }
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   created_by bigint,
   modified_at timestamp with time zone,

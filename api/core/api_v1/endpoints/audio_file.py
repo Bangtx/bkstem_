@@ -37,7 +37,7 @@ def create_audio(audio: schemas.File, request: Request):
         wfile.write(file_content)
         wfile.close()
     client_host = request.client.host
-    url = f'{VUE_APP_API_URL}/audio_file/get_audio?key={key}'
+    url = f'{VUE_APP_API_URL_PRO}/audio_file/get_audio?key={key}'
     # audio_insert = models.AudioFile.create(**{'url': url})
     return {'url': url}
 
