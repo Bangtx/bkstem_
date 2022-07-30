@@ -8,14 +8,7 @@
       <jdbc-url>jdbc:postgresql://localhost:1300/default</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="@103.124.93.10" uuid="65e11be3-eac9-4a9f-baf4-5a6398f1ed77">
-      <driver-ref>postgresql</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://103.124.93.10:1300/</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
-    <data-source source="LOCAL" name="default@103.124.93.10" uuid="5d84cdce-9a27-4931-b1de-063f51b9c157">
+    <data-source source="LOCAL" name="default@103.124.93.10" uuid="377a55d8-6ebb-46ce-9633-19089d51d6ba">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
