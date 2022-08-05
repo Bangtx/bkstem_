@@ -71,7 +71,7 @@
       :absent-types="absentTypes"
       :is-self-learning="true"
       @on-close="isShowEdit = false"
-      @reload="getData(), getAbsentType()"
+      @reload="reload()"
     )
 
 </template>
@@ -173,6 +173,11 @@ const RegisterSelfLearning = defineComponent({
       await getAbsentType()
     })
 
+    const reload = async () => {
+      await getData()
+      await getAbsentType()
+    }
+
     return {
       member,
       openRegisterSelfLearningDialog,
@@ -186,7 +191,8 @@ const RegisterSelfLearning = defineComponent({
       absentTypes,
       rollCallProps,
       getData,
-      getAbsentType
+      getAbsentType,
+      reload
     }
   }
 })
