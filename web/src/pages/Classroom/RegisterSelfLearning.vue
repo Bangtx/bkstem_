@@ -94,7 +94,7 @@ const RegisterSelfLearning = defineComponent({
     RegisterSelfLearningDialog,
     EditRollCallDialog
   },
-  setup(props, { root }) {
+  setup(props, { root, emit }) {
     const { $toast } = root
     const member: any = toCamelCase(jwtDecode(String(localStorage.getItem('token'))))
     const isOpenRegisterSelfLearningDialog = ref(false)
@@ -174,8 +174,7 @@ const RegisterSelfLearning = defineComponent({
     })
 
     const reload = async () => {
-      await getData()
-      await getAbsentType()
+      emit('get-slide')
     }
 
     return {

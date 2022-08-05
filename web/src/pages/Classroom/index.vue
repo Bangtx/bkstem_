@@ -15,6 +15,7 @@
           :units="units"
           :slides="slides"
           @re-load="getData()"
+          @get-slide="getSlide()"
         )
         roll-call(
           v-if="feature==='rollcall'" :classroom="classroom" :students="students" :teacher="teacher"
@@ -155,7 +156,8 @@ const Classroom = defineComponent({
       feature,
       units,
       getData,
-      slides
+      slides,
+      getSlide
     }
   }
 })
