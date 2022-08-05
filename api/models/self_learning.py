@@ -51,7 +51,7 @@ class SelfLearning(BaseModel):
             ).where(
                 cls.active,
                 cls.date <= f'{currentYear}-{currentMonth}-{last}',
-                cls.date >= f'{currentYear}-{currentMonth}-{first}'
+                cls.date >= f'{currentYear}-{currentMonth}-01'
             ).order_by(
                 cls.date
             ).dicts()
